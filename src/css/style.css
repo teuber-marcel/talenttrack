@@ -1,0 +1,9 @@
+@import "reset.css"; /* Optional: For resetting default browser styles */
+@import "header.css"; /* Specific styles for the header */
+@import "footer.css"; /* Specific styles for the footer */
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
