@@ -19,3 +19,167 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Allgemeine Stile für Überschriften */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Arial', sans-serif; /* Schriftart */
+  color: #333; /* Textfarbe */
+  margin: 0.5rem 0; /* Abstand oben und unten */
+}
+
+/* Spezifische Stile für jede Überschriftsebene */
+h1 {
+  font-size: 2rem; /* Schriftgröße */
+  font-weight: bold; /* Schriftgewicht */
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+h6 {
+  font-size: 0.875rem;
+  font-weight: bold;
+}
+
+/* src/styles/buttonModern.css */
+
+.button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #1d4ed8; /* Basisfarbe (Blau) */
+  border: none;
+  border-radius: 0.375rem; /* 6px abgerundete Ecken */
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: 0.5rem; /* Abstand um den Button */
+}
+
+.button:hover {
+  background-color: #2563eb; /* Dunkleres Blau beim Hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.button:active {
+  background-color: #1e40af; /* Noch dunkleres Blau beim Klicken */
+  transform: translateY(2px); /* Leichte Verschiebung nach unten */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button:disabled {
+  background-color: #9ca3af; /* Graue Farbe bei deaktiviertem Zustand */
+  cursor: not-allowed;
+  box-shadow: none;
+  opacity: 0.6; /* Halbtransparenz für deaktivierten Zustand */
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.5); /* Blauer Fokus-Indikator */
+}
+
+/* Zusätzliche Varianten (Optional) */
+
+/* Grüner Button */
+.button-green {
+  background-color: #10B981; /* Grün */
+}
+
+.button-green:hover {
+  background-color: #059669; /* Dunkleres Grün beim Hover */
+}
+
+.button-green:active {
+  background-color: #047857; /* Noch dunkleres Grün beim Klicken */
+}
+
+/* Roter Button */
+.button-red {
+  background-color: #EF4444; /* Rot */
+}
+
+.button-red:hover {
+  background-color: #DC2626; /* Dunkleres Rot beim Hover */
+}
+
+.button-red:active {
+  background-color: #B91C1C; /* Noch dunkleres Rot beim Klicken */
+}
+
+.flex-container {
+  display: flex; /* Aktiviert Flexbox */
+  flex-direction: row; /* Anordnung in einer Reihe (Standard) */
+  justify-content: space-between; /* Verteilung der Komponenten */
+  align-items: flex-start; /* Ausrichtung entlang der Querachse */
+  gap: 0rem; /* Abstand zwischen den Komponenten */
+  padding: 1rem; /* Innenabstand des Containers */
+}
+
+@media (max-width: 400px) {
+  .flex-container {
+    flex-direction: column; /* Stapelt die Komponenten vertikal */
+  }
+}
+
+.textfield-multiline {
+  display: block;
+  width: 100%; /* Volle Breite des Containers */
+  padding: 0.75rem 1rem; /* Innenabstand */
+  font-size: 1rem; /* Schriftgröße */
+  font-weight: 400; /* Schriftgewicht */
+  color: #4B5563; /* Textfarbe (dunkelgrau) */
+  background-color: #FFFFFF; /* Hintergrundfarbe (weiß) */
+  border: 1px solid #D1D5DB; /* Rahmenfarbe (hellgrau) */
+  border-radius: 0.375rem; /* Abgerundete Ecken (6px) */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Sanfte Übergänge */
+  outline: none; /* Entfernt den standardmäßigen Fokusrahmen */
+  margin: 0.5rem; /* Zentriert das Element horizontal */
+  box-sizing: border-box;
+}
+
+.textfield-multiline::placeholder {
+  color: #9CA3AF; /* Platzhalterfarbe (mittelgrau) */
+  opacity: 1; /* Stelle sicher, dass die Farbe sichtbar ist */
+}
+
+.textfield-multiline:focus {
+  border-color: #2563EB; /* Rahmenfarbe beim Fokus (blau) */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Blauer Schatten beim Fokus */
+}
+
+.textfield-multiline:hover {
+  border-color: #9CA3AF; /* Rahmenfarbe beim Hover (mittelgrau) */
+}
+
+.textfield-multiline:disabled {
+  background-color: #F3F4F6; /* Hintergrundfarbe bei deaktiviertem Zustand (hellgrau) */
+  border-color: #D1D5DB; /* Rahmenfarbe bei deaktiviertem Zustand */
+  color: #9CA3AF; /* Textfarbe bei deaktiviertem Zustand */
+  cursor: not-allowed; /* Cursor zeigt an, dass das Feld nicht interaktiv ist */
+}
+
+.no-wrap {
+  white-space: nowrap;
+}
