@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome, faFileAlt, faUsers, faCalendarAlt, faCog } from '@fortawesome/free-solid-svg-icons';
 
 const NavigationBar: React.FC = () => {
   return (
-  
     <div
       style={{
         width: '80px', // Adjust the width for a compact sidebar
@@ -20,9 +20,9 @@ const NavigationBar: React.FC = () => {
         height: '100vh',
       }}
     >
-      {/* Logo Placeholder */}
+      {/* Logo */}
       <div style={{ marginBottom: '20px' }}>
-        <h2 style={{ textAlign: 'center', color:'white'}}>Logo</h2>
+        <Image src="/assets/Logo_Klein.png" alt="Logo" width={50} height={50} />
       </div>
 
       <ul style={{ listStyleType: 'none', padding: 0, textAlign: 'center', width: '100%' }}>
@@ -37,7 +37,7 @@ const NavigationBar: React.FC = () => {
           </Link>
         </li>
         <li style={{ marginBottom: '30px', display: 'flex', justifyContent: 'center' }}>
-          <Link href="/CreateVacancy">
+          <Link href="/Documents">
             <FontAwesomeIcon
               icon={faFileAlt}
               style={{ fontSize: '30px', color: '#0070f3' }}

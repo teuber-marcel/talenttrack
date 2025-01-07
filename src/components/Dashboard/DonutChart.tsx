@@ -31,17 +31,19 @@ const DonutChart: React.FC = () => {
     ],
   };
 
+  
   const options = {
     responsive: true,
     maintainAspectRatio: false, // Allow chart to resize based on its container
     plugins: {
       legend: {
-        position: 'top',
+        position: 'top' as const,
         labels: {
           font: {
             size: 14,
             family: 'Arial, sans-serif',
           },
+          color: 'white',
         },
       },
       tooltip: {
@@ -73,7 +75,7 @@ const DonutChart: React.FC = () => {
 
   return (
     <BackgroundBox width="100%" height="500px"> {/* Adjusted height for better fit */}
-      <h3 style={{ textAlign: 'center', fontSize: '24px', marginBottom: '20px', color: 'white' }}>
+      <h3 style={{ textAlign: 'center', marginBottom: '20px'}}>
         Status of all Positions
       </h3>
       <div style={{ position: 'relative', height: '100%' }}>

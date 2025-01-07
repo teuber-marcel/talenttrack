@@ -27,7 +27,7 @@ const applicants = [
 const ApplicantDashboard: React.FC = () => {
   return (
     <BackgroundBox width="100%" height="100%">
-      <h3 style={{ textAlign: 'center', fontSize: '20px', marginBottom: '20px', color: 'white' }}>
+      <h3 style={{ textAlign: 'center', marginBottom: '20px', color: 'white' }}>
         New Applicants
       </h3>
       <div style={{ overflowY: 'auto', height: '80%' }}>

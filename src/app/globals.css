@@ -23,7 +23,7 @@ body {
 /* Allgemeine Stile für Überschriften */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Arial', sans-serif; /* Schriftart */
-  color: #333; /* Textfarbe */
+  color: #FFFFFF; /* Textfarbe */
   margin: 0.5rem 0; /* Abstand oben und unten */
 }
 
