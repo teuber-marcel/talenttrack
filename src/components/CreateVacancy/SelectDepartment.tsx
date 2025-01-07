@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import RadioButton from '@/components/RadioButton';
+import RadioButton from '@/components/CreateVacancy/RadioButton';
 
 const SelectDepartment: React.FC = () => {
     const [selectedValue, setSelectedValue] = useState<string>('');

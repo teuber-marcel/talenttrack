@@ -1,7 +1,7 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import BackgroundBox from './BackgroundBox'; // Import BackgroundBox component
+import BackgroundBox from '../Global/BackgroundBox'; // Import BackgroundBox component
 import { urlToHttpOptions } from 'url';
 
 // Registering the necessary Chart.js components

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Checkbox from '@/components/Checkbox';
+import Checkbox from '@/components/CreateVacancy/Checkbox';
 
 interface MultipleCheckboxState {
     workingStudent: boolean;

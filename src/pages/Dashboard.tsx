@@ -1,8 +1,8 @@
 import React from 'react';
 import '../app/globals.css';
-import NavigationBar from '../components/NavigationBar';
-import DonutChart from '../components/DonutChart'; // Donut Chart component
-import ApplicantDashboard from '../components/ApplicantDashboard'; // Applicant Dashboard component
+import NavigationBar from '../components/Global/NavigationBar';
+import DonutChart from '../components/Dashboard/DonutChart'; // Donut Chart component
+import ApplicantDashboard from '../components/Dashboard/ApplicantDashboard'; // Applicant Dashboard component
 
 const Dashboard: React.FC = () => {
   return (

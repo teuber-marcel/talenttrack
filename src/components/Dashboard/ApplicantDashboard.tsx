@@ -1,5 +1,5 @@
 import React from 'react';
-import BackgroundBox from './BackgroundBox'; // Import BackgroundBox component
+import BackgroundBox from '../Global/BackgroundBox';
 
 const applicants = [
   {
