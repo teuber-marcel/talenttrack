@@ -4,6 +4,7 @@ import SelectDepartment from '@/components/SelectDepartment';
 import SelectSeniorityLevel from '@/components/SelectSeniorityLevel';
 import TextFieldMultiLine from '@/components/TextFieldMultiLine';
 import Button from '@/components/Button';
+import NavigationBar from '@/components/NavigationBar'; // Add this 
 
 const InputVacancyTitle: React.FC = () => {
     const [vacancyTitle, setVacancyTitle] = useState<string>('');
