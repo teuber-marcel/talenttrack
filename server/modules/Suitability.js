@@ -26,6 +26,56 @@ if (!OPENAI_API_KEY) {
 }
 console.log("Loaded OPENAI_API_KEY:", OPENAI_API_KEY); // Debug-Ausgabe
 
+async function calculateSuitabilityScore(cv, motivationalLetter, position) {
+    console.log("Sende Anfrage an die OpenAI-API...");
+
+    const messages = [
+        {
+            role: "system",
+            content: "You are a professional assistant. Always respond in English, regardless of the input language."
+        },
+        {
+            role: "user",
+            content: `
+                Based on the following data, provide a suitability score as a single numeric value between 0 and 100, 
+                where 0 indicates no suitability and 100 indicates perfect suitability:
+
+                CV: ${cv}
+                Motivational Letter: ${motivationalLetter}
+                Target Position: ${position}
+
+                Respond with only the numeric score, no explanations or additional text.
+            `
+        }
+    ];
+
+    console.log("Anfrage-Nachricht an die API:", JSON.stringify(messages, null, 2));
+
+    const response = await axios.post(
+        'https://api.openai.com/v1/chat/completions',
+        {
+            model: 'gpt-3.5-turbo',
+            messages: messages,
+            max_tokens: 50,
+            temperature: 0.0
+        },
+        {
+            headers: {
+                'Authorization': `Bearer ${OPENAI_API_KEY}`,
+                'Content-Type': 'application/json'
+            }
+        }
+    );
+
+    console.log("Vollständige Antwort der OpenAI-API:", JSON.stringify(response.data, null, 2));
+
+    const score = response.data.choices[0].message.content.trim();
+
+    console.log("Generierter Score:", score);
+
+    return score;
+}
+
 app.get('/generate-suitability-score', async (req, res) => {
     try {
         console.log("Beginne mit dem Lesen der Dateien...");
@@ -47,51 +97,7 @@ app.get('/generate-suitability-score', async (req, res) => {
         console.log("Motivationsschreiben erfolgreich geladen:", motivationalLetter.substring(0, 100));
         console.log("Positionsbeschreibung erfolgreich geladen:", position.substring(0, 100));
 
-        console.log("Sende Anfrage an die OpenAI-API...");
-
-        const messages = [
-            {
-                role: "system",
-                content: "You are a professional assistant. Always respond in English, regardless of the input language."
-            },
-            {
-                role: "user",
-                content: `
-                    Based on the following data, provide a suitability score as a single numeric value between 0 and 100, 
-                    where 0 indicates no suitability and 100 indicates perfect suitability:
-
-                    CV: ${cv}
-                    Motivational Letter: ${motivationalLetter}
-                    Target Position: ${position}
-
-                    Respond with only the numeric score, no explanations or additional text.
-                `
-            }
-        ];
-
-        console.log("Anfrage-Nachricht an die API:", JSON.stringify(messages, null, 2));
-
-        const response = await axios.post(
-            'https://api.openai.com/v1/chat/completions',
-            {
-                model: 'gpt-3.5-turbo',
-                messages: messages,
-                max_tokens: 50,
-                temperature: 0.0
-            },
-            {
-                headers: {
-                    'Authorization': `Bearer ${OPENAI_API_KEY}`,
-                    'Content-Type': 'application/json'
-                }
-            }
-        );
-
-        console.log("Vollständige Antwort der OpenAI-API:", JSON.stringify(response.data, null, 2));
-
-        const score = response.data.choices[0].message.content.trim();
-
-        console.log("Generierter Score:", score);
+        const score = await calculateSuitabilityScore(cv, motivationalLetter, position);
 
         res.send(score); // Nur die Zahl wird zurückgegeben
     } catch (error) {

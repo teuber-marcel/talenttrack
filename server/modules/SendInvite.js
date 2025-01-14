@@ -66,9 +66,4 @@ async function sendInvite(candidateId, date, time) {
   }
 }
 
-// Example function call with variables
-const candidateId = process.argv[2]; // Candidate ID passed as a command-line argument
-const date = process.argv[3]; // Date passed as a command-line argument
-const time = process.argv[4]; // Time passed as a command-line argument
-
-sendInvite(candidateId, date, time);
+module.exports = { sendInvite };
