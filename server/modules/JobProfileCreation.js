@@ -26,7 +26,7 @@ if (!OPENAI_API_KEY) {
 }
 console.log("Loaded OPENAI_API_KEY:", OPENAI_API_KEY); // Debug-Ausgabe
 
-app.get('/JobProfileCreation', async (req, res) => {
+async function createJobProfile() {
     console.log("Received request for /JobProfileCreation");
     try {
         console.log("Beginne mit dem Lesen der Dateien...");
@@ -96,10 +96,21 @@ app.get('/JobProfileCreation', async (req, res) => {
 
         console.log("Generierte Jobanzeige:", jobAdvertisement);
 
-        res.send(jobAdvertisement);
+        return jobAdvertisement;
     } catch (error) {
         console.error("Fehler:", error.response ? JSON.stringify(error.response.data, null, 2) : error.message);
-        res.status(500).send(`Ein Fehler ist aufgetreten: ${error.message}`);
+        throw new Error(`Ein Fehler ist aufgetreten: ${error.message}`);
+    }
+}
+
+module.exports = { createJobProfile };
+
+app.get('/JobProfileCreation', async (req, res) => {
+    try {
+        const jobAdvertisement = await createJobProfile();
+        res.send(jobAdvertisement);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 
