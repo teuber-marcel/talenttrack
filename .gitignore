@@ -40,3 +40,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Frontend (client)
+client/node_modules/
+client/.next/
+client/.env.local
+
+# Backend (server)
+server/node_modules/
+server/.env
