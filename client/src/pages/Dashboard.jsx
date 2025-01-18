@@ -5,7 +5,7 @@ import DonutChart from '../components/Dashboard/DonutChart'; // Donut Chart comp
 import ApplicantDashboard from '../components/Dashboard/ApplicantDashboard'; // Applicant Dashboard component
 import Calendar  from '../components/Dashboard/Calendar'; // Calendar component
 
-const Dashboard: React.FC = () => {
+const Dashboard = () => {
   return (
     <div style={{ display: 'flex', width: '100%', height: '100vh' }}>
       <NavigationBar />
@@ -19,6 +19,7 @@ const Dashboard: React.FC = () => {
         }}
       >
         {/* Top Section: Donut Chart and Applicant Dashboard */}
+        
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
           <div style={{ flex: 1, marginRight: '20px' }}>
             <DonutChart />
