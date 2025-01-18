@@ -12,6 +12,7 @@ import {
 	getApplicantById,
 	createApplicant,
 	updateApplicant,
+	calculateSuitabilityScore,
 	deleteApplicant
 } from '../controllers/applicant.controller.js';
 import {
@@ -41,6 +42,8 @@ router.route('/api/applicants/:id')
 	.get(getApplicantById)
 	.put(updateApplicant)
 	.delete(deleteApplicant);
+router.route('/api/applicants/:id/suitability')
+	.put(calculateSuitabilityScore);
 
 router.route('/api/interviews')
 	.get(getInterviews)

@@ -14,6 +14,8 @@ type Vacancy = {
 	updatedAt: Date;
 };
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const Vacancies = () => {
 	const [vacancies, setVacancies] = useState<Vacancy[]>([]);
 
@@ -22,13 +24,13 @@ const Vacancies = () => {
 	}, []);
 
 	const getVacancies = async () => {
-		const response = await fetch("/api/vacancies");
+		const response = await fetch(`${API_URL}/api/vacancies`);
 		const responseBody = await response.json();
 		setVacancies(responseBody);
 	}
 	
 	const deleteVacancy = async (id: string) => {
-		await fetch("/api/vacancies/" + id, {
+		await fetch(`${API_URL}/api/vacancies/` + id, {
 			method: "DELETE"
 		})
 		getVacancies();
