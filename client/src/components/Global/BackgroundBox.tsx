@@ -6,7 +6,7 @@ interface BackgroundBoxProps {
   height?: string; // Optional height to allow customization
 }
 
-const BackgroundBox: React.FC<BackgroundBoxProps> = ({ children, width = '100%', height = '100%' }) => {
+const BackgroundBox: React.FC<BackgroundBoxProps> = ({ children, width = '100%', height = '500px' }) => {
   return (
     <div
       style={{

@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
-import NavigationBar from '../components/Global/NavigationBar';
 import Dashboard from "../pages/Dashboard";
+import VacanciesOverview from "../pages/VacanciesOverview";
 
 const App = () => {
   return (
@@ -10,7 +10,7 @@ const App = () => {
         <BrowserRouter>
             <Routes>
               <Route path={'/Dashboard'} element={<Dashboard/>}/>
-              
+              <Route path={'/VacanciesOverview'} element={<VacanciesOverview />}/>
             </Routes>  
         </BrowserRouter>   
 

@@ -7,7 +7,7 @@ import Calendar  from '../components/Dashboard/Calendar'; // Calendar component
 
 const Dashboard = () => {
   return (
-    <div style={{ display: 'flex', width: '100%', height: '100vh' }}>
+    <div style={{ display: 'flex', width: '100%', height: '100%' }}>
       <NavigationBar />
       <div
         style={{

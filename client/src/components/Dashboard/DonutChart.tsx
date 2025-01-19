@@ -80,8 +80,9 @@ const DonutChart: React.FC = () => {
       },
       tooltip: {
         callbacks: {
+          title: () => '', 
           label: (tooltipItem: any) => {
-            return `${tooltipItem.label}: ${tooltipItem.raw}`;
+            return ` ${tooltipItem.label}: ${tooltipItem.raw}`;
           },
         },
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
@@ -89,7 +90,7 @@ const DonutChart: React.FC = () => {
         bodyColor: '#fff',
         padding: 10,
       },
-      datalabels: {
+      datalabels: { 
         display: true,
         color: 'white',
         formatter: (value: any) => `${value}`,
@@ -98,25 +99,7 @@ const DonutChart: React.FC = () => {
           weight: 'bold',
         },
       },
-      doughnutlabel: {
-        labels: [
-          {
-            text: totalVacancies,
-            font: {
-              size: '20',
-              weight: 'bold',
-            },
-            color: '#000',
-          },
-          {
-            text: 'Total Vacancies',
-            font: {
-              size: '12',
-            },
-            color: '#000',
-          },
-        ],
-      },
+      
     },
     animation: {
       animateScale: true,
@@ -127,7 +110,7 @@ const DonutChart: React.FC = () => {
   return (
     <BackgroundBox width="100%" height="500px"> {/* Adjusted height for better fit */}
       <h3 style={{ textAlign: 'center', marginBottom: '20px'}}>
-        Status of all Positions
+        Status of all Positions | Total: {totalVacancies}
       </h3>
       <div style={{ position: 'relative', height: '100%' }}>
         <Doughnut data={data} options={options} />
