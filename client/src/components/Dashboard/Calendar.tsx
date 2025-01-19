@@ -1,12 +1,58 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BackgroundBox from '../Global/BackgroundBox'; // Import BackgroundBox component
+import Calendar from 'react-calendar'; // Import react-calendar
+import 'react-calendar/dist/Calendar.css'; // Import react-calendar styles
+import './Calendar.css'; // Import custom styles
 
-const Calendar: React.FC = () => {
-  const events = [
-    { time: '8 AM', description: 'Interview 1: Max Mustermann' },
-    { time: '10 AM', description: 'Interview 2: John Doe' },
-    { time: '1 PM', description: 'Interview 3: Leo Caprio' },
-  ];
+interface Applicant {
+  id: string;
+  prename: string;
+  surname: string;
+}
+
+interface Interview {
+  time: string;
+  description: string;
+  interviewDate: string;
+  applicant: Applicant;
+}
+
+const CalendarComponent: React.FC = () => {
+  const [events, setEvents] = useState<Interview[]>([]);
+  const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    getInterviews();
+  }, []);
+
+  const getApplicantById = async (id: string): Promise<Applicant> => {
+    const response = await fetch(`http://localhost:5555/api/applicants/${id}`);
+    const data = await response.json();
+    return data;
+  };
+
+  const getInterviews = async () => {
+    const response = await fetch('http://localhost:5555/api/interviews');
+    const data = await response.json();
+    const formattedData = await Promise.all(
+      data.map(async (event: Interview) => {
+        const applicant = await getApplicantById(event.applicant);
+        return {
+          ...event,
+          interviewDate: new Date(event.interviewDate).toLocaleString('en-GB', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          }).replace(',', ' |'),
+          applicant,
+        };
+      })
+    );
+    setEvents(formattedData);
+  };
 
   return (
     <BackgroundBox width="100%" height="auto"> {/* Wrap the calendar in BackgroundBox */}
@@ -18,59 +64,13 @@ const Calendar: React.FC = () => {
         }}
       >
         {/* Calendar Section */}
-        <div style={{ width: '60%' }}>
-          <h3 style={{ marginBottom: '10px', color: 'white' }}>October 2024</h3>
-          <table
-            style={{
-              borderCollapse: 'collapse',
-              width: '100%',
-              color: 'white',
-            }}
-          >
-            <thead>
-              <tr>
-                {['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) => (
-                  <th
-                    key={day}
-                    style={{
-                      padding: '5px',
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: '#ddd',
-                    }}
-                  >
-                    {day}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                [null, null, null, 1, 2, 3, 4],
-                [5, 6, 7, 8, 9, 10, 11],
-                [12, 13, 14, 15, 16, 17, 18],
-                [19, 20, 21, 22, 23, 24, 25],
-                [26, 27, 28, 29, 30, 31, null],
-              ].map((week, i) => (
-                <tr key={i}>
-                  {week.map((day, j) => (
-                    <td
-                      key={j}
-                      style={{
-                        padding: '10px',
-                        textAlign: 'center',
-                        backgroundColor: day === 8 ? '#0070f3' : 'transparent',
-                        color: day === 8 ? '#fff' : '#ccc',
-                        borderRadius: day === 8 ? '50%' : '0',
-                      }}
-                    >
-                      {day || ''}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ width: '70%' }}>
+          <Calendar
+            onChange={setDate}
+            value={date}
+            className="dark-theme-calendar"
+            locale="en-US" // Set the locale to English
+          />
         </div>
 
         {/* Events Section */}
@@ -78,15 +78,14 @@ const Calendar: React.FC = () => {
           style={{
             paddingLeft: '20px',
             borderLeft: '1px solid #444',
-            width: '35%',
+            width: '30%',
           }}
         >
-          <h3 style={{ color: 'white' }}>Coming Up Today</h3>
+          <h3 style={{ color: 'white' }}>Coming Up</h3>
           <ul style={{ listStyleType: 'none', padding: 0, color: '#ddd' }}>
             {events.map((event, index) => (
               <li key={index} style={{ marginBottom: '10px' }}>
-                <strong>{event.time}</strong>
-                <p style={{ margin: 0 }}>{event.description}</p>
+                {event.interviewDate} | {event.applicant?.prename} {event.applicant?.surname}
               </li>
             ))}
           </ul>
@@ -96,4 +95,4 @@ const Calendar: React.FC = () => {
   );
 };
 
-export default Calendar;
+export default CalendarComponent;
