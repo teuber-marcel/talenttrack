@@ -1,45 +1,112 @@
+/* General calendar styling */
 .dark-theme-calendar {
   width: 100%;
   background-color: #333;
   color: #fff;
-  border: none;
+  border: 1px solid #777;
   border-radius: 8px;
   padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add subtle shadow */
 }
 
+/* Styling for calendar tiles */
 .dark-theme-calendar .react-calendar__tile {
-  background-color: #444;
+  background-color: none;
   color: #fff;
-  border: 1px solid #555; /* Add border to tiles */
+  border: 1px solid #555; /* Subtle border for separation */
+  border-radius: 4px; /* Rounded edges for tiles */
+  transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
 }
 
 .dark-theme-calendar .react-calendar__tile--active {
   background-color: #555;
   color: #fff;
-  border: 1px solid #666; /* Add border to active tiles */
+  border: 1px solid #777; /* Highlight border for active tile */
 }
 
+/* Highlight the current date with a slightly different background */
 .dark-theme-calendar .react-calendar__tile--now {
-  background-color: #666; /* Highlight current date */
-  color: #fff;
-  border: 1px solid #777;
+  background-color: #444 !important; /* Slightly darker background for today */
+  color: #fff !important;
+  border: 1px solid #999; /* Add a border for emphasis */
+  font-weight: bold; /* Make today's date text bold */
 }
 
+/* Ensure the current date with an interview has blue text */
+.dark-theme-calendar .react-calendar__tile--now.highlighted-date {
+  background-color: #444 !important; /* Retain the different background for today */
+  color: #73aaf3 !important; /* Blue text for interviews */
+  font-weight: bold;
+  border: 1px solid #999; /* Ensure the border is consistent */
+}
+
+/* Hover effect for the current date */
+.dark-theme-calendar .react-calendar__tile--now:hover {
+  background-color: #555 !important; /* Slightly lighter on hover */
+  color: #ddd !important; /* Slightly lighter text color */
+}
+
+/* Hover effect for the current date with an interview */
+.dark-theme-calendar .react-calendar__tile--now.highlighted-date:hover {
+  background-color: #555 !important; /* Slightly lighter on hover */
+  color: #73aaf3 !important; /* Retain blue text for interviews */
+}
+
+/* Hover effect for all tiles */
 .dark-theme-calendar .react-calendar__tile:hover {
-  background-color: #555; /* Darker color on hover */
-  color: #fff;
+  background-color: black; /* Darker color on hover */
+  color: #ddd; /* Slightly lighter text on hover */
+  border: 1px solid #aaa; /* Highlight border on hover */
 }
 
+/* Styling for navigation buttons */
 .dark-theme-calendar .react-calendar__navigation button {
   color: #fff;
-  border: 1px solid #555; /* Add border to navigation buttons */
+  border: none; /* Consistent button border */
+  background-color: #333; /* Ensure a consistent background */
+  border-radius: 4px; /* Rounded edges for buttons */
+  padding: 5px 10px; /* Add padding for better usability */
+  transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
 }
 
+.dark-theme-calendar .react-calendar__navigation button:hover {
+  background-color: black; /* Change background color on hover */
+  color: #ddd; /* Slightly lighter text color for contrast */
+  border: 1px solid #555; /* Highlight border on hover */
+}
+
+/* Styling for weekdays */
 .dark-theme-calendar .react-calendar__month-view__weekdays {
   color: #ddd;
-  border-bottom: 1px solid #555; /* Add border to weekdays */
+  border-bottom: 1px solid #444; /* Add border for separation */
+  padding-bottom: 5px; /* Add spacing for visual clarity */
 }
 
+/* Styling for individual days */
 .dark-theme-calendar .react-calendar__month-view__days__day {
   border: 1px solid #555; /* Add border to days */
+  border-radius: 4px; /* Rounded edges for days */
+  transition: transform 0.2s; /* Smooth scale effect on hover */
+}
+
+.dark-theme-calendar .react-calendar__month-view__days__day:hover {
+  transform: scale(1.05); /* Slight zoom on hover */
+  background-color: #555; /* Change background color on hover */
+  color: #fff; /* Maintain text visibility */
+}
+
+/* Styling for disabled tiles */
+.dark-theme-calendar .react-calendar__tile--disabled {
+  background-color: #222; /* Dimmed background for disabled tiles */
+  color: #555; /* Subtle text color */
+  cursor: not-allowed; /* Show disabled state */
+}
+
+/* Highlight dates with interviews using a different text color */
+.highlighted-date {
+  text-decoration: underline; /* Underline the date */
+  color: #73aaf3 !important; /* Highlighted text for interviews */
+  border-radius: 50%; /* Make it circular */
+  font-weight: bold;
+  background-color: inherit !important; /* Inherit background color */
 }
