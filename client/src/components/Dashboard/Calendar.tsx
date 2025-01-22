@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import BackgroundBox from '../Global/BackgroundBox'; // Import BackgroundBox component
 import Calendar from 'react-calendar'; // Import react-calendar
 import 'react-calendar/dist/Calendar.css'; // Import react-calendar styles
 import './Calendar.css'; // Import custom styles
@@ -65,7 +64,7 @@ const CalendarComponent: React.FC = () => {
   };
 
   return (
-    <BackgroundBox width="100%" height="auto"> {/* Wrap the calendar in BackgroundBox */}
+    <div    >
       <div
         style={{
           display: 'flex',
@@ -112,12 +111,12 @@ const CalendarComponent: React.FC = () => {
             width: '50%',
           }}
         >
-          <h3 style={{ color: 'white' }}>
+          <h3 style={{ color: 'white', textAlign: 'center', paddingBottom: '10px' }}>
             {date
               ? `Interviews on ${date.toLocaleDateString('en-GB')}`
               : 'Coming Up'}
           </h3>
-          <ul style={{ listStyleType: 'none', padding: 0, color: '#ddd' }}>
+          <ul style={{ listStyleType: 'none', padding: 0, color: '#ddd', textAlign: 'left' }}>
             {events
               .filter((event) => {
                 if (!date) return false;
@@ -158,7 +157,7 @@ const CalendarComponent: React.FC = () => {
           )}
         </div>
       </div>
-    </BackgroundBox>
+    </div>
   );
 };
 

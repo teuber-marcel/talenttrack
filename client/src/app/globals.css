@@ -1,194 +1,141 @@
+/* Base Tailwind Setup */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Root Variables */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0d0d0d; /* Dark layout background */
+  --foreground: #ededed; /* Light foreground color */
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #0d0d0d;
     --foreground: #ededed;
   }
 }
 
-body {
+/* Body Styles */
+html,
+body,
+#root {
+  margin: 0; /* Remove any default margins */
+  height: 100%; /* Extend the black background to the entire height */
   color: var(--foreground);
-  background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Allgemeine Stile für Überschriften */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Arial', sans-serif; /* Schriftart */
-  color: #FFFFFF; /* Textfarbe */
-  margin: 0.5rem 0; /* Abstand oben und unten */
-}
-
-/* Spezifische Stile für jede Überschriftsebene */
-h1 {
-  font-size: 2rem; /* Schriftgröße */
-  font-weight: bold; /* Schriftgewicht */
-}
-
-h2 {
-  font-size: 1.75rem;
-  font-weight: bold;
-}
-
-h3 {
-  font-size: 1.5rem;
-  font-weight: bold;
+  background-color: var(--background); /* Ensure the background color is applied */
 }
 
 h4 {
-  font-size: 1.25rem;
-  font-weight: bold;
+  text-align: left;
 }
 
-h5 {
-  font-size: 1rem;
-  font-weight: bold;
+h3 {
+  font-size: 20;
 }
 
-h6 {
-  font-size: 0.875rem;
-  font-weight: bold;
+p {
+  text-align: left;
 }
 
-/* src/styles/buttonModern.css */
+/* Dashboard Layout */
+.dashboard-layout {
+  min-height: 100vh;
+}
 
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #ffffff;
-  background-color: #1d4ed8; /* Basisfarbe (Blau) */
-  border: none;
-  border-radius: 0.375rem; /* 6px abgerundete Ecken */
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+/* Sidebar Styles */
+.sidebar {
+   height: 100vh;
+  left: 0;
+  top: 0;
+  background-color: #181818; /* Dark sidebar background */
+}
+
+.sidebar-logo {
+  padding: 16px;
+  color: white;
   text-align: center;
-  text-decoration: none;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin: 0.5rem; /* Abstand um den Button */
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.button:hover {
-  background-color: #2563eb; /* Dunkleres Blau beim Hover */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+/* Sidebar Menu Styles */
+.sidebar-menu {
+  background-color: #181818 !important; /* Match sidebar background */
+  border-right: none; /* Remove border if visible */
 }
 
-.button:active {
-  background-color: #1e40af; /* Noch dunkleres Blau beim Klicken */
-  transform: translateY(2px); /* Leichte Verschiebung nach unten */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.sidebar-menu .ant-menu-item {
+  background-color: transparent; /* Transparent background for default state */
+  color: #cccccc; /* Light gray text */
 }
 
-.button:disabled {
-  background-color: #9ca3af; /* Graue Farbe bei deaktiviertem Zustand */
-  cursor: not-allowed;
-  box-shadow: none;
-  opacity: 0.6; /* Halbtransparenz für deaktivierten Zustand */
+.sidebar-menu .ant-menu-item:hover {
+  background-color: #383838; /* Slightly darker hover effect */
+  color: white; /* White text on hover */
 }
 
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.5); /* Blauer Fokus-Indikator */
+.sidebar-menu .ant-menu-item-selected {
+  background-color: #303030 !important; /* Match selected state with the theme */
+  color: white !important; /* White text when selected */
 }
 
-/* Zusätzliche Varianten (Optional) */
-
-/* Grüner Button */
-.button-green {
-  background-color: #10B981; /* Grün */
+.sidebar-menu .ant-menu-title-content {
+  color: inherit; /* Ensure menu title text color matches parent */
 }
 
-.button-green:hover {
-  background-color: #059669; /* Dunkleres Grün beim Hover */
+/* Sidebar Trigger (Collapse Icon) */
+.ant-layout-sider-trigger {
+  background-color: #181818 !important; /* Match the sidebar background */
+  color: #cccccc !important; /* Light gray icon color */
+  border-top: 1px solid #303030; /* Optional: Subtle border for separation */
 }
 
-.button-green:active {
-  background-color: #047857; /* Noch dunkleres Grün beim Klicken */
+.ant-layout-sider-trigger:hover {
+  background-color: #383838 !important; /* Slightly darker on hover */
+  color: white !important; /* White icon on hover */
 }
 
-/* Roter Button */
-.button-red {
-  background-color: #EF4444; /* Rot */
+/* Main Content Styles */
+.main-content {
+  margin: 20px;
+  padding: 20px;
+  background-color: #202020; /* Darker content background */
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
-.button-red:hover {
-  background-color: #DC2626; /* Dunkleres Rot beim Hover */
+.dashboard-section {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
 }
 
-.button-red:active {
-  background-color: #B91C1C; /* Noch dunkleres Rot beim Klicken */
+.chart-container {
+  flex: 1;
+  margin-right: 20px;
 }
 
+.calendar-container {
+  flex: 1;
+}
+
+/* Utility Styles */
 .flex-container {
-  display: flex; /* Aktiviert Flexbox */
-  flex-direction: row; /* Anordnung in einer Reihe (Standard) */
-  justify-content: space-between; /* Verteilung der Komponenten */
-  align-items: flex-start; /* Ausrichtung entlang der Querachse */
-  gap: 0rem; /* Abstand zwischen den Komponenten */
-  padding: 1rem; /* Innenabstand des Containers */
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
 }
 
-@media (max-width: 400px) {
-  .flex-container {
-    flex-direction: column; /* Stapelt die Komponenten vertikal */
-  }
-}
-
-.textfield-multiline {
-  display: block;
-  width: 100%; /* Volle Breite des Containers */
-  padding: 0.75rem 1rem; /* Innenabstand */
-  font-size: 1rem; /* Schriftgröße */
-  font-weight: 400; /* Schriftgewicht */
-  color: #4B5563; /* Textfarbe (dunkelgrau) */
-  background-color: #FFFFFF; /* Hintergrundfarbe (weiß) */
-  border: 1px solid #D1D5DB; /* Rahmenfarbe (hellgrau) */
-  border-radius: 0.375rem; /* Abgerundete Ecken (6px) */
-  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Sanfte Übergänge */
-  outline: none; /* Entfernt den standardmäßigen Fokusrahmen */
-  margin: 0.5rem; /* Zentriert das Element horizontal */
-  box-sizing: border-box;
-}
-
-.textfield-multiline::placeholder {
-  color: #9CA3AF; /* Platzhalterfarbe (mittelgrau) */
-  opacity: 1; /* Stelle sicher, dass die Farbe sichtbar ist */
-}
-
-.textfield-multiline:focus {
-  border-color: #2563EB; /* Rahmenfarbe beim Fokus (blau) */
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2); /* Blauer Schatten beim Fokus */
-}
-
-.textfield-multiline:hover {
-  border-color: #9CA3AF; /* Rahmenfarbe beim Hover (mittelgrau) */
-}
-
-.textfield-multiline:disabled {
-  background-color: #F3F4F6; /* Hintergrundfarbe bei deaktiviertem Zustand (hellgrau) */
-  border-color: #D1D5DB; /* Rahmenfarbe bei deaktiviertem Zustand */
-  color: #9CA3AF; /* Textfarbe bei deaktiviertem Zustand */
-  cursor: not-allowed; /* Cursor zeigt an, dass das Feld nicht interaktiv ist */
-}
-
-.no-wrap {
-  white-space: nowrap;
+.flex-container-column {
+  flex-direction: column;
 }
 
 .center-image {
   display: block;
   margin: 0 auto;
-}
-
-.font-geist-mono {
-  font-family: 'Geist Mono', monospace;
 }

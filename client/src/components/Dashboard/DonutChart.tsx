@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
-import BackgroundBox from '../Global/BackgroundBox'; // Import BackgroundBox component
 
 // Registering the necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
@@ -63,7 +62,6 @@ const DonutChart: React.FC = () => {
     ],
   };
 
-  
   const options = {
     responsive: true,
     maintainAspectRatio: false, // Allow chart to resize based on its container
@@ -99,7 +97,6 @@ const DonutChart: React.FC = () => {
           weight: 'bold',
         },
       },
-      
     },
     animation: {
       animateScale: true,
@@ -108,14 +105,15 @@ const DonutChart: React.FC = () => {
   };
 
   return (
-    <BackgroundBox width="100%" height="500px"> {/* Adjusted height for better fit */}
-      <h3 style={{ textAlign: 'center', marginBottom: '20px'}}>
-        Status of all Positions | Total: {totalVacancies}
+    <div style={{ width: '100%', height: '100%' }}>
+      
+      <h3 style={{ textAlign: 'center', marginBottom: '10px', color: 'white' }}>
+      Status of all Positions | Total: {totalVacancies}
       </h3>
-      <div style={{ position: 'relative', height: '100%' }}>
+      <div style={{ position: 'relative', height: '300px', width: 'auto', margin: '0 auto', alignSelf: 'top' }}>
         <Doughnut data={data} options={options} />
       </div>
-    </BackgroundBox>
+    </div>
   );
 };
 

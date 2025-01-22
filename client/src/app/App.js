@@ -3,6 +3,7 @@ import Image from "next/image";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import VacanciesOverview from "../pages/VacanciesOverview";
+import TestLayout from "../pages/TestLayout";
 
 const App = () => {
   return (
@@ -11,11 +12,12 @@ const App = () => {
             <Routes>
               <Route path={'/Dashboard'} element={<Dashboard/>}/>
               <Route path={'/VacanciesOverview'} element={<VacanciesOverview />}/>
+              <Route path={'/TestLayout'} element={<TestLayout />}/>
             </Routes>  
         </BrowserRouter>   
 
 
-        <div className="grid place-items-center h-screen gap-8">
+      <div className="grid place-items-center h-screen gap-8">
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       
         <Image

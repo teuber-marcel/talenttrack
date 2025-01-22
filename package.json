@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "antd": "^5.23.2"
+  },
+  "devDependencies": {
+    "@types/antd": "^0.12.32"
+  }
+}
