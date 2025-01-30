@@ -21,7 +21,8 @@ import {
 	createInterview,
 	updateInterview,
 	deleteInterview,
-	generateInterviewQuestions
+	generateInterviewQuestions,
+	downloadInterviewQuestions
 } from '../controllers/interview.controller.js';
 
 const router = express.Router();
@@ -55,6 +56,8 @@ router.route('/api/interviews/:id')
 	.delete(deleteInterview);
 router.route('/api/interviews/:id/generate-questions')
 	.post(generateInterviewQuestions);
+router.route('/api/interviews/:id/download-questions')
+	.get(downloadInterviewQuestions);
 
 router.use('/', (req, res) => {
 	res.status(200).send("Program is running");
