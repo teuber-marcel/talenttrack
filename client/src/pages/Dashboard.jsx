@@ -12,6 +12,8 @@ import theme from 'antd/es/theme';
 import DonutChart from '../components/Dashboard/DonutChart';
 import ApplicantDashboard from '../components/Dashboard/ApplicantDashboard';
 import CalendarComponent from '../components/Dashboard/Calendar'; // Import CalendarComponent
+import Sidebar from '../components/Global/Sidebar';
+
 
 const { Sider, Header, Content } = Layout;
 
@@ -32,7 +34,7 @@ const items = [
   getItem('Files', '9', <FileOutlined />),
 ];
 
-const TestLayout = () => {
+const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   // Extract color and border-radius tokens from Ant Design theme
@@ -43,24 +45,10 @@ const TestLayout = () => {
   return (
     <Layout style={{ backgroundColor: 'var(--background)', minHeight: '100vh', height: '100%', display: 'flex' }}>
       {/* Sidebar */}
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-        className="sidebar"
-      >
-        <div className="sidebar-logo">Logo</div>
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          items={items}
-          className="sidebar-menu"
-        />
-      </Sider>
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       {/* Main Layout */}
-      <Layout style={{ background: 'var(--background)' }}>
+      <Layout style={{ background: 'var(--background)' }}>  
         <Header
           style={{
             color: 'white',
@@ -143,4 +131,4 @@ const TestLayout = () => {
   );
 };
 
-export default TestLayout;
+export default Dashboard;
