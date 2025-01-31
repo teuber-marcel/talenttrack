@@ -6,6 +6,21 @@ export const getVacancies = async () => {
 };
 
 export const deleteVacancy = async (id) => {
-  const response = await fetch(`${API_URL}/api/vacancies/` + id, { method: 'DELETE' });
-  return response.ok;
+  if (!id) {
+    console.error("No ID transmitted for DELETE request.");
+    return false;
+  }
+
+  try {
+    const response = await fetch(`${API_URL}/api/vacancies/${id}`, { method: "DELETE" });
+
+    if (!response.ok) {
+      throw new Error(`Error when deleting: ${response.statusText}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error("API error:", error);
+    return false;
+  }
 };

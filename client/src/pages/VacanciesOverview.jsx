@@ -36,9 +36,14 @@ const Vacancies = () => {
 
   const handleDelete = async (id) => {
     try {
-      await deleteVacancy(id);
-      message.success("Vacancy gelöscht");
-      setVacancies((prev) => prev.filter((v) => v.id !== id)); // Optimistisches Update
+      const success = await deleteVacancy(id);
+      
+      if (success) {
+        message.success("Vacancy gelöscht");
+        setVacancies((prev) => prev.filter((vacancy) => vacancy._id !== id));
+      } else {
+        message.error("Fehler beim Löschen");
+      }
     } catch (error) {
       message.error("Fehler beim Löschen");
     }
@@ -56,7 +61,7 @@ const Vacancies = () => {
       dataIndex: "title",
       key: "title",
       render: (text, record) => (
-        <Link href={`/vacancies/${record.id}`}>{text}</Link>
+        <Link href={`/vacancies/${record._id}`}>{text}</Link>
       ),
     },
     {
@@ -75,7 +80,7 @@ const Vacancies = () => {
       key: "status",
     },
     {
-      title: "Created At",
+      title: "Created",
       dataIndex: "createdAt",
       key: "createdAt",
       render: (text) => new Date(text).toLocaleDateString(),
@@ -90,14 +95,14 @@ const Vacancies = () => {
       key: "actions",
       render: (_, record) => (
         <Space>
-          <Link href={`/vacancies/edit/${record.id}`}>
+          <Link href={`/vacancies/edit/${record._id}`}>
             <Button type="primary">Edit</Button>
           </Link>
           <Popconfirm
-            title="Sicher löschen?"
-            onConfirm={() => setTimeout(() => handleDelete(record.id), 100)}
-            okText="Ja"
-            cancelText="Nein"
+            title="Confirm Deletion"
+            onConfirm={() => setTimeout(() => handleDelete(record._id), 100)}
+            okText="Confirm"
+            cancelText="Cancel"
           >
             <Button danger>Delete</Button>
           </Popconfirm>
