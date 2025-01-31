@@ -1,12 +1,5 @@
 import React, { useState } from 'react';
 import '../app/globals.css';
-import {
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
-  TeamOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
 import { Layout, Menu, Row, Col } from 'antd';
 import theme from 'antd/es/theme';
 import DonutChart from '../components/Dashboard/DonutChart';
@@ -15,24 +8,8 @@ import CalendarComponent from '../components/Dashboard/Calendar'; // Import Cale
 import Sidebar from '../components/Global/Sidebar';
 
 
-const { Sider, Header, Content } = Layout;
+const {Header, Content } = Layout;
 
-function getItem(label, key, icon, children) {
-  return {
-    key,
-    icon,
-    children,
-    label,
-  };
-}
-
-const items = [
-  getItem('Dashboard', '1', <PieChartOutlined />),
-  getItem('Vacancies', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />),
-  getItem('Team', 'sub2', <TeamOutlined />),
-  getItem('Files', '9', <FileOutlined />),
-];
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -58,7 +35,7 @@ const Dashboard = () => {
             fontSize: '24px',
           }}
         >
-          TalentTrack Dashboard
+          "Your Company's" Dashboard
         </Header>
         <Content style={{ margin: '16px' }}>
           <div>
