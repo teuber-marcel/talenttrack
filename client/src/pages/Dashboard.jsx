@@ -43,7 +43,7 @@ const Dashboard = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ backgroundColor: 'var(--background)', minHeight: '100vh', height: '100%', display: 'flex' }}>
+    <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: "margin-left 0.3s ease", backgroundColor: 'var(--background)', minHeight: '100vh', height: '100%', display: 'flex' }}>
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 

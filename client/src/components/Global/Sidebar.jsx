@@ -30,7 +30,15 @@ const items = [
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} className="sidebar">
+    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} className="sidebar"
+    style={{
+        position: "fixed", // Keeps sidebar in place
+        left: 0,
+        top: 0,
+        bottom: 0,
+        height: "100vh", // Full height
+        overflow: "hidden", // Prevents scrolling inside sidebar
+        }}>
        <div className="sidebar-logo">Logo</div>
         <Menu
           theme="dark"
