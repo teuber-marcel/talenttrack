@@ -1,52 +1,67 @@
 // components/Sidebar.jsx
-import React, { useState } from "react";
+import React from "react";
 import { Layout, Menu } from "antd";
 import {
   DesktopOutlined,
-  FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
   UserOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const { Sider } = Layout;
 
-const getItem = (label, key, icon, href) => ({
-  key,
+/**
+ * Helper to build Menu items.
+ * 'key' should match the 'href' so that we can directly use the router.pathname
+ * to highlight the correct menu item.
+ */
+const getItem = (label, key, icon) => ({
+  key,      // <-- use the path as the key
   icon,
-  label: href ? <Link href={href}>{label}</Link> : label,
+  label: <Link href={key}>{label}</Link>,
 });
 
 const items = [
-  getItem("Dashboard", "1", <PieChartOutlined />, "/dashboard"),
-  getItem("Vacancies", "2", <DesktopOutlined />, "/vacancies"),
-  getItem("User", "sub1", <UserOutlined />, "/profile"),
-  getItem("Team", "sub2", <TeamOutlined />, "/team"),
-  getItem("Files", "9", <FileOutlined />, "/files"),
+  getItem("Dashboard", "/Dashboard", <PieChartOutlined />),
+  getItem("Vacancies", "/VacanciesOverview", <DesktopOutlined />),
+  getItem("Applicants", "/Applicants", <UserOutlined />),
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
+  // Grab the current route from Next.js router
+  const router = useRouter();
+  const currentPath = router.pathname; // e.g., "/dashboard", "/VacanciesOverview", etc.
+
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed} className="sidebar"
-    style={{
-        position: "fixed", // Keeps sidebar in place
+    <Sider
+      collapsible
+      collapsed={collapsed}
+      onCollapse={setCollapsed}
+      className="sidebar"
+      style={{
+        position: "fixed",
         left: 0,
         top: 0,
         bottom: 0,
-        height: "100vh", // Full height
-        overflow: "hidden", // Prevents scrolling inside sidebar
-        }}>
-       <div className="sidebar-logo">Logo</div>
-        <Menu
-          theme="dark"
-          defaultSelectedKeys={['1']}
-          mode="inline"
-          items={items}
-          className="sidebar-menu"
-        />
+        height: "100vh",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        className="sidebar-logo"
+        style={{ textAlign: "center", padding: "16px", color: "white" }}
+      >
+        {collapsed ? "🗂" : "Menu"}
+      </div>
+      <Menu
+        theme="dark"
+        mode="inline"
+        // Use 'selectedKeys' (controlled) instead of 'defaultSelectedKeys'
+        selectedKeys={[currentPath]} 
+        items={items}
+        className="sidebar-menu"
+      />
     </Sider>
   );
 };

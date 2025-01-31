@@ -3,7 +3,6 @@ import Image from "next/image";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import Dashboard from "../pages/Dashboard";
 import VacanciesOverview from "../pages/VacanciesOverview";
-import TestLayout from "../pages/TestLayout";
 
 const App = () => {
   return (
@@ -12,7 +11,8 @@ const App = () => {
             <Routes>
               <Route path={'/Dashboard'} element={<Dashboard/>}/>
               <Route path={'/VacanciesOverview'} element={<VacanciesOverview />}/>
-              <Route path={'/TestLayout'} element={<TestLayout />}/>
+              <Route path={'/layout'} element={<layout />}/>
+
             </Routes>  
         </BrowserRouter>   
 
@@ -21,7 +21,7 @@ const App = () => {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
       
         <Image
-          className="dark:invert center-image"
+          className="dark:invert center-image"  
           src="/assets/Logo_Klein.png"
           alt="logo"
           width={180}
