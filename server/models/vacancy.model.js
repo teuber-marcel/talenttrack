@@ -27,7 +27,7 @@ const vacancySchema = mongoose.Schema(
             enum: {
                 values: [
                     "workingStudent", "intern", "juniorProfessional", "professional",
-                    "seniorProfessional", "teamLead", "manager", "director"
+                    "seniorProfessional", "executiveProfessional", "teamLead", "manager", "director", "executiveDirector"
                 ], 
                 message : "{VALUE} is not a valid hierarchy"
             },

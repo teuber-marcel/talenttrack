@@ -3,7 +3,7 @@ import '../app/globals.css';
 import theme from "antd/es/theme";
 import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
 import Link from "next/link";
-import { SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
 
@@ -132,11 +132,12 @@ const Vacancies = () => {
         <Content style={{ margin: "16px", padding: 24 }}>
           <Space style={{ marginBottom: 16 }}>
             <Link href="/vacancies/new">
-              <Button type="primary">+ Neue Vacancy</Button>
+              <Button type="primary" icon={<PlusCircleOutlined />} size="large">New Vacancy</Button>
             </Link>
             <Input
-              placeholder="Suche..."
+              placeholder="Search..."
               prefix={<SearchOutlined />}
+              size="large"
               onChange={(e) => setSearchText(e.target.value)}
               allowClear
             />
