@@ -134,6 +134,23 @@ const updateVacancy = async (req, res) => {
 	}
 };
 
+const partialUpdateVacancy = async (req, res) => {
+    const id = req.params.id;
+    const updateFields = req.body; // Enthält nur die Felder, die aktualisiert werden sollen
+
+    try {
+        const updatedVacancy = await Vacancy.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
+
+        if (!updatedVacancy) {
+            return res.status(404).json({ message: "Vacancy not found" });
+        }
+
+        res.status(200).json(updatedVacancy);
+    } catch (error) {
+        res.status(400).json({ message: "Error updating vacancy", error: error.message });
+    }
+};
+
 const deleteVacancy = async (req, res) => {
 	const id = req.params.id;
 	try {
@@ -153,5 +170,6 @@ export {
 	getVacancyWithApplicantsById,
 	createVacancy,
 	updateVacancy,
+	partialUpdateVacancy,
 	deleteVacancy
 }

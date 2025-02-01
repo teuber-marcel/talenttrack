@@ -5,6 +5,7 @@ import {
 	getVacancyWithApplicantsById,
 	createVacancy,
 	updateVacancy,
+	partialUpdateVacancy,
 	deleteVacancy
 } from '../controllers/vacancy.controller.js';
 import {
@@ -36,6 +37,8 @@ router.route('/api/vacancies/:id')
 	.delete(deleteVacancy);
 router.route('/api/vacancies/:id/details')
 	.get(getVacancyWithApplicantsById);
+router.route('/api/vacancies/:id/details')
+	.patch(partialUpdateVacancy);
 
 router.route('/api/applicants')
 	.get(getApplicants)
