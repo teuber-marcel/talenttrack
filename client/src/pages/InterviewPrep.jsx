@@ -40,7 +40,7 @@ const InterviewPreparation = () => {
   const steps = [
     { title: "Job Overview", status: "finish" },
     { title: "Applicant Details", status: "finish" },
-    { title: "Interview Preparation", status: "finish" }
+    { title: "Interview Preparation", status: "process" }
   ];
 
   return (
