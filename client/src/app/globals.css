@@ -202,3 +202,8 @@ p {
 .custom-disabled-button .anticon {
   color: #8c8c8c !important; /* Icon auch grau färben */
 }
+
+.custom-steps .ant-steps-item-tail::after {
+  background-color: white !important;
+}
+
