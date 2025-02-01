@@ -189,3 +189,16 @@ p {
 .custom-table .ant-input::placeholder {
   color: #a0a0a0 !important;
 }
+
+.custom-disabled-button {
+  background-color: #bfbfbf !important; /* Hellgrauer Hintergrund */
+  color: #8c8c8c !important; /* Grauer Text */
+  border-color: #bfbfbf !important; /* Randfarbe gleich Hintergrund */
+  cursor: not-allowed !important; /* Zeigt an, dass der Button nicht klickbar ist */
+  box-shadow: none !important; /* Entfernt eventuelle Schatten */
+  opacity: 1 !important; /* Entfernt die Standard-Transparenz von Ant Design */
+}
+
+.custom-disabled-button .anticon {
+  color: #8c8c8c !important; /* Icon auch grau färben */
+}
