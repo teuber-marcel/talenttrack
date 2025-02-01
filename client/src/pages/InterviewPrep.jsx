@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Typography, Row, Col, Card, Button, Image, message } from "antd";
+import { Layout, Typography, Row, Col, Card, Button, Image, message, notification } from "antd";
+import { CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import BackgroundBox from "../components/Global/BackgroundBox";
 import { getApplicants } from "../services/applicantService";
@@ -9,6 +10,12 @@ import { createInterview, generateQuestions, getInterviewByApplicantId, download
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
+
+// 1. Globale Notification-Konfiguration: Legt die Grundeinstellungen für alle Notifications fest
+notification.config({
+  placement: 'topRight', // Position oben rechts
+  top: 100 // Abstand von oben in Pixeln
+});
 
 const InterviewPreparation = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -93,11 +100,28 @@ const InterviewPreparation = () => {
       return;
     }
     
-    const success = await downloadInterviewQuestions(currentInterview._id);
-    if (success) {
-      message.success("Interview questions downloaded successfully");
-    } else {
-      message.error("Failed to download interview questions");
+    try {
+      const success = await downloadInterviewQuestions(currentInterview._id);
+      if (success) {
+        // 2. Notification-Aufruf: Zeigt eine Success-Notification mit benutzerdefinierten Styles
+        notification.success({
+          message: "Download Complete", // Titel der Notification
+          description: "Interview questions have been successfully downloaded.", // Beschreibungstext
+          icon: <CheckCircleOutlined style={{ color: "#547bae" }} />, // Custom Icon mit Farbe
+          duration: 4, // Anzeigedauer in Sekunden
+          pauseOnHover: true, // Pausiert Timer beim Hover
+          style: { 
+            backgroundColor: "rgba(255,255,255,0.8)", // Halbtransparenter Hintergrund
+            borderLeft: '4px solid #547bae', // Farbiger Rand links
+            backdropFilter: 'blur(8px)' // Glaseffekt
+          }
+        });
+      } else {
+        message.error("Failed to download interview questions");
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      message.error("Error during download");
     }
   };
 
@@ -106,9 +130,16 @@ const InterviewPreparation = () => {
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout style={{ marginLeft: collapsed ? 80 : 200, padding: "24px", background: "#000000" }}>
         <Content>
-          <div style={{ position: "absolute", top: "24px", left: "70%", transform: "translateX(-50%)" }}>
+          <div style={{ 
+            position: "absolute", 
+            top: "24px", 
+            left: "70%", 
+            transform: "translateX(-50%)",
+            zIndex: 1000
+          }}>
             <ProgressStepper steps={steps} currentStep={0} />
           </div>
+
           <Title level={1}>Interview Preparation</Title>
           <Row justify="center" style={{ margin: "40px 0 16px" }}>
             {applicants.length > 0 && (
@@ -150,7 +181,7 @@ const InterviewPreparation = () => {
                 </Card>
                 <Row justify="end" style={{ marginTop: "16px" }}>
                   <Button 
-                    onClick={() => {}} 
+                    onClick={() => {}} // Leerer Click-Handler für Cancel
                     type="default" 
                     size="large"
                     style={{ 

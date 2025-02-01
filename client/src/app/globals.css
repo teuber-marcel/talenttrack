@@ -222,3 +222,33 @@ h1, h2, h3, h4, h5, h6, p {
 .custom-steps .ant-steps-item-tail::after {
   background-color: white !important;
 }
+
+/* Custom Notification Styles */
+.custom-notification {
+  z-index: 9999 !important;
+}
+
+.ant-notification {
+  z-index: 9999 !important;
+}
+
+.ant-notification-notice {
+  background-color: rgba(255,255,255,0.5) !important;
+  border: 3px solid #547bae !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  padding: 16px !important;
+}
+
+.ant-notification-notice-message {
+  color: #000000 !important;
+  font-weight: 500 !important;
+}
+
+.ant-notification-notice-description {
+  color: #333333 !important;
+}
+
+.ant-notification-notice-close {
+  color: #547bae !important;
+}
