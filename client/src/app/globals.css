@@ -199,8 +199,16 @@ p {
 }
 
 /* Fix for visibility issues */
-h1, h2, h3, h4, h5, h6, p, .ant-typography {
-  color: var(--foreground) !important; /* Ensure text remains visible */
+h1, h2, h3, h4, h5, h6, p {
+  color: var(--foreground) !important;
+}
+
+/* Neue Regel für .ant-typography, die Ausnahmen erlaubt */
+.ant-typography {
+  color: var(--foreground) !important;
+}
+.interview-questions .ant-typography {
+  color: #000000 !important;
 }
 
 .ant-divider {
