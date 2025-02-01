@@ -3,7 +3,8 @@ import '../app/globals.css';
 import theme from "antd/es/theme";
 import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
 import Link from "next/link";
-import { SearchOutlined, PlusCircleOutlined } from "@ant-design/icons";
+import { useRouter } from 'next/router';
+import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined  } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
 
@@ -14,6 +15,8 @@ const Vacancies = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [collapsed, setCollapsed] = useState(false);
+
+  const router = useRouter();
 
   const {
     token: { borderRadiusLG },
@@ -96,7 +99,7 @@ const Vacancies = () => {
       render: (_, record) => (
         <Space>
           <Link href={`/vacancies/edit/${record._id}`}>
-            <Button type="primary">Edit</Button>
+            <Button type="primary" icon={<EditOutlined />} />
           </Link>
           <Popconfirm
             title="Confirm Deletion"
@@ -104,7 +107,7 @@ const Vacancies = () => {
             okText="Confirm"
             cancelText="Cancel"
           >
-            <Button danger>Delete</Button>
+            <Button danger icon={<DeleteOutlined />} />
           </Popconfirm>
         </Space>
       ),
@@ -131,9 +134,7 @@ const Vacancies = () => {
         </Header>
         <Content style={{ margin: "16px", padding: 24 }}>
           <Space style={{ marginBottom: 16 }}>
-            <Link href="/vacancies/new">
-              <Button type="primary" icon={<PlusCircleOutlined />} size="large">New Vacancy</Button>
-            </Link>
+            <Button type="primary" icon={<PlusCircleOutlined />} size="large" onClick={() => router.push('/CreateVacancy')}>New Vacancy</Button>
             <Input
               placeholder="Search..."
               prefix={<SearchOutlined />}
