@@ -47,7 +47,15 @@ const InterviewPreparation = () => {
     <div className="flex h-screen">
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       <div className={`flex-1 relative flex flex-col p-6 ${collapsed ? 'ml-12' : 'ml-56'}`}>
-        <div className="absolute top-6 right-6">
+        {/* Container: ProgressStepper zentriert und leicht nach rechts versetzt */}
+        <div
+          style={{
+            position: "absolute",
+            top: "1.5rem", // entspricht top-6
+            left: "70%",
+            transform: "translateX(calc(-50% + 10px))"
+          }}
+        >
           <ProgressStepper steps={steps} currentStep={0} />
         </div>
         <h1 className="text-4xl font-bold mb-4 text-left">Interview Preparation</h1>
