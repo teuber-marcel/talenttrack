@@ -6,12 +6,16 @@ import PDFDocument from "pdfkit";
 import fs from "fs";
 
 const getInterviews = async (req,res) => {
-	try {
-		const interviews = await Interview.find({});
-		res.status(200).json(interviews);
-	} catch (e) {
-		res.status(500).json({ message: "Error retrieving interviews", error: e.message });
-	}
+    try {
+        const filter = {};
+        if (req.query.applicant) {
+            filter.applicant = req.query.applicant;
+        }
+        const interviews = await Interview.find(filter);
+        res.status(200).json(interviews);
+    } catch (e) {
+        res.status(500).json({ message: "Error retrieving interviews", error: e.message });
+    }
 }
 
 const getInterviewById = async (req,res) => {

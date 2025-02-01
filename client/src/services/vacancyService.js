@@ -5,6 +5,11 @@ export const getVacancies = async () => {
   return response.json();
 };
 
+export const getVacancyById = async (id) => {
+  const response = await fetch(`${API_URL}/api/vacancies/${id}`);
+  return response.json();
+};
+
 export const deleteVacancy = async (id) => {
   if (!id) {
     console.error("No ID transmitted for DELETE request.");
