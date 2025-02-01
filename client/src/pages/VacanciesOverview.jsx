@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import '../app/globals.css';
-import theme from "antd/es/theme";
 import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
 import Link from "next/link";
 import { useRouter } from 'next/router';
@@ -17,10 +16,6 @@ const Vacancies = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const router = useRouter();
-
-  const {
-    token: { borderRadiusLG },
-  } = theme.useToken();
 
   useEffect(() => {
     const fetchVacancies = async () => {
@@ -64,7 +59,7 @@ const Vacancies = () => {
       dataIndex: "title",
       key: "title",
       render: (text, record) => (
-        <Link href={`/vacancies/${record._id}`}>{text}</Link>
+        <Link href={`/vacancies/edit/${record._id}`}>{text}</Link>
       ),
     },
     {
@@ -147,7 +142,7 @@ const Vacancies = () => {
             className="custom-table"
             columns={columns}
             dataSource={filteredVacancies}
-            rowKey="id"
+            rowKey="_id"
             loading={loading}
           />
         </Content>
