@@ -104,7 +104,7 @@ const generateInterviewQuestions = async (req, res) => {
         const openAIResponse = await axios.post(
             "https://api.openai.com/v1/chat/completions",
             {
-                model: "chatgpt-4o-mini",
+                model: "gpt-3.5-turbo",
                 messages: [
                     {
                         role: "system",
