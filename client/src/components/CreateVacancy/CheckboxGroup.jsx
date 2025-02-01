@@ -3,7 +3,7 @@ import { Checkbox, Typography } from "antd";
 
 const { Title } = Typography;
 
-const CheckboxGroup = ({ onChange }) => {
+const CheckboxGroup = ({ onChange, disabled }) => {
   const [checkedValues, setCheckedValues] = useState([]);
 
   const handleChange = (checkedValues) => {
@@ -19,23 +19,28 @@ const CheckboxGroup = ({ onChange }) => {
       </Title>
 
       {/* Grid für die Checkboxen */}
-      <Checkbox.Group onChange={handleChange} value={checkedValues} style={{ width: "100%" }}>
+      <Checkbox.Group
+        onChange={handleChange}
+        value={checkedValues}
+        style={{ width: "100%" }}
+        disabled={disabled}
+      >
         <div style={{ 
           display: "grid", 
           gridTemplateColumns: "1fr 1fr", 
           rowGap: "12px", 
           columnGap: "100px" 
         }}>
-          <Checkbox value="workingStudent" style={{ color: "white" }}>Working Student</Checkbox>
-          <Checkbox value="intern" style={{ color: "white" }}>Intern</Checkbox>
-          <Checkbox value="juniorProfessional" style={{ color: "white" }}>Junior Professional</Checkbox>
-          <Checkbox value="professional" style={{ color: "white" }}>Professional</Checkbox>
-          <Checkbox value="seniorProfessional" style={{ color: "white" }}>Senior Professional</Checkbox>
-          <Checkbox value="executiveProfessional" style={{ color: "white" }}>Executive Professional</Checkbox>
-          <Checkbox value="teamLead" style={{ color: "white" }}>Team Lead</Checkbox>
-          <Checkbox value="manager" style={{ color: "white" }}>Manager</Checkbox>
-          <Checkbox value="director" style={{ color: "white" }}>Director</Checkbox>
-          <Checkbox value="executiveDirector" style={{ color: "white" }}>Executive Director</Checkbox>
+          <Checkbox value="workingStudent" style={{ color: "white" }} disabled={disabled}>Working Student</Checkbox>
+          <Checkbox value="intern" style={{ color: "white" }} disabled={disabled}>Intern</Checkbox>
+          <Checkbox value="juniorProfessional" style={{ color: "white" }} disabled={disabled}>Junior Professional</Checkbox>
+          <Checkbox value="professional" style={{ color: "white" }} disabled={disabled}>Professional</Checkbox>
+          <Checkbox value="seniorProfessional" style={{ color: "white" }} disabled={disabled}>Senior Professional</Checkbox>
+          <Checkbox value="executiveProfessional" style={{ color: "white" }} disabled={disabled}>Executive Professional</Checkbox>
+          <Checkbox value="teamLead" style={{ color: "white" }} disabled={disabled}>Team Lead</Checkbox>
+          <Checkbox value="manager" style={{ color: "white" }} disabled={disabled}>Manager</Checkbox>
+          <Checkbox value="director" style={{ color: "white" }} disabled={disabled}>Director</Checkbox>
+          <Checkbox value="executiveDirector" style={{ color: "white" }} disabled={disabled}>Executive Director</Checkbox>
         </div>
       </Checkbox.Group>
     </div>

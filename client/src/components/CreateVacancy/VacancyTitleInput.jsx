@@ -3,7 +3,7 @@ import { Input, Typography } from "antd";
 
 const { Title } = Typography;
 
-const VacancyTitleInput = ({ onChange }) => {
+const VacancyTitleInput = ({ onChange, disabled  }) => {
 
   const [value, setValue] = useState("");
 
@@ -41,6 +41,7 @@ const VacancyTitleInput = ({ onChange }) => {
           padding: "10px",
           borderRadius: "6px"
         }}
+        disabled={disabled}
       />
     </div>
   );
