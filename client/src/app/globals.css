@@ -215,3 +215,7 @@ h1, h2, h3, h4, h5, h6, p, .ant-typography {
 .ant-typography, .ant-divider {
   color: #ffffff !important; /* Ensure text and divider are white */
 }
+
+.custom-steps .ant-steps-item-tail::after {
+  background-color: white !important;
+}
