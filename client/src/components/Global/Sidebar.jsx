@@ -52,7 +52,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         className="sidebar-logo"
         style={{ textAlign: "center", padding: "16px", color: "white" }}
       >
-        {collapsed ? "🗂" : "Menu"}
+        {collapsed ? (
+          <img src="/assets/Logo_Klein.png" alt="Collapsed Logo" style={{ width: '30px', height: '30px' }} />
+        ) : "TalentTrack" }
       </div>
       <Menu
         theme="dark"

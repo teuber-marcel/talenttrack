@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar'; // Import react-calendar
 import 'react-calendar/dist/Calendar.css'; // Import react-calendar styles
 import './Calendar.css'; // Import custom styles
+import Link from 'next/link';
 
 interface Applicant {
-  id: string;
+  _id: string;
   prename: string;
   surname: string;
 }
@@ -12,7 +13,8 @@ interface Applicant {
 interface Interview {
   time: string;
   description: string;
-  interviewDate: string; // Stored as ISO string
+  interviewStartDate: string; // Stored as ISO string
+  interviewEndDate: string; // Stored as ISO string
   applicant: Applicant;
 }
 
@@ -41,17 +43,25 @@ const CalendarComponent: React.FC = () => {
         const applicant = await getApplicantById(applicantId);
         return {
           ...event,
-          interviewDate: new Date(event.interviewDate), // Parse ISO string to Date object
+          interviewStartDate: new Date(event.interviewStartDate), // Parse ISO string to Date object
+          interviewEndDate: new Date(event.interviewEndDate), // Parse ISO string to Date object
           applicant,
         };
       })
     );
     setEvents(formattedData);
+    
   };
 
-  const interviewDates = events.map((event) =>
-    new Date(event.interviewDate).toDateString()
+  const interviewStartDates = events.map((event) =>
+    new Date(event.interviewStartDate).toDateString()
   );
+
+  const interviewEndDates = events.map((event) =>
+    new Date(event.interviewEndDate).toDateString()
+  );
+
+
 
   const handleTodayClick = () => {
     const today = new Date();
@@ -80,7 +90,7 @@ const CalendarComponent: React.FC = () => {
             className="dark-theme-calendar"
             locale="en-GB" // Set the locale to English
             tileClassName={({ date }) =>
-              interviewDates.includes(date.toDateString())
+              interviewStartDates.includes(date.toDateString())
                 ? 'highlighted-date'
                 : undefined
             }
@@ -120,7 +130,7 @@ const CalendarComponent: React.FC = () => {
             {events
               .filter((event) => {
                 if (!date) return false;
-                const eventDate = new Date(event.interviewDate);
+                const eventDate = new Date(event.interviewStartDate);
                 return (
                   eventDate.getFullYear() === date.getFullYear() &&
                   eventDate.getMonth() === date.getMonth() &&
@@ -128,25 +138,33 @@ const CalendarComponent: React.FC = () => {
                 );
               })
               .sort((a, b) => {
-                const timeA = new Date(a.interviewDate).getTime();
-                const timeB = new Date(b.interviewDate).getTime();
+                const timeA = new Date(a.interviewStartDate).getTime();
+                const timeB = new Date(b.interviewStartDate).getTime();
                 return timeA - timeB;
               })
               .map((event, index) => (
                 <li key={index} style={{ marginBottom: '10px' }}>
-                  {new Date(event.interviewDate).toLocaleString('en-GB', {
+                  {new Date(event.interviewStartDate).toLocaleString('en-GB', {
                     hour: '2-digit',
                     minute: '2-digit',
                     hour12: false,
-                  })}{' '}
-                  | {event.applicant?.prename} {event.applicant?.surname}
-                </li>
-              ))}
+                  })}{' '} - {' '}
+                   {new Date(event.interviewEndDate).toLocaleString('en-GB', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false,
+                  })} {' '}
+                  | {event.applicant?.prename} {event.applicant?.surname} | {' '}
+                  <Link href={`InterviewPrep?applicantId=${event.applicant?._id}`}>
+                    Interview Preparation
+                  </Link>
+                  </li>
+              ))} 
           </ul>
           {/* Show message if no interviews are scheduled */}
           {events.filter((event) => {
             if (!date) return false;
-            const eventDate = new Date(event.interviewDate);
+            const eventDate = new Date(event.interviewStartDate);
             return (
               eventDate.getFullYear() === date.getFullYear() &&
               eventDate.getMonth() === date.getMonth() &&

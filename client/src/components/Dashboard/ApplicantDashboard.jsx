@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
+import Link from 'next/link';
 
 const ApplicantDashboard = () => {
   const [applicants2, setApplicants] = useState([]);
@@ -85,7 +86,9 @@ const ApplicantDashboard = () => {
               borderBottom: '1px solid #444444',
             }}
           >
+            
             {applicant.photo ? (
+              <Link href={`/applicants/details/${applicant._id}`}>
               <img
                 src={applicant.photo}
                 alt={`${applicant.prename} ${applicant.surname}`}
@@ -96,8 +99,9 @@ const ApplicantDashboard = () => {
                   marginRight: '15px',
                 }}
               />
+              </Link>
             ) : (
-              <FaUserCircle
+              <Link href={`/applicants/details/${applicant._id}`}>              <FaUserCircle
                 style={{
                   width: '40px',
                   height: '40px',
@@ -105,11 +109,14 @@ const ApplicantDashboard = () => {
                   marginRight: '15px',
                 }}
               />
+              </Link>
+
             )}
             <div>
+              <Link href={`/applicants/details/${applicant._id}`}>
               <h4 style={{ margin: 0, color: 'white' }}>
                 {`${applicant.prename} ${applicant.surname}`}
-              </h4>
+              </h4> </Link>
               <p style={{ margin: 0, color: '#7f8c8d' }}>
                 {applicant.vacancy
                   ? vacancyTitles[applicant.vacancy] || 'Loading...'

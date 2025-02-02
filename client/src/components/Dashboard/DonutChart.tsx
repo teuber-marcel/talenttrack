@@ -1,31 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } from 'chart.js';
 
-// Registering the necessary Chart.js components
+// Register the necessary Chart.js components
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 interface Vacancy {
   status: 'Open' | 'Filled' | 'Draft' | 'Interview';
-  // other properties of Vacancy can be added here
+  // other properties can be added here
 }
 
 const DonutChart: React.FC = () => {
+  const chartRef = useRef<any>(null);
+  const [vacancies, setVacancies] = React.useState<Vacancy[]>([]);
+  const [statusCounts, setStatusCounts] = React.useState({
+    Open: 0,
+    Filled: 0,
+    Draft: 0,
+    Interview: 0,
+  });
 
-  const[vacancies, setVacancies] = React.useState<Vacancy[]>([]);
-  const[statusCounts, setStatusCounts] = React.useState({ Open: 0, Filled: 0, Draft: 0, Interview: 0 });
-  
   useEffect(() => {
     getVacancies();
   }, []);
 
-  //data for the chart
+  // Fetch vacancies and count status occurrences
   const getVacancies = async () => {
     const response = await fetch('http://localhost:5555/api/vacancies');
     const data: Vacancy[] = await response.json();
     setVacancies(data);
     countStatus(data);
-  }
+  };
 
   const countStatus = (data: Vacancy[]) => {
     const counts = { Open: 0, Filled: 0, Draft: 0, Interview: 0 };
@@ -35,20 +40,32 @@ const DonutChart: React.FC = () => {
       }
     });
     setStatusCounts(counts);
-  }
+  };
 
-  const totalVacancies = statusCounts.Open + statusCounts.Filled + statusCounts.Draft + statusCounts.Interview;
+  const totalVacancies =
+    statusCounts.Open +
+    statusCounts.Filled +
+    statusCounts.Draft +
+    statusCounts.Interview;
+
+  // Update the labels to match the Vacancy status values
+  const chartLabels = ['Open', 'Filled', 'Draft', 'Interview'];
 
   const data = {
-    labels: ['Open', 'Filled', 'Drafted', 'Interviewing'],
+    labels: chartLabels,
     datasets: [
       {
-        data: [statusCounts.Open, statusCounts.Filled, statusCounts.Draft, statusCounts.Interview],
+        data: [
+          statusCounts.Open,
+          statusCounts.Filled,
+          statusCounts.Draft,
+          statusCounts.Interview,
+        ],
         backgroundColor: [
           'rgba(200, 50, 50, 0.9)', 
           'rgba(30, 150, 80, 0.9)', // Dark green
           'rgba(200, 100, 20, 0.9)', // Muted orange
-          'rgba(60, 120, 200, 0.9)'  // Deep blue
+          'rgba(60, 120, 200, 0.9)', // Deep blue
         ],
         borderColor: [
           'rgba(200, 50, 50, 0.9)', 
@@ -78,17 +95,15 @@ const DonutChart: React.FC = () => {
       },
       tooltip: {
         callbacks: {
-          title: () => '', 
-          label: (tooltipItem: any) => {
-            return ` ${tooltipItem.label}: ${tooltipItem.raw}`;
-          },
+          title: () => '',
+          label: (tooltipItem: any) => ` ${tooltipItem.label}: ${tooltipItem.raw}`,
         },
         backgroundColor: 'rgba(0, 0, 0, 0.7)',
         titleColor: '#fff',
         bodyColor: '#fff',
         padding: 10,
       },
-      datalabels: { 
+      datalabels: {
         display: true,
         color: 'white',
         formatter: (value: any) => `${value}`,
@@ -104,14 +119,40 @@ const DonutChart: React.FC = () => {
     },
   };
 
+  // Handler for chart clicks using the chart reference
+  const handleSegmentClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!chartRef.current) return;
+    // Retrieve the chart elements that were clicked on using the 'nearest' mode.
+    const elements = chartRef.current.getElementsAtEventForMode(
+      event,
+      'nearest',
+      { intersect: true },
+      false
+    );
+    if (elements.length > 0) {
+      // Get the first clicked element and its index
+      const element = elements[0];
+      const index = element.index;
+      // Use the chart label as the status to filter by
+      const clickedStatus = chartLabels[index];
+      
+      // Redirect with the status as a query parameter
+      window.location.href = `/VacanciesOverview?status=${encodeURIComponent(clickedStatus)}`;
+    }
+  };
+
   return (
     <div style={{ width: '100%', height: '100%' }}>
-      
       <h3 style={{ textAlign: 'center', marginBottom: '10px', color: 'white' }}>
-      Status of all Positions | Total: {totalVacancies}
+        Status of all Positions | Total: {totalVacancies}
       </h3>
       <div style={{ position: 'relative', height: '300px', width: 'auto', margin: '0 auto', alignSelf: 'top' }}>
-        <Doughnut data={data} options={options} />
+        <Doughnut 
+          ref={chartRef} 
+          data={data} 
+          options={options} 
+          onClick={handleSegmentClick} 
+        />
       </div>
     </div>
   );
