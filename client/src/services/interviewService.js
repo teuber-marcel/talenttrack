@@ -59,3 +59,17 @@ export const downloadInterviewQuestions = async (interviewId) => {
     return false;
   }
 };
+
+export const saveInterviewQuestions = async (interviewId, questions) => {
+  try {
+    const response = await fetch(`${API_URL}/api/interviews/${interviewId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ questions })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error saving questions:', error);
+    throw error;
+  }
+};
