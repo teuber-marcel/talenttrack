@@ -1,13 +1,16 @@
 /* Root Variables */
 :root {
-  --background: #0d0d0d; /* Dark layout background */
-  --foreground: #ededed; /* Light foreground color */
+  --background: #ffffff; /* Light layout background */
+  --foreground: #212529; /* Dark foreground color */
+  --card-background: #f8f9fa; /* Light card background */
+  --border-color: #dee2e6; /* Light border color */
+  --highlight-color: #007bff; /* Accent color */
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0d0d0d;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #212529;
   }
 }
 
@@ -15,11 +18,11 @@
 html,
 body,
 #root {
-  margin: 0; /* Remove any default margins */
-  height: 100%; /* Extend the black background to the entire height */
+  margin: 0;
+  height: 100%;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--background); /* Ensure the background color is applied */
+  background-color: var(--background);
 }
 
 h4 {
@@ -27,7 +30,7 @@ h4 {
 }
 
 h3 {
-  font-size: 20;
+  font-size: 20px;
 }
 
 p {
@@ -41,15 +44,15 @@ p {
 
 /* Sidebar Styles */
 .sidebar {
-   height: 100vh;
+  height: 100vh;
   left: 0;
   top: 0;
-  background-color: #181818; /* Dark sidebar background */
+  background-color: var(--card-background);
 }
 
 .sidebar-logo {
   padding: 16px;
-  color: white;
+  color: var(--foreground);
   text-align: center;
   font-weight: bold;
   font-size: 18px;
@@ -57,145 +60,94 @@ p {
 
 /* Sidebar Menu Styles */
 .sidebar-menu {
-  background-color: #181818 !important; /* Match sidebar background */
-  border-right: none; /* Remove border if visible */
+  background-color: var(--card-background) !important;
+  border-right: none;
 }
 
 .sidebar-menu .ant-menu-item {
-  background-color: transparent; /* Transparent background for default state */
-  color: #cccccc; /* Light gray text */
+  background-color: transparent;
+  color: var(--foreground);
 }
 
 .sidebar-menu .ant-menu-item:hover {
-  background-color: #383838; /* Slightly darker hover effect */
-  color: white; /* White text on hover */
+  background-color: var(--border-color);
+  color: var(--foreground);
 }
 
 .sidebar-menu .ant-menu-item-selected {
-  background-color: #303030 !important; /* Match selected state with the theme */
-  color: white !important; /* White text when selected */
-}
-
-.sidebar-menu .ant-menu-title-content {
-  color: inherit; /* Ensure menu title text color matches parent */
+  background-color: var(--highlight-color) !important;
+  color: white !important;
 }
 
 /* Sidebar Trigger (Collapse Icon) */
 .ant-layout-sider-trigger {
-  background-color: #181818 !important; /* Match the sidebar background */
-  color: #cccccc !important; /* Light gray icon color */
-  border-top: 1px solid #303030; /* Optional: Subtle border for separation */
+  background-color: var(--card-background) !important;
+  color: var(--foreground) !important;
+  border-top: 1px solid var(--border-color);
 }
 
 .ant-layout-sider-trigger:hover {
-  background-color: #383838 !important; /* Slightly darker on hover */
-  color: white !important; /* White icon on hover */
+  background-color: var(--border-color) !important;
+  color: var(--foreground) !important;
 }
 
 /* Main Content Styles */
 .main-content {
   margin: 20px;
   padding: 20px;
-  background-color: #202020; /* Darker content background */
+  background-color: var(--card-background);
   border-radius: 8px;
-  color: white;
+  color: var(--foreground);
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
 
-.dashboard-section {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.chart-container {
-  flex: 1;
-  margin-right: 20px;
-}
-
-.calendar-container {
-  flex: 1;
-}
-
-/* Utility Styles */
-.flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-}
-
-.flex-container-column {
-  flex-direction: column;
-}
-
-.center-image {
-  display: block;
-  margin: 0 auto;
-}
-
-/* Apply general dark mode styling to the table */
+/* Table Styles */
 .custom-table .ant-table {
-  background-color: #181818 !important;
-  color: #e0e0e0 !important;
+  background-color: var(--card-background) !important;
+  color: var(--foreground) !important;
   border-radius: 8px;
 }
 
-/* Table Header */
 .custom-table .ant-table-thead > tr > th {
-  background-color: #232323 !important;
-  color: #e0e0e0 !important;
+  background-color: var(--border-color) !important;
+  color: var(--foreground) !important;
   font-weight: 600;
-  border-bottom: 2px solid #333 !important;
+  border-bottom: 2px solid var(--border-color) !important;
 }
 
-/* Table Body */
 .custom-table .ant-table-tbody > tr > td {
-  background-color: #1e1e1e !important;
-  color: #d0d0d0 !important;
-  border-bottom: 1px solid #333 !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border-bottom: 1px solid var(--border-color) !important;
 }
 
-/* Table Hover Effect */
 .custom-table .ant-table-tbody > tr:hover > td {
-  background-color: #292929 !important;
+  background-color: var(--border-color) !important;
   transition: background-color 0.3s ease;
 }
 
 /* Action Buttons */
 .custom-table .ant-btn-primary {
-  background-color: #007bff !important;
-  border-color: #0056b3 !important;
+  background-color: var(--highlight-color) !important;
+  border-color: var(--highlight-color) !important;
 }
 
 .custom-table .ant-btn-danger {
-  background-color: #ff4d4f !important;
-  border-color: #ff7875 !important;
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
 }
 
 /* Input and Search Field */
 .custom-table .ant-input {
-  background-color: #232323 !important;
-  color: #e0e0e0 !important;
-  border: 1px solid #444 !important;
+  background-color: var(--background) !important;
+  color: var(--foreground) !important;
+  border: 1px solid var(--border-color) !important;
 }
 
 .custom-table .ant-input::placeholder {
-  color: #a0a0a0 !important;
-}
-
-.custom-disabled-button {
-  background-color: #bfbfbf !important; /* Hellgrauer Hintergrund */
-  color: #8c8c8c !important; /* Grauer Text */
-  border-color: #bfbfbf !important; /* Randfarbe gleich Hintergrund */
-  cursor: not-allowed !important; /* Zeigt an, dass der Button nicht klickbar ist */
-  box-shadow: none !important; /* Entfernt eventuelle Schatten */
-  opacity: 1 !important; /* Entfernt die Standard-Transparenz von Ant Design */
-}
-
-.custom-disabled-button .anticon {
-  color: #8c8c8c !important; /* Icon auch grau färben */
+  color: #6c757d !important;
 }
 
 /* Fix for visibility issues */
@@ -203,124 +155,32 @@ h1, h2, h3, h4, h5, h6, p {
   color: var(--foreground) !important;
 }
 
-/* Neue Regel für .ant-typography, die Ausnahmen erlaubt */
-.ant-typography {
-  color: var(--foreground) !important;
-}
-.interview-questions .ant-typography {
-  color: #000000 !important;
-}
-
-.ant-divider {
-  border-color: #ffffff !important; /* Make the divider line visible */
-}
-
-.ant-typography, .ant-divider {
-  color: #ffffff !important; /* Ensure text and divider are white */
-}
-
-.custom-steps .ant-steps-item-tail::after {
-  background-color: white !important;
-}
-
 /* Custom Notification Styles */
-.custom-notification {
-  z-index: 9999 !important;
-}
-
-.ant-notification {
-  z-index: 9999 !important;
-}
-
 .ant-notification-notice {
-  background-color: rgba(255,255,255,0.5) !important;
-  border: 3px solid #547bae !important;
+  background-color: var(--card-background) !important;
+  border-left: 3px solid var(--highlight-color) !important;
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
   padding: 16px !important;
 }
 
 .ant-notification-notice-message {
-  color: #000000 !important;
+  color: var(--foreground) !important;
   font-weight: 500 !important;
 }
 
 .ant-notification-notice-description {
-  color: #333333 !important;
+  color: var(--foreground) !important;
 }
 
 .ant-notification-notice-close {
-  color: #547bae !important;
+  color: var(--highlight-color) !important;
 }
 
 :root {
-  --background: #141414;         /* Main app background */
-  --card-background: #1f1f1f;    /* Cards/panels background */
-  --text-color: #f0f0f0;         /* Light text color */
-  --border-color: #303030;       /* Subtle border color */
-  --highlight-color: #1890ff;    /* Accent color (e.g., for badges/links) */
+  --background: #ffffff;
+  --card-background: #f8f9fa;
+  --text-color: #212529;
+  --border-color: #dee2e6;
+  --highlight-color: #007bff;
 }
-
-.dark-table-row td {
-  background-color: #1c1c1c !important;
-  color: #f0f0f0 !important;
-  font-size: 14px;
-  border-bottom: 1px solid #2a2a2a !important;
-  transition: background-color 0.2s ease;
-}
-
-.dark-table-row:hover td {
-  background-color: #2a2a2a !important; /* Slightly lighter on hover */
-}
-
-.ant-table-thead > tr > th {
-  background-color: #2f2f2f !important;
-  color: #ffffff !important;
-  border-bottom: 1px solid #3a3a3a !important;
-  font-weight: 600 !important;
-  text-transform: uppercase; /* optional style */
-}
-
-/* Make all Steps titles and descriptions white */
-.ant-steps-item-title,
-.ant-steps-item-description {
-  color: #ffffff !important;
-}
-
-/* Ensure the icon color is also visible */
-.ant-steps-item-icon .ant-steps-icon {
-  color: #ffffff !important;
-}
-
-.ant-steps-item-process .ant-steps-item-title {
-  color: #1890ff !important; /* or any highlight color you like */
-}
-
-/* Make pagination icons/arrows white */
-.ant-table-pagination .ant-pagination-next .ant-pagination-item-link .anticon,
-.ant-table-pagination .ant-pagination-prev .ant-pagination-item-link .anticon {
-  color: #ffffff !important;
-}
-
-/* Also style the page number items */
-.ant-table-pagination .ant-pagination-item,
-.ant-table-pagination .ant-pagination-prev .ant-pagination-item-link,
-.ant-table-pagination .ant-pagination-next .ant-pagination-item-link {
-  background-color: #1e1e1e !important;
-  border: 1px solid #2a2a2a !important;
-  color: #ffffff !important;
-}
-
-/* Hover states */
-.ant-table-pagination .ant-pagination-item:hover,
-.ant-table-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
-.ant-table-pagination .ant-pagination-next:hover .ant-pagination-item-link {
-  background-color: #2a2a2a !important;
-  border-color: #3a3a3a !important;
-}
-
-/* Active page highlight */
-.ant-table-pagination .ant-pagination-item-active {
-  border-color: #1890ff !important;  /* or any accent color you prefer */
-}
-

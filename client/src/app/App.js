@@ -23,7 +23,7 @@ const LoginPage = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", backgroundColor: "#000", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px" }}>
+    <Layout style={{ minHeight: "100vh", backgroundColor: "#ffffff", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px" }}>
       {/* Logo Section */}
       <Image 
         src="/assets/Logo_Klein.png" 
@@ -34,10 +34,10 @@ const LoginPage = () => {
       />
 
       {/* Headline */}
-      <Title level={2} style={{ color: "#ededed", textAlign: "center" }}>
+      <Title level={2} style={{ color: "#212529", textAlign: "center" }}>
         Welcome Back
       </Title>
-      <Text style={{ color: "#ccc", textAlign: "center" }}>
+      <Text style={{ color: "#6c757d", textAlign: "center" }}>
         Sign in to continue exploring TalentTrack
       </Text>
 
@@ -65,14 +65,14 @@ const LoginPage = () => {
         </Form.Item>
       </Form>
 
-      <Divider style={{ borderColor: "#444", color: "#ccc", width: "100%", maxWidth: "400px" }}>or sign in with</Divider>
+      <Divider style={{ borderColor: "#dee2e6", color: "#6c757d", width: "100%", maxWidth: "400px" }}>or sign in with</Divider>
 
       {/* Social Login Options */}
       <Space direction="vertical" style={{ width: "100%", maxWidth: "400px" }}>
         <Button 
           block 
           icon={<WindowsOutlined />} 
-          style={{ backgroundColor: "#333", color: "white" }}
+          style={{ backgroundColor: "#f8f9fa", color: "#212529", border: "1px solid #dee2e6" }}
           onClick={handleSSOClick}
         >
           Sign in with Microsoft
@@ -81,7 +81,7 @@ const LoginPage = () => {
         <Button 
           block 
           icon={<GoogleOutlined />} 
-          style={{ backgroundColor: "#d32f2f", color: "white" }}
+          style={{ backgroundColor: "#dc3545", color: "white" }}
           onClick={handleSSOClick}
         >
           Sign in with Google
@@ -89,9 +89,9 @@ const LoginPage = () => {
       </Space>
 
       {/* Footer Section */}
-      <footer style={{ marginTop: 24, color: "#777", fontSize: "14px", textAlign: "center" }}>
+      <footer style={{ marginTop: 24, color: "#6c757d", fontSize: "14px", textAlign: "center" }}>
         <p> 
-          Need help? <Link href="#" style={{ color: "#1890ff" }}>Contact Support</Link>
+          Need help? <Link href="#" style={{ color: "#007bff" }}>Contact Support</Link>
         </p>
       </footer>
     </Layout>

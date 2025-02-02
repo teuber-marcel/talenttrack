@@ -7,7 +7,6 @@ ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 interface Vacancy {
   status: 'Open' | 'Filled' | 'Draft' | 'Interview';
-  // other properties can be added here
 }
 
 const DonutChart: React.FC = () => {
@@ -24,7 +23,6 @@ const DonutChart: React.FC = () => {
     getVacancies();
   }, []);
 
-  // Fetch vacancies and count status occurrences
   const getVacancies = async () => {
     const response = await fetch('http://localhost:5555/api/vacancies');
     const data: Vacancy[] = await response.json();
@@ -48,7 +46,6 @@ const DonutChart: React.FC = () => {
     statusCounts.Draft +
     statusCounts.Interview;
 
-  // Update the labels to match the Vacancy status values
   const chartLabels = ['Open', 'Filled', 'Draft', 'Interview'];
 
   const data = {
@@ -62,16 +59,16 @@ const DonutChart: React.FC = () => {
           statusCounts.Interview,
         ],
         backgroundColor: [
-          'rgba(200, 50, 50, 0.9)', 
-          'rgba(30, 150, 80, 0.9)', // Dark green
-          'rgba(200, 100, 20, 0.9)', // Muted orange
-          'rgba(60, 120, 200, 0.9)', // Deep blue
+          '#dc3545', // Red
+          '#198754', // Green
+          '#fd7e14', // Orange
+          '#0d6efd', // Blue
         ],
         borderColor: [
-          'rgba(200, 50, 50, 0.9)', 
-          'rgba(30, 150, 80, 0.9)', 
-          'rgba(200, 100, 20, 0.9)', 
-          'rgba(60, 120, 200, 0.9)'
+          '#dc3545',
+          '#198754',
+          '#fd7e14',
+          '#0d6efd',
         ],
         borderWidth: 1,
         hoverOffset: 10,
@@ -81,7 +78,7 @@ const DonutChart: React.FC = () => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false, // Allow chart to resize based on its container
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -90,7 +87,7 @@ const DonutChart: React.FC = () => {
             size: 14,
             family: 'Arial, sans-serif',
           },
-          color: 'white',
+          color: '#212529',
         },
       },
       tooltip: {
@@ -98,19 +95,10 @@ const DonutChart: React.FC = () => {
           title: () => '',
           label: (tooltipItem: any) => ` ${tooltipItem.label}: ${tooltipItem.raw}`,
         },
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-        titleColor: '#fff',
-        bodyColor: '#fff',
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#000',
+        bodyColor: '#000',
         padding: 10,
-      },
-      datalabels: {
-        display: true,
-        color: 'white',
-        formatter: (value: any) => `${value}`,
-        font: {
-          size: 16,
-          weight: 'bold',
-        },
       },
     },
     animation: {
@@ -119,10 +107,8 @@ const DonutChart: React.FC = () => {
     },
   };
 
-  // Handler for chart clicks using the chart reference
   const handleSegmentClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (!chartRef.current) return;
-    // Retrieve the chart elements that were clicked on using the 'nearest' mode.
     const elements = chartRef.current.getElementsAtEventForMode(
       event,
       'nearest',
@@ -130,20 +116,16 @@ const DonutChart: React.FC = () => {
       false
     );
     if (elements.length > 0) {
-      // Get the first clicked element and its index
       const element = elements[0];
       const index = element.index;
-      // Use the chart label as the status to filter by
       const clickedStatus = chartLabels[index];
-      
-      // Redirect with the status as a query parameter
       window.location.href = `/VacanciesOverview?status=${encodeURIComponent(clickedStatus)}`;
     }
   };
 
   return (
-    <div style={{ width: '100%', height: '100%' }}>
-      <h3 style={{ textAlign: 'center', marginBottom: '10px', color: 'white' }}>
+    <div style={{ width: '100%', height: '100%', backgroundColor: '#ffffff' }}>
+      <h3 style={{ textAlign: 'center', marginBottom: '10px', color: '#212529' }}>
         Status of all Positions | Total: {totalVacancies}
       </h3>
       <div style={{ position: 'relative', height: '300px', width: 'auto', margin: '0 auto', alignSelf: 'top' }}>

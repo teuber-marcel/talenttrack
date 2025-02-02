@@ -12,13 +12,22 @@ import {
   Typography,
   Skeleton,
   Tooltip,
+  Row,
+  Col,
 } from "antd";
 import { ArrowLeftOutlined, ReloadOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancyWithApplicantsById } from "../services/vacancyService";
+import ProgressStepper from "../components/Global/ProgressStepper";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
+
+const steps = [
+  { title: "Job Overview", status: "finish" },
+  { title: "Applicant Details", status: "finish" },
+  { title: "Interview Preparation", status: "finish" },
+];
 
 const JobApplicationsPage = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -32,7 +41,6 @@ const JobApplicationsPage = () => {
 
   useEffect(() => {
     if (!id) return;
-
     const fetchVacancyData = async () => {
       setLoading(true);
       setError(false);
@@ -50,21 +58,19 @@ const JobApplicationsPage = () => {
         setLoading(false);
       }
     };
-
     fetchVacancyData();
   }, [id]);
 
   const getStatusBadge = (status) => {
-    // Map statuses to colors you can read easily on a dark background
     const statusMap = {
-      Applied: { color: "var(--highlight-color)", text: "Applied" },
+      Applied: { color: "#1890ff", text: "Applied" },
       "Interview Scheduled": { color: "#faad14", text: "Interview" },
       Hired: { color: "#52c41a", text: "Hired" },
       Rejected: { color: "#ff4d4f", text: "Rejected" },
     };
     return (
       <Badge
-        color={statusMap[status]?.color || "#888"}
+        color={statusMap[status]?.color || "#666"}
         text={statusMap[status]?.text || status}
       />
     );
@@ -72,23 +78,19 @@ const JobApplicationsPage = () => {
 
   const columns = [
     {
-      title: <span style={{ color: "var(--text-color)" }}>Name</span>,
+      title: "Name",
       dataIndex: "prename",
       key: "name",
-      render: (_, record) => (
-        <span style={{ color: "var(--text-color)" }}>
-          {record.surname}, {record.prename}
-        </span>
-      ),
+      render: (_, record) => `${record.surname}, ${record.prename}`,
     },
     {
-      title: <span style={{ color: "var(--text-color)" }}>Status</span>,
+      title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status) => getStatusBadge(status),
+      render: getStatusBadge,
     },
     {
-      title: <span style={{ color: "var(--text-color)" }}>Suitability</span>,
+      title: "Suitability",
       dataIndex: "suitabilityScore",
       key: "suitabilityScore",
       render: (score) => (
@@ -99,20 +101,19 @@ const JobApplicationsPage = () => {
             strokeColor={
               score >= 70 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"
             }
-            // Add a dark track color for the progress bar
-            trailColor="#3a3a3a"
+            trailColor="#f0f0f0"
           />
         </Tooltip>
       ),
     },
     {
-      title: <span style={{ color: "var(--text-color)" }}>View Profile</span>,
+      title: "View Profile",
       key: "profile",
       render: (_, record) => (
         <Button
           type="link"
           onClick={() => router.push(`/applicants/details/${record._id}`)}
-          style={{ color: "var(--highlight-color)" }}
+          style={{ padding: 0 }}
         >
           View Details
         </Button>
@@ -121,143 +122,114 @@ const JobApplicationsPage = () => {
   ];
 
   return (
-    <Layout style={{ minHeight: "100vh", background: "var(--background)" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout
-        style={{
-          marginLeft: collapsed ? 80 : 200,
-          padding: "24px",
-          background: "var(--background)",
-        }}
-      >
-        <Content>
-          <Title
-            level={1}
-            style={{ color: "var(--text-color)", textAlign: "center" }}
-          >
-            {vacancy ? `Applications for ${vacancy.title}` : "Loading..."}
-          </Title>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "20px 0",
-            }}
+      {/* Main Section */}
+      <Layout style={{ marginLeft: collapsed ? 80 : 200, padding: "24px" }}>
+        <Content style={{ background: "#f0f2f5", padding: "24px" }}>
+          {/* Row for Title + Stepper */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: 24 }}
           >
-            <Steps
-              current={1}
-              items={[
-                { title: "Job Overview" },
-                { title: "Applicant Details" },
-                { title: "Interview Preparation" },
-              ]}
-              // Ant Steps default in light mode; override text color:
-              style={{ color: "var(--text-color)" }}
-            />
-          </div>
+            <Col>
+              <Title level={2} style={{ marginBottom: 0 }}>
+                {vacancy ? `Applications for ${vacancy.title}` : "Loading..."}
+              </Title>
+            </Col>
+            <Col>
+              {/* The Progress Stepper, aligned to the right with black text for readability */}
+              <ProgressStepper
+                steps={steps}
+                currentStep={0}
+                style={{ color: "#333" }}
+              />
+            </Col>
+          </Row>
 
-          <Content
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 2fr",
-              gap: "24px",
-              alignItems: "flex-start",
-            }}
-          >
-            {loading ? (
-              <Skeleton active />
-            ) : error ? (
-              <div style={{ textAlign: "center", color: "var(--text-color)" }}>
-                <p>Failed to load data.</p>
-                <Button
-                  type="primary"
-                  icon={<ReloadOutlined />}
-                  onClick={() => router.reload()}
-                >
-                  Retry
-                </Button>
-              </div>
-            ) : (
-              vacancy && (
-                <>
+          {loading ? (
+            <Skeleton active />
+          ) : error ? (
+            <div style={{ textAlign: "center" }}>
+              <p>Failed to load data.</p>
+              <Button
+                type="primary"
+                icon={<ReloadOutlined />}
+                onClick={() => router.reload()}
+              >
+                Retry
+              </Button>
+            </div>
+          ) : (
+            vacancy && (
+              <Row gutter={[24, 24]}>
+                {/* Left Column */}
+                <Col xs={24} md={8}>
                   <Card
+                    bordered={false}
+                    style={{
+                      background: "#fff",
+                      border: "1px solid #d9d9d9",
+                      borderRadius: 8,
+                      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                      padding: 24,
+                    }}
                     title={
-                      <Title level={4} style={{ color: "var(--text-color)" }}>
+                      <Title level={4} style={{ margin: 0 }}>
                         {vacancy.title}
                       </Title>
                     }
-                    bordered={false}
-                    style={{
-                      background: "#1f1f1f",
-                      color: "#f0f0f0",
-                      border: "1px solid #2b2b2b",
-                      borderRadius: 8,
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.5)",
-                      padding: 24,
-                    }}
                   >
-                    <Text style={{ color: "var(--text-color)" }}>
-                      <strong>Department:</strong> {vacancy.department}
+                    <Text>
+                      <strong>Department: </strong>
+                      {vacancy.department}
                     </Text>
                     <br />
-                    <Text style={{ color: "var(--text-color)" }}>
-                      <strong>Status:</strong>{" "}
-                      <Badge
-                        color="var(--highlight-color)"
-                        text={vacancy.status}
-                      />
+                    <Text>
+                      <strong>Status: </strong>
+                      <Badge color="#1890ff" text={vacancy.status} />
                     </Text>
                     <br />
-                    <Title level={5} style={{ color: "var(--text-color)" }}>
+                    <Title level={5} style={{ marginTop: 16 }}>
                       # Applications
                     </Title>
-                    <Text style={{ color: "var(--text-color)" }}>
-                      {applicants.length} Total
-                    </Text>
+                    <Text>{applicants.length} Total</Text>
                     <br />
                     <Button
-                      type="default"
                       icon={<ArrowLeftOutlined />}
                       onClick={() => router.push("/VacanciesOverview")}
-                      style={{
-                        marginTop: "16px",
-                        backgroundColor: "#ffffff", // white or a light color
-                        color: "#000000", // black text
-                        borderColor: "#d9d9d9", // optional subtle gray border }}
-                      }}
+                      style={{ marginTop: 16 }}
                     >
                       Back to Vacancies
                     </Button>
                   </Card>
+                </Col>
 
-                  <div
+                {/* Right Column */}
+                <Col xs={24} md={16}>
+                  <Card
+                    bordered={false}
                     style={{
-                      background: "var(--card-background)",
-                      padding: "24px",
-                      borderRadius: "12px",
-                      color: "var(--text-color)",
-                      boxShadow: "0px 4px 6px rgba(0,0,0,0.5)",
-                      border: `1px solid var(--border-color)`,
+                      background: "#fff",
+                      border: "1px solid #d9d9d9",
+                      borderRadius: 8,
+                      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                      padding: 24,
                     }}
                   >
                     <Table
                       columns={columns}
                       dataSource={applicants}
-                      loading={loading}
-                      pagination={{ pageSize: 5 }}
                       rowKey="_id"
-                      rowClassName={() => "dark-table-row"}
-                      style={{
-                        background: "transparent", // Let the row CSS control the row backgrounds
-                        marginTop: "16px",
-                      }}
+                      pagination={{ pageSize: 5 }}
                     />
-                  </div>
-                </>
-              )
-            )}
-          </Content>
+                  </Card>
+                </Col>
+              </Row>
+            )
+          )}
         </Content>
       </Layout>
     </Layout>

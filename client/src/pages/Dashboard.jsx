@@ -1,15 +1,13 @@
-import React, { useState } from 'react';
-import '../app/globals.css';
-import { Layout, Menu, Row, Col } from 'antd';
-import theme from 'antd/es/theme';
-import DonutChart from '../components/Dashboard/DonutChart';
-import ApplicantDashboard from '../components/Dashboard/ApplicantDashboard';
-import CalendarComponent from '../components/Dashboard/Calendar'; // Import CalendarComponent
-import Sidebar from '../components/Global/Sidebar';
+import React, { useState } from "react";
+import "../app/globals.css";
+import { Layout, Menu, Row, Col } from "antd";
+import theme from "antd/es/theme";
+import DonutChart from "../components/Dashboard/DonutChart";
+import ApplicantDashboard from "../components/Dashboard/ApplicantDashboard";
+import CalendarComponent from "../components/Dashboard/Calendar"; // Import CalendarComponent
+import Sidebar from "../components/Global/Sidebar";
 
-
-const {Header, Content } = Layout;
-
+const { Header, Content } = Layout;
 
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -20,24 +18,34 @@ const Dashboard = () => {
   } = theme.useToken();
 
   return (
-    <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: "margin-left 0.3s ease", backgroundColor: 'var(--background)', minHeight: '100vh', height: '100%', display: 'flex' }}>
+    <Layout
+      style={{
+        marginLeft: collapsed ? 80 : 200,
+        transition: "margin-left 0.3s ease",
+        backgroundColor: "#ffffff",
+        minHeight: "100vh",
+        height: "100%",
+        display: "flex",
+      }}
+    >
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       {/* Main Layout */}
-      <Layout style={{ background: 'var(--background)' }}>  
+      <Layout style={{ background: "#f8f9fa" }}>
         <Header
           style={{
-            color: 'white',
-            background: 'var(--background)',
+            color: "#212529",
+            background: "#ffffff",
             padding: 0,
-            textAlign: 'center',
-            fontSize: '24px',
+            textAlign: "center",
+            fontSize: "24px",
+            borderBottom: "1px solid #dee2e6",
           }}
         >
           "Your Company's" Dashboard
         </Header>
-        <Content style={{ margin: '16px' }}>
+        <Content style={{ margin: "16px" }}>
           <div>
             {/* Dashboard Layout */}
             <Row gutter={[16, 16]}>
@@ -48,16 +56,16 @@ const Dashboard = () => {
                     padding: 16,
                     minHeight: 420,
                     maxHeight: 420,
-                    background: '#333',
+                    background: "#ffffff",
                     borderRadius: borderRadiusLG,
-                    textAlign: 'center',
-                    color: 'white',
-                    display: 'flex',
-                    justifyContent: 'center',
-                   
+                    textAlign: "center",
+                    color: "#212529",
+                    display: "flex",
+                    justifyContent: "center",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <div style={{ width: '95%', height: '95%' }}>
+                  <div style={{ width: "95%", height: "95%" }}>
                     <DonutChart />
                   </div>
                 </div>
@@ -70,14 +78,15 @@ const Dashboard = () => {
                     padding: 16,
                     minHeight: 420,
                     maxHeight: 420,
-                    background: '#333',
+                    background: "#ffffff",
                     borderRadius: borderRadiusLG,
-                    textAlign: 'center',
-                    color: 'white',
-                    overflowY: 'auto',
+                    textAlign: "center",
+                    color: "#212529",
+                    overflowY: "auto",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <div style={{ width: '95%', height: '95%' }}>
+                  <div style={{ width: "95%", height: "95%" }}>
                     <ApplicantDashboard />
                   </div>
                 </div>
@@ -89,13 +98,14 @@ const Dashboard = () => {
                   style={{
                     padding: 16,
                     minHeight: 400,
-                    background: '#333',
+                    background: "#ffffff",
                     borderRadius: borderRadiusLG,
-                    textAlign: 'center',
-                    color: 'white',
+                    textAlign: "center",
+                    color: "#212529",
+                    boxShadow: "0px 4px 6px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <div style={{ width: '100%', height: '100%' }}>
+                  <div style={{ width: "100%", height: "100%" }}>
                     <CalendarComponent />
                   </div>
                 </div>

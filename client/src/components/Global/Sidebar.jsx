@@ -11,13 +11,8 @@ import { useRouter } from "next/router";
 
 const { Sider } = Layout;
 
-/**
- * Helper to build Menu items.
- * 'key' should match the 'href' so that we can directly use the router.pathname
- * to highlight the correct menu item.
- */
 const getItem = (label, key, icon) => ({
-  key,      // <-- use the path as the key
+  key,
   icon,
   label: <Link href={key}>{label}</Link>,
 });
@@ -29,9 +24,8 @@ const items = [
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
-  // Grab the current route from Next.js router
   const router = useRouter();
-  const currentPath = router.pathname; // e.g., "/dashboard", "/VacanciesOverview", etc.
+  const currentPath = router.pathname;
 
   return (
     <Sider
@@ -46,23 +40,31 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         bottom: 0,
         height: "100vh",
         overflow: "hidden",
+        backgroundColor: "#ffffff",
+        borderRight: "1px solid #dee2e6",
       }}
     >
       <div
         className="sidebar-logo"
-        style={{ textAlign: "center", padding: "16px", color: "white" }}
+        style={{ textAlign: "center", padding: "16px", color: "#212529" }}
       >
         {collapsed ? (
-          <img src="/assets/Logo_Klein.png" alt="Collapsed Logo" style={{ width: '30px', height: '30px' }} />
-        ) : "TalentTrack" }
+          <img
+            src="/assets/Logo_Klein.png"
+            alt="Collapsed Logo"
+            style={{ width: "30px", height: "30px" }}
+          />
+        ) : (
+          "TalentTrack"
+        )}
       </div>
       <Menu
-        theme="dark"
+        theme="light"
         mode="inline"
-        // Use 'selectedKeys' (controlled) instead of 'defaultSelectedKeys'
-        selectedKeys={[currentPath]} 
+        selectedKeys={[currentPath]}
         items={items}
         className="sidebar-menu"
+        style={{ backgroundColor: "#ffffff", color: "#212529" }}
       />
     </Sider>
   );

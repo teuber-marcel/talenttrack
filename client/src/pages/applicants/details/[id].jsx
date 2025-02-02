@@ -44,12 +44,10 @@ const ApplicantDetails = () => {
         if (!data) throw new Error("Applicant not found");
         setApplicant(data);
 
-        // Prüfe ob Interview-Fragen existieren
+        // Check if interview questions already exist
         const interview = await getInterviewByApplicantId(data._id);
         setHasInterviewQuestions(
-          interview && 
-          interview.questions && 
-          interview.questions.length > 0
+          interview && interview.questions && interview.questions.length > 0
         );
       } catch (error) {
         console.error("Error fetching applicant data:", error);
@@ -62,43 +60,43 @@ const ApplicantDetails = () => {
     fetchApplicantData();
   }, [id]);
 
-  // Add notification config at component level
+  // Setup global notification config
   useEffect(() => {
     notification.config({
-      placement: 'topRight',
-      top: 100
+      placement: "topRight",
+      top: 100,
     });
   }, []);
 
   const handleGenerateQuestions = async () => {
     setGeneratingQuestions(true);
     try {
-      // Erst prüfen ob bereits ein Interview existiert
+      // First check if an interview exists
       let interview = await getInterviewByApplicantId(applicant._id);
-      
+
       if (!interview) {
-        // Wenn kein Interview existiert, erstelle ein neues
+        // If no interview exists, create a new one
         interview = await createInterview(applicant._id);
       }
-      
+
       if (!interview?._id) {
-        throw new Error('No valid interview ID');
+        throw new Error("No valid interview ID");
       }
 
-      // Generiere Fragen mit der vorhandenen Interview ID
+      // Generate questions with the existing interview ID
       await generateQuestions(interview._id);
       setHasInterviewQuestions(true);
       notification.success({
         message: "Interview Questions Generated",
-        description: "The interview questions have been successfully generated and are ready for review.",
-        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        description:
+          "The interview questions have been successfully generated and are ready for review.",
+        icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
         duration: 4,
         pauseOnHover: true,
-        style: { 
-          backgroundColor: "rgba(255,255,255,0.8)",
-          borderLeft: '4px solid #547bae',
-          backdropFilter: 'blur(8px)'
-        }
+        style: {
+          backgroundColor: "#ffffff",
+          borderLeft: "4px solid #1890ff",
+        },
       });
       router.push(`/InterviewPrep?applicantId=${applicant._id}`);
     } catch (error) {
@@ -115,25 +113,23 @@ const ApplicantDetails = () => {
       content: "Are you sure you want to overwrite any existing questions?",
       okText: "Yes",
       cancelText: "No",
-      onOk: handleGenerateQuestions
+      onOk: handleGenerateQuestions,
     });
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", background: "var(--background)" }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
       <Layout
         style={{
           marginLeft: collapsed ? 80 : 200,
           padding: "24px",
-          background: "var(--background)",
+          background: "#f0f2f5", // replaced var(--background)
         }}
       >
         <Content>
-          <Title
-            level={1}
-            style={{ color: "var(--text-color)", textAlign: "center" }}
-          >
+          <Title level={1} style={{ textAlign: "center", color: "#333" }}>
+            {/* replaced var(--text-color) */}
             Applicant Details
           </Title>
 
@@ -155,9 +151,7 @@ const ApplicantDetails = () => {
           </div>
 
           {loading ? (
-            <p style={{ color: "var(--text-color)", textAlign: "center" }}>
-              Loading...
-            </p>
+            <p style={{ textAlign: "center", color: "#333" }}>Loading...</p>
           ) : applicant ? (
             <div
               style={{
@@ -171,13 +165,16 @@ const ApplicantDetails = () => {
               <Card
                 bordered={false}
                 style={{
-                  background: "#1C1C1C",
+                  background: "#fff", // replaced #1C1C1C
+                  border: "1px solid #d9d9d9",
                   borderRadius: "12px",
-                  color: "var(--text-color)",
+                  color: "#333", // replaced var(--text-color)
                   padding: "20px",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                 }}
               >
-                <Title level={3} style={{ color: "var(--text-color)" }}>
+                <Title level={3} style={{ color: "#333" }}>
+                  {/* replaced var(--text-color) */}
                   {applicant.prename} {applicant.surname}
                 </Title>
                 <Image
@@ -185,28 +182,28 @@ const ApplicantDetails = () => {
                   alt="Applicant Photo"
                   width={120}
                   height={120}
-                  style={{ borderRadius: "50%" }}
+                  style={{ borderRadius: "50%", marginBottom: 16 }}
                 />
 
-                <Text style={{ color: "var(--text-color)" }}>
+                <Text style={{ color: "#333" }}>
                   <strong>Age:</strong> 27
                 </Text>
                 <br />
-                <Text style={{ color: "var(--text-color)" }}>
+                <Text style={{ color: "#333" }}>
                   <strong>Education:</strong> B.Sc. Computer Science
                 </Text>
                 <br />
-                <Text style={{ color: "var(--text-color)" }}>
+                <Text style={{ color: "#333" }}>
                   <strong>Location:</strong> {applicant.address.city}
                 </Text>
                 <br />
-                <Text style={{ color: "var(--text-color)" }}>
+                <Text style={{ color: "#333" }}>
                   <strong>Status:</strong>{" "}
-                  <Badge color="blue" text={applicant.status} />
+                  <Badge color="#1890ff" text={applicant.status} />
                 </Text>
                 <br />
 
-                <Title level={5} style={{ color: "var(--text-color)" }}>
+                <Title level={5} style={{ marginTop: 16, color: "#333" }}>
                   Suitability
                 </Title>
                 <Progress
@@ -228,18 +225,21 @@ const ApplicantDetails = () => {
                   title="Downloads"
                   bordered={false}
                   style={{
-                    background: "#1C1C1C",
-                    color: "var(--text-color)",
+                    background: "#fff",
+                    border: "1px solid #d9d9d9",
+                    borderRadius: "12px",
+                    color: "#333",
                     padding: "20px",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <Button type="default" block>
+                  <Button type="default" block style={{ marginBottom: 8 }}>
                     CV
                   </Button>
-                  <Button type="default" block>
+                  <Button type="default" block style={{ marginBottom: 8 }}>
                     Motivation Letter
                   </Button>
-                  <Button type="default" block>
+                  <Button type="default" block style={{ marginBottom: 8 }}>
                     Degree Certification
                   </Button>
                   <Button type="default" block>
@@ -251,13 +251,16 @@ const ApplicantDetails = () => {
                   title="Further Steps"
                   bordered={false}
                   style={{
-                    background: "#1C1C1C",
-                    color: "var(--text-color)",
+                    background: "#fff",
+                    border: "1px solid #d9d9d9",
+                    borderRadius: "12px",
+                    color: "#333",
                     padding: "20px",
                     marginTop: "16px",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                   }}
                 >
-                  <Button type="primary" block>
+                  <Button type="primary" block style={{ marginBottom: 8 }}>
                     Schedule Interview
                   </Button>
                   <Button type="default" block danger>
@@ -269,10 +272,13 @@ const ApplicantDetails = () => {
                   title="Interview Preparation"
                   bordered={false}
                   style={{
-                    background: "#1C1C1C",
-                    color: "var(--text-color)",
+                    background: "#fff",
+                    border: "1px solid #d9d9d9",
+                    borderRadius: "12px",
+                    color: "#333",
                     padding: "20px",
                     marginTop: "16px",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                   }}
                 >
                   <Button
@@ -280,13 +286,16 @@ const ApplicantDetails = () => {
                     block
                     onClick={confirmGenerateQuestions}
                     loading={generatingQuestions}
+                    style={{ marginBottom: 8 }}
                   >
                     Generate New Interview Questions
                   </Button>
-                  <Button 
-                    type="default" 
-                    block 
-                    onClick={() => router.push(`/InterviewPrep?applicantId=${applicant._id}`)}
+                  <Button
+                    type="default"
+                    block
+                    onClick={() =>
+                      router.push(`/InterviewPrep?applicantId=${applicant._id}`)
+                    }
                     disabled={!hasInterviewQuestions}
                   >
                     Show Interview Questions
@@ -295,7 +304,7 @@ const ApplicantDetails = () => {
               </div>
             </div>
           ) : (
-            <p style={{ color: "var(--text-color)", textAlign: "center" }}>
+            <p style={{ textAlign: "center", color: "#333" }}>
               Applicant not found.
             </p>
           )}

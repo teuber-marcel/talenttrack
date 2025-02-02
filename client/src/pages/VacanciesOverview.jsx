@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
-import { getApplicantsForOverview } from "../services/applicantService"; // ✅ **Neue Funktion importiert**
+import { getApplicantsForOverview } from "../services/applicantService"; // ✅ Imported new function
 
 const { Header, Content } = Layout;
 
@@ -40,7 +40,7 @@ const VacanciesOverview = () => {
           applications: applicantCount[vacancy._id] || 0,
         }));
 
-        //Falls ein Status in der URL ist, nur passende Vacancies anzeigen
+        // If there's a status in the URL, filter vacancies by that status
         if (status) {
           setVacancies(updatedVacancies.filter((v) => v.status === status));
         } else {
@@ -54,12 +54,11 @@ const VacanciesOverview = () => {
     };
 
     fetchData();
-  }, [status]); //Filtert automatisch, wenn sich der Status ändert
+  }, [status]);
 
   const handleDelete = async (id) => {
     try {
       const success = await deleteVacancy(id);
-
       if (success) {
         message.success("Vacancy deleted");
         setVacancies((prev) => prev.filter((vacancy) => vacancy._id !== id));
@@ -79,7 +78,6 @@ const VacanciesOverview = () => {
 
   const getColumnFilters = (dataIndex) => {
     const uniqueValues = [...new Set(vacancies.map((item) => item[dataIndex]))];
-
     return uniqueValues.map((value) => ({
       text: value,
       value: value,
@@ -140,7 +138,7 @@ const VacanciesOverview = () => {
       dataIndex: "applications",
       key: "applications",
       sorter: (a, b) => a.applications - b.applications,
-      render: (count) => count, //**Zeigt Anzahl der Bewerbungen an**
+      render: (count) => count,
       align: "center",
     },
     {
@@ -170,26 +168,30 @@ const VacanciesOverview = () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "var(--background)",
+        backgroundColor: "#f0f2f5", // replaced var(--background)
         minHeight: "100vh",
         height: "100%",
         display: "flex",
       }}
     >
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout style={{ background: "var(--background)" }}>
+
+      <Layout style={{ background: "#f0f2f5" }}>
+        {" "}
+        {/* replaced var(--background) */}
         <Header
           style={{
-            color: "white",
-            background: "var(--background)",
+            background: "#fff", // typical light header
+            color: "#333", // darker text
             padding: 0,
             textAlign: "center",
             fontSize: "24px",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.05)", // subtle header shadow
           }}
         >
           Vacancy Overview
         </Header>
-        <Content style={{ margin: "16px", padding: 24 }}>
+        <Content style={{ margin: "16px", padding: 24, background: "#fff" }}>
           <Space style={{ marginBottom: 16 }}>
             <Button
               type="primary"
