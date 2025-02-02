@@ -111,7 +111,7 @@ const JobApplicationsPage = () => {
       render: (_, record) => (
         <Button
           type="link"
-          onClick={() => router.push(`/applicants/${record._id}`)}
+          onClick={() => router.push(`/applicants/details/${record._id}`)}
           style={{ color: "var(--highlight-color)" }}
         >
           View Details
