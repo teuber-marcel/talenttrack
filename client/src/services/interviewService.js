@@ -1,15 +1,25 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const createInterview = async (applicantId) => {
-  const response = await fetch(`${API_URL}/api/interviews`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      applicant: applicantId,
-      interviewDate: new Date(Date.now() + 86400000)
-    })
-  });
-  return response.json();
+  try {
+    const response = await fetch(`${API_URL}/api/interviews`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        applicant: applicantId,
+        interviewDate: new Date(Date.now() + 86400000),
+        interviewStartDate: new Date(Date.now() + 86400000), // tomorrow
+        interviewEndDate: new Date(Date.now() + 90000000)    // tomorrow + 1 hour
+      })
+    });
+    if (!response.ok) {
+      throw new Error('Failed to create interview');
+    }
+    return response.json();
+  } catch (error) {
+    console.error('Error in createInterview:', error);
+    throw error;
+  }
 };
 
 export const generateQuestions = async (interviewId) => {

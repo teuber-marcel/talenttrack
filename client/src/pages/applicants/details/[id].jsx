@@ -11,13 +11,16 @@ import {
   Steps,
   message,
   Badge,
+  Modal,
+  notification,
 } from "antd";
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import Sidebar from "../../../components/Global/Sidebar";
 import { getApplicantById } from "../../../services/applicantService";
 import {
   createInterview,
   generateQuestions,
+  getInterviewByApplicantId,
 } from "../../../services/interviewService";
 
 const { Content } = Layout;
@@ -27,6 +30,8 @@ const ApplicantDetails = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [applicant, setApplicant] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [hasInterviewQuestions, setHasInterviewQuestions] = useState(false);
+  const [generatingQuestions, setGeneratingQuestions] = useState(false);
   const router = useRouter();
   const { id } = router.query;
 
@@ -38,6 +43,14 @@ const ApplicantDetails = () => {
         const data = await getApplicantById(id);
         if (!data) throw new Error("Applicant not found");
         setApplicant(data);
+
+        // Prüfe ob Interview-Fragen existieren
+        const interview = await getInterviewByApplicantId(data._id);
+        setHasInterviewQuestions(
+          interview && 
+          interview.questions && 
+          interview.questions.length > 0
+        );
       } catch (error) {
         console.error("Error fetching applicant data:", error);
         message.error("Error loading applicant details");
@@ -49,14 +62,61 @@ const ApplicantDetails = () => {
     fetchApplicantData();
   }, [id]);
 
+  // Add notification config at component level
+  useEffect(() => {
+    notification.config({
+      placement: 'topRight',
+      top: 100
+    });
+  }, []);
+
   const handleGenerateQuestions = async () => {
+    setGeneratingQuestions(true);
     try {
-      const interview = await createInterview(applicant._id);
+      // Erst prüfen ob bereits ein Interview existiert
+      let interview = await getInterviewByApplicantId(applicant._id);
+      
+      if (!interview) {
+        // Wenn kein Interview existiert, erstelle ein neues
+        interview = await createInterview(applicant._id);
+      }
+      
+      if (!interview?._id) {
+        throw new Error('No valid interview ID');
+      }
+
+      // Generiere Fragen mit der vorhandenen Interview ID
       await generateQuestions(interview._id);
-      message.success("Interview questions generated successfully!");
+      setHasInterviewQuestions(true);
+      notification.success({
+        message: "Interview Questions Generated",
+        description: "The interview questions have been successfully generated and are ready for review.",
+        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        duration: 4,
+        pauseOnHover: true,
+        style: { 
+          backgroundColor: "rgba(255,255,255,0.8)",
+          borderLeft: '4px solid #547bae',
+          backdropFilter: 'blur(8px)'
+        }
+      });
+      router.push(`/InterviewPrep?applicantId=${applicant._id}`);
     } catch (error) {
+      console.error("Error generating questions:", error);
       message.error("Error generating interview questions");
+    } finally {
+      setGeneratingQuestions(false);
     }
+  };
+
+  const confirmGenerateQuestions = () => {
+    Modal.confirm({
+      title: "Generate New Interview Questions",
+      content: "Are you sure you want to overwrite any existing questions?",
+      okText: "Yes",
+      cancelText: "No",
+      onOk: handleGenerateQuestions
+    });
   };
 
   return (
@@ -218,11 +278,17 @@ const ApplicantDetails = () => {
                   <Button
                     type="primary"
                     block
-                    onClick={handleGenerateQuestions}
+                    onClick={confirmGenerateQuestions}
+                    loading={generatingQuestions}
                   >
                     Generate New Interview Questions
                   </Button>
-                  <Button type="default" block>
+                  <Button 
+                    type="default" 
+                    block 
+                    onClick={() => router.push(`/InterviewPrep?applicantId=${applicant._id}`)}
+                    disabled={!hasInterviewQuestions}
+                  >
                     Show Interview Questions
                   </Button>
                 </Card>

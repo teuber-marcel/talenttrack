@@ -3,10 +3,11 @@ import { Layout, Typography, Row, Col, Card, Button, Image, message, notificatio
 import { CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined, DownloadOutlined, CloseCircleOutlined, RedoOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import BackgroundBox from "../components/Global/BackgroundBox";
-import { getApplicants } from "../services/applicantService";
+import { getApplicants, getApplicantById } from "../services/applicantService";
 import { getVacancyById } from "../services/vacancyService";
 import ProgressStepper from "../components/Global/ProgressStepper";
 import { createInterview, generateQuestions, getInterviewByApplicantId, downloadInterviewQuestions, saveInterviewQuestions } from "../services/interviewService";
+import { useRouter } from 'next/router';
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -18,6 +19,9 @@ notification.config({
 });
 
 const InterviewPreparation = () => {
+  const router = useRouter();
+  const { applicantId } = router.query;
+  
   const [collapsed, setCollapsed] = useState(false);
   const [applicants, setApplicants] = useState([]);
   const [vacancy, setVacancy] = useState(null);
@@ -30,40 +34,30 @@ const InterviewPreparation = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!applicantId) return;
+      
       try {
-        const applicantsData = await getApplicants();
-        setApplicants(applicantsData);
-        console.log('Applicants Data:', applicantsData); // Debug-Log
+        const applicantData = await getApplicantById(applicantId);
+        setApplicants([applicantData]); // Setze den spezifischen Bewerber
 
-        if (applicantsData.length > 0) {
-          if (applicantsData[0].vacancy) {
-            const vacancyData = await getVacancyById(applicantsData[0].vacancy);
-            setVacancy(vacancyData);
-            console.log('Vacancy Data:', vacancyData); // Debug-Log
-          }
+        if (applicantData.vacancy) {
+          const vacancyData = await getVacancyById(applicantData.vacancy);
+          setVacancy(vacancyData);
+        }
 
-          let interview = await getInterviewByApplicantId(applicantsData[0]._id);
-          setCurrentInterview(interview); // Speichern des Interview-Objekts
-          console.log('Initial Interview Data:', interview); // Debug-Log
+        let interview = await getInterviewByApplicantId(applicantId);
+        setCurrentInterview(interview);
 
-          if (!interview) {
-            interview = await createInterview(applicantsData[0]._id);
-            console.log('Created Interview:', interview); // Debug-Log
-            
-            const questionsData = await generateQuestions(interview._id);
-            console.log('Generated Questions Data:', questionsData); // Debug-Log
-            
-            // Anpassung hier: Wir prüfen die Struktur der questionsData
-            const questions = questionsData.questions || questionsData;
-            console.log('Final Questions to be set:', questions); // Debug-Log
-            setInterviewQuestions(questions);
-          } else {
-            console.log('Existing Interview Questions:', interview.questions); // Debug-Log
-            setInterviewQuestions(interview.questions || []);
-          }
+        if (!interview) {
+          interview = await createInterview(applicantId);
+          const questionsData = await generateQuestions(interview._id);
+          const questions = questionsData.questions || questionsData;
+          setInterviewQuestions(questions);
+        } else {
+          setInterviewQuestions(interview.questions || []);
         }
       } catch (error) {
-        console.error("Error:", error); // Debug-Log
+        console.error("Error:", error);
         message.error("Fehler beim Laden der Daten");
       } finally {
         setLoading(false);
@@ -71,7 +65,7 @@ const InterviewPreparation = () => {
     };
 
     fetchData();
-  }, []);
+  }, [applicantId]);
 
   // Debugging-Log für den State
   useEffect(() => {
@@ -217,7 +211,14 @@ const InterviewPreparation = () => {
                 >
                   <Row align="middle" justify="space-around">
                     <Col span={11}>  {/* Increased from 10 to 11 */}
-                      <Title level={1} style={{ margin: 0, color: '#fff' }}>
+                      <Title
+                        level={1}
+                        style={{
+                          margin: 0,
+                          color: '#fff',
+                          fontSize: 'clamp(16px, 5vw, 32px)'
+                        }}
+                      >
                         {applicants[0].prename} {applicants[0].surname}
                       </Title>
                     </Col>

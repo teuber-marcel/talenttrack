@@ -1,4 +1,5 @@
 {
+  "name": "talenttrack",
   "dependencies": {
     "antd": "^5.23.2"
   },
