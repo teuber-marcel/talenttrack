@@ -15,9 +15,9 @@ const { TextArea } = Input;
 const CreateVacancy = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedDepartment, setSelectedDepartment] = useState(null);
-  const [selectedHierarchies, setSelectedHierarchies] = useState([]);
+  const [selectedHierarchy, setSelectedHierarchy] = useState(null);
   const [vacancyTitle, setVacancyTitle] = useState("");
-  const [createdVacancy, setCreatedVacancy] = useState(null); // Speichert erstellte Vacancy
+  const [createdVacancy, setCreatedVacancy] = useState(null);
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
   const [requirements, setRequirements] = useState("");
@@ -27,7 +27,7 @@ const CreateVacancy = () => {
 
   const isCreateDisabled = 
     !selectedDepartment || 
-    selectedHierarchies.length === 0 || 
+    !selectedHierarchy || 
     vacancyTitle.length < 3;
 
   // Vacancy erstellen (POST /api/vacancies)
@@ -42,7 +42,7 @@ const CreateVacancy = () => {
         body: JSON.stringify({
           title: vacancyTitle,
           department: selectedDepartment,
-          hierarchy: selectedHierarchies[0], // Nur eine Hierarchie nehmen
+          hierarchy: selectedHierarchy,
         }),
       });
 
@@ -51,7 +51,7 @@ const CreateVacancy = () => {
       }
 
       const data = await response.json();
-      setCreatedVacancy(data); // Speichert die erstellte Vacancy
+      setCreatedVacancy(data);
       setDescription(data.description);
       setRequirements(data.requirements);
       setOther(data.other);
@@ -90,7 +90,7 @@ const CreateVacancy = () => {
             throw new Error(data.message || 'Failed to update vacancy');
         }
 
-        message.success(`Vacancy ${status ? "published" : "saved as draft"} successfully!`);
+        message.success(`Vacancy ${status ? "Published" : "Draft"} successfully!`);
         router.push('/VacanciesOverview');
     } catch (error) {
         console.error("❌ Error updating vacancy:", error);
@@ -136,7 +136,7 @@ const handleDeleteVacancy = async () => {
             </Col>
             <Col span={12}>
               <div style={{ padding: 16, minHeight: 240, background: '#333', borderRadius: 8, color: 'white', display: 'flex', justifyContent: 'center' }}>
-                <CheckboxGroup onChange={setSelectedHierarchies} disabled={!!createdVacancy} />
+                <CheckboxGroup onChange={setSelectedHierarchy} disabled={!!createdVacancy} />
               </div>
             </Col>
             <Col span={24}>
