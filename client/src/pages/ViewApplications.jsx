@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import "../app/globals.css";
 import {
   Layout,
@@ -9,65 +10,92 @@ import {
   Radio,
   Button,
   Typography,
+  message,
 } from "antd";
-import theme from "antd/es/theme";
 import Sidebar from "../components/Global/Sidebar";
+import { getVacancyWithApplicantsById } from "../services/vacancyService";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
 
-const columns = [
-  { title: "ID", dataIndex: "id", key: "id" },
-  { title: "Name", dataIndex: "name", key: "name" },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (status) => <Badge status="processing" text={status} />,
-  },
-  {
-    title: "Suitability",
-    dataIndex: "suitability",
-    key: "suitability",
-    render: () => <span>🟢🟡🔴</span>,
-  },
-  {
-    title: "View Profile",
-    dataIndex: "profile",
-    key: "profile",
-    render: () => <span>...</span>,
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    id: "AP-246",
-    name: "Daniel Jay Park",
-    status: "New",
-    suitability: "🟢",
-  },
-  {
-    key: "2",
-    id: "AP-245",
-    name: "Sarah Johnson",
-    status: "On Hold",
-    suitability: "🟡",
-  },
-  {
-    key: "3",
-    id: "AP-244",
-    name: "Michael Brown",
-    status: "Rejected",
-    suitability: "🔴",
-  },
-];
-
 const JobApplicationsPage = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { borderRadiusLG },
-  } = theme.useToken();
+  const [vacancy, setVacancy] = useState(null);
+  const [applicants, setApplicants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+  const { id } = router.query;
+
+  useEffect(() => {
+    console.log("Router Query ID:", id);
+  }, [id]);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchVacancyData = async () => {
+      setLoading(true);
+      try {
+        console.log(`Fetching vacancy with applicants for ID: ${id}`);
+
+        const data = await getVacancyWithApplicantsById(id);
+        console.log("API Response Data:", data);
+
+        if (!data || !data.vacancy || !data.applicants) {
+          throw new Error("Invalid API response");
+        }
+
+        setVacancy(data.vacancy);
+        setApplicants(data.applicants || []);
+      } catch (error) {
+        console.error("Error fetching vacancy data:", error);
+        message.error("Error loading job applications");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVacancyData();
+  }, [id]);
+
+  const getStatusBadge = (status) => {
+    const statusMap = {
+      Applied: "blue",
+      "Interview Scheduled": "orange",
+      Hired: "green",
+      Rejected: "red",
+    };
+    return <Badge color={statusMap[status] || "gray"} text={status} />;
+  };
+
+  const columns = [
+    { title: "ID", dataIndex: "_id", key: "_id" },
+    { title: "Name", dataIndex: "prename", key: "prename" },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => getStatusBadge(status),
+    },
+    {
+      title: "Suitability",
+      dataIndex: "suitabilityScore",
+      key: "suitabilityScore",
+      render: (score) => (score !== null ? `${score}%` : "N/A"),
+    },
+    {
+      title: "View Profile",
+      key: "profile",
+      render: (_, record) => (
+        <Button
+          type="link"
+          onClick={() => router.push(`/applicants/${record._id}`)}
+        >
+          View Details
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <Layout
@@ -80,10 +108,7 @@ const JobApplicationsPage = () => {
         display: "flex",
       }}
     >
-      {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-
-      {/* Main Layout */}
       <Layout style={{ background: "var(--background)", padding: "24px" }}>
         <Header
           style={{
@@ -95,7 +120,7 @@ const JobApplicationsPage = () => {
             fontWeight: "bold",
           }}
         >
-          View Job Applications
+          {vacancy ? `View Applications for ${vacancy.title}` : "Loading..."}
         </Header>
         <Content
           style={{
@@ -105,88 +130,37 @@ const JobApplicationsPage = () => {
             alignItems: "flex-start",
           }}
         >
-          {/* Left Panel */}
-          <Card
-            title={
-              <Title level={4} style={{ color: "white" }}>
-                Software Developer Backend
+          {vacancy && (
+            <Card
+              title={
+                <Title level={4} style={{ color: "white" }}>
+                  {vacancy.title}
+                </Title>
+              }
+              bordered={false}
+              style={{
+                background: "#202020",
+                borderRadius: "12px",
+                padding: "16px",
+                color: "white",
+                boxShadow: "0px 4px 6px rgba(0,0,0,0.2)",
+              }}
+            >
+              <Text style={{ color: "white" }}>
+                <strong>Department:</strong> {vacancy.department}
+              </Text>
+              <br />
+              <Text style={{ color: "white" }}>
+                <strong>Status:</strong>{" "}
+                <Badge color="blue" text={vacancy.status} />
+              </Text>
+              <br />
+              <Title level={5} style={{ color: "white" }}>
+                # Applications
               </Title>
-            }
-            bordered={false}
-            style={{
-              background: "#202020",
-              borderRadius: "12px",
-              padding: "16px",
-              color: "white",
-              boxShadow: "0px 4px 6px rgba(0,0,0,0.2)",
-            }}
-          >
-            <Text style={{ color: "white" }}>
-              <strong>Department:</strong> IT
-            </Text>
-            <br />
-            <Text style={{ color: "white" }}>
-              <strong>Status:</strong> <Badge color="blue" text="Open" />
-            </Text>
-            <br />
-            <Text style={{ color: "white" }}>
-              <strong>Details:</strong> Published on 06.10.2024
-            </Text>
-            <Title level={5} style={{ color: "white" }}>
-              Seniority Level
-            </Title>
-            <Radio.Group
-              defaultValue="Junior"
-              style={{
-                marginBottom: "12px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "6px",
-              }}
-            >
-              <Radio value="Junior" style={{ color: "white" }}>
-                Junior Professional
-              </Radio>
-              <Radio value="Professional" style={{ color: "white" }}>
-                Professional
-              </Radio>
-            </Radio.Group>
-            <Title level={5} style={{ color: "white" }}>
-              # Applications
-            </Title>
-            <Text style={{ color: "white" }}>3 Ideal Candidates</Text>
-            <br />
-            <Text style={{ color: "white" }}>2 Possible Candidates</Text>
-            <br />
-            <Text style={{ color: "white" }}>3 Unlikely Candidates</Text>
-            <br />
-            <Button
-              type="default"
-              block
-              style={{
-                marginTop: "16px",
-                background: "#333",
-                color: "white",
-                border: "none",
-              }}
-            >
-              Edit Description
-            </Button>
-            <Button
-              type="primary"
-              block
-              style={{
-                marginTop: "8px",
-                background: "#0056b3",
-                color: "white",
-                border: "none",
-              }}
-            >
-              Edit Status
-            </Button>
-          </Card>
-
-          {/* Right Panel - Table and Progress Bar */}
+              <Text style={{ color: "white" }}>{applicants.length} Total</Text>
+            </Card>
+          )}
           <div
             style={{
               background: "#202020",
@@ -206,38 +180,18 @@ const JobApplicationsPage = () => {
             />
             <Table
               columns={columns}
-              dataSource={data}
+              dataSource={applicants}
+              loading={loading}
               style={{
                 marginTop: "16px",
                 background: "transparent",
                 color: "white",
               }}
               pagination={{ pageSize: 5 }}
+              rowKey="_id"
             />
           </div>
         </Content>
-        <Footer
-          style={{
-            textAlign: "right",
-            padding: "16px",
-            display: "flex",
-            justifyContent: "space-between",
-            background: "var(--background)",
-          }}
-        >
-          <Button
-            type="default"
-            style={{ background: "#333", color: "white", border: "none" }}
-          >
-            Cancel
-          </Button>
-          <Button
-            type="primary"
-            style={{ background: "#0056b3", color: "white", border: "none" }}
-          >
-            All Applications
-          </Button>
-        </Footer>
       </Layout>
     </Layout>
   );

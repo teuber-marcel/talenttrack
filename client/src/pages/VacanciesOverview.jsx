@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from "react";
-import '../app/globals.css';
+import "../app/globals.css";
 import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
 import Link from "next/link";
-import { useRouter } from 'next/router';
-import { SearchOutlined, PlusCircleOutlined, EditOutlined, DeleteOutlined  } from "@ant-design/icons";
+import { useRouter } from "next/router";
+import {
+  SearchOutlined,
+  PlusCircleOutlined,
+  EditOutlined,
+  DeleteOutlined,
+} from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
 
 const { Header, Content } = Layout;
 
-const Vacancies = () => {
+const VacanciesOverview = () => {
   const [vacancies, setVacancies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
@@ -23,7 +28,7 @@ const Vacancies = () => {
         const data = await getVacancies();
         setVacancies(data);
       } catch (error) {
-        message.error("Fehler beim Laden der Vacancies");
+        message.error("Error loading vacancies");
       } finally {
         setLoading(false);
       }
@@ -35,15 +40,15 @@ const Vacancies = () => {
   const handleDelete = async (id) => {
     try {
       const success = await deleteVacancy(id);
-      
+
       if (success) {
-        message.success("Vacancy gelöscht");
+        message.success("Vacancy deleted");
         setVacancies((prev) => prev.filter((vacancy) => vacancy._id !== id));
       } else {
-        message.error("Fehler beim Löschen");
+        message.error("Error deleting vacancy");
       }
     } catch (error) {
-      message.error("Fehler beim Löschen");
+      message.error("Error deleting vacancy");
     }
   };
 
@@ -59,7 +64,7 @@ const Vacancies = () => {
       dataIndex: "title",
       key: "title",
       render: (text, record) => (
-        <Link href={`/vacancies/edit/${record._id}`}>{text}</Link>
+        <Link href={`/ViewApplications?id=${record._id}`}>{text}</Link>
       ),
     },
     {
@@ -110,26 +115,42 @@ const Vacancies = () => {
   ];
 
   return (
-    <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: "margin-left 0.3s ease", backgroundColor: 'var(--background)', minHeight: '100vh', height: '100%', display: 'flex' }}>
+    <Layout
+      style={{
+        marginLeft: collapsed ? 80 : 200,
+        transition: "margin-left 0.3s ease",
+        backgroundColor: "var(--background)",
+        minHeight: "100vh",
+        height: "100%",
+        display: "flex",
+      }}
+    >
       {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       {/* Main Layout */}
-      <Layout style={{ background: 'var(--background)' }}>  
+      <Layout style={{ background: "var(--background)" }}>
         <Header
           style={{
-            color: 'white',
-            background: 'var(--background)',
+            color: "white",
+            background: "var(--background)",
             padding: 0,
-            textAlign: 'center',
-            fontSize: '24px',
+            textAlign: "center",
+            fontSize: "24px",
           }}
         >
           Vacancy Overview
         </Header>
         <Content style={{ margin: "16px", padding: 24 }}>
           <Space style={{ marginBottom: 16 }}>
-            <Button type="primary" icon={<PlusCircleOutlined />} size="large" onClick={() => router.push('/CreateVacancy')}>New Vacancy</Button>
+            <Button
+              type="primary"
+              icon={<PlusCircleOutlined />}
+              size="large"
+              onClick={() => router.push("/CreateVacancy")}
+            >
+              New Vacancy
+            </Button>
             <Input
               placeholder="Search..."
               prefix={<SearchOutlined />}
@@ -151,4 +172,4 @@ const Vacancies = () => {
   );
 };
 
-export default Vacancies;
+export default VacanciesOverview;
