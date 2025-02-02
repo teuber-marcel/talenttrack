@@ -38,3 +38,8 @@ export const getApplicantsByVacancy = async (vacancyId) => {
     return [];
   }
 };
+
+export const getApplicantById = async (id) => {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/applicants/${id}`);
+  return response.json();
+};
