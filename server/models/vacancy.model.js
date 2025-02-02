@@ -13,25 +13,25 @@ const vacancySchema = mongoose.Schema(
             required: true,
             enum: {
                 values: [
-                    "accounting", "finance", "riskAndCompliance",
-                    "humanResources", "it", "marketing", "production",
-                    "projectManagement", "researchAndDevelopment", "sales"
+                    "Accounting", "Finance", "Risk & Compliance",
+                    "Human Resources", "IT", "Marketing", "Production",
+                    "Project Management", "Research & Development", "Sales"
                 ],
                 message: "{VALUE} is not a valid department"
             },
-            default: "accounting"
+            default: "Accounting"
         },
         hierarchy: {
             type: String,
             required: true,
             enum: {
                 values: [
-                    "workingStudent", "intern", "juniorProfessional", "professional",
-                    "seniorProfessional", "executiveProfessional", "teamLead", "manager", "director", "executiveDirector"
+                    "Working Student", "Intern", "Junior Professional", "Professional",
+                    "Senior Professional", "Executive Professional", "Team Lead", "Manager", "Director", "Executive Director"
                 ], 
                 message : "{VALUE} is not a valid hierarchy"
             },
-            default:"workingStudent"
+            default:"Working Student"
         },
         description: {
             type: String,
@@ -56,7 +56,7 @@ const vacancySchema = mongoose.Schema(
             required: true,
             enum: {
                 values: [
-                    "Draft","Open","Interview","Filled"
+                    "Draft","Open","Filled"
                 ],
                 message: "{VALUE} is not a valid status"
             },
