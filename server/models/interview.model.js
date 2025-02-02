@@ -2,7 +2,17 @@ import mongoose from "mongoose";
 
 const interviewSchema = mongoose.Schema(
     {
-        interviewDate: {
+        interviewStartDate: {
+            type: Date,
+            required: true,
+            validate: {
+                validator: function (value) {
+                    return value.getTime() > Date.now();
+                },
+                message: "Interview date must be in the future."
+            }
+        },
+        interviewEndDate: {
             type: Date,
             required: true,
             validate: {
