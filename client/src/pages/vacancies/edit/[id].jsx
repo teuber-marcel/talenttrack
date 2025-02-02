@@ -15,7 +15,7 @@ const { TextArea } = Input;
 const EditVacancy = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
-    const [selectedHierarchies, setSelectedHierarchies] = useState([]);
+    const [selectedHierarchy, setSelectedHierarchy] = useState(null);
     const [vacancyTitle, setVacancyTitle] = useState("");
     const [createdVacancy, setCreatedVacancy] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -37,7 +37,7 @@ const EditVacancy = () => {
         if (
             vacancyTitle === createdVacancy.title &&
             selectedDepartment === createdVacancy.department &&
-            JSON.stringify(selectedHierarchies) === JSON.stringify(Array.isArray(createdVacancy.hierarchy) ? createdVacancy.hierarchy : [createdVacancy.hierarchy]) &&
+            selectedHierarchy === createdVacancy.hierarchy &&
             description === createdVacancy.description &&
             requirements === createdVacancy.requirements &&
             other === createdVacancy.other
@@ -49,7 +49,7 @@ const EditVacancy = () => {
         const updatedFields = { 
             title: vacancyTitle,
             department: selectedDepartment,
-            hierarchy: selectedHierarchies[0] || createdVacancy.hierarchy,
+            hierarchy: selectedHierarchy,
             description, 
             requirements, 
             other 
@@ -94,7 +94,7 @@ const EditVacancy = () => {
                     setCreatedVacancy(data);
                     setVacancyTitle(data.title || "");
                     setSelectedDepartment(data.department || "");
-                    setSelectedHierarchies(Array.isArray(data.hierarchy) ? data.hierarchy : [data.hierarchy]);
+                    setSelectedHierarchy(data.hierarchy || "");
                     setDescription(data.description || "");
                     setRequirements(data.requirements || "");
                     setOther(data.other || "");
@@ -123,7 +123,7 @@ const EditVacancy = () => {
                         </Col>
                         <Col span={12}>
                             <div style={{ padding: 16, minHeight: 240, background: '#333', borderRadius: 8, color: 'white', display: 'flex', justifyContent: 'center' }}>
-                                <EditCheckboxGroup onChange={setSelectedHierarchies} value={selectedHierarchies} />
+                                <EditCheckboxGroup onChange={setSelectedHierarchy} value={selectedHierarchy} />
                             </div>
                         </Col>
                         <Col span={24}>
@@ -177,7 +177,7 @@ const EditVacancy = () => {
                                     createdVacancy &&
                                     vacancyTitle === createdVacancy.title &&
                                     selectedDepartment === createdVacancy.department &&
-                                    JSON.stringify(selectedHierarchies) === JSON.stringify(Array.isArray(createdVacancy.hierarchy) ? createdVacancy.hierarchy : [createdVacancy.hierarchy]) &&
+                                    selectedHierarchy === createdVacancy.hierarchy &&
                                     description === createdVacancy.description &&
                                     requirements === createdVacancy.requirements &&
                                     other === createdVacancy.other
