@@ -252,3 +252,75 @@ h1, h2, h3, h4, h5, h6, p {
 .ant-notification-notice-close {
   color: #547bae !important;
 }
+
+:root {
+  --background: #141414;         /* Main app background */
+  --card-background: #1f1f1f;    /* Cards/panels background */
+  --text-color: #f0f0f0;         /* Light text color */
+  --border-color: #303030;       /* Subtle border color */
+  --highlight-color: #1890ff;    /* Accent color (e.g., for badges/links) */
+}
+
+.dark-table-row td {
+  background-color: #1c1c1c !important;
+  color: #f0f0f0 !important;
+  font-size: 14px;
+  border-bottom: 1px solid #2a2a2a !important;
+  transition: background-color 0.2s ease;
+}
+
+.dark-table-row:hover td {
+  background-color: #2a2a2a !important; /* Slightly lighter on hover */
+}
+
+.ant-table-thead > tr > th {
+  background-color: #2f2f2f !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #3a3a3a !important;
+  font-weight: 600 !important;
+  text-transform: uppercase; /* optional style */
+}
+
+/* Make all Steps titles and descriptions white */
+.ant-steps-item-title,
+.ant-steps-item-description {
+  color: #ffffff !important;
+}
+
+/* Ensure the icon color is also visible */
+.ant-steps-item-icon .ant-steps-icon {
+  color: #ffffff !important;
+}
+
+.ant-steps-item-process .ant-steps-item-title {
+  color: #1890ff !important; /* or any highlight color you like */
+}
+
+/* Make pagination icons/arrows white */
+.ant-table-pagination .ant-pagination-next .ant-pagination-item-link .anticon,
+.ant-table-pagination .ant-pagination-prev .ant-pagination-item-link .anticon {
+  color: #ffffff !important;
+}
+
+/* Also style the page number items */
+.ant-table-pagination .ant-pagination-item,
+.ant-table-pagination .ant-pagination-prev .ant-pagination-item-link,
+.ant-table-pagination .ant-pagination-next .ant-pagination-item-link {
+  background-color: #1e1e1e !important;
+  border: 1px solid #2a2a2a !important;
+  color: #ffffff !important;
+}
+
+/* Hover states */
+.ant-table-pagination .ant-pagination-item:hover,
+.ant-table-pagination .ant-pagination-prev:hover .ant-pagination-item-link,
+.ant-table-pagination .ant-pagination-next:hover .ant-pagination-item-link {
+  background-color: #2a2a2a !important;
+  border-color: #3a3a3a !important;
+}
+
+/* Active page highlight */
+.ant-table-pagination .ant-pagination-item-active {
+  border-color: #1890ff !important;  /* or any accent color you prefer */
+}
+
