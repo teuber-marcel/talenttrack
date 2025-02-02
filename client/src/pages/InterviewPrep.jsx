@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Typography, Row, Col, Card, Button, Image, message, notification } from "antd";
-import { CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Layout, Typography, Row, Col, Card, Button, Image, message, notification, Input } from "antd";
+import { CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined, DownloadOutlined, CloseCircleOutlined, RedoOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import BackgroundBox from "../components/Global/BackgroundBox";
 import { getApplicants } from "../services/applicantService";
 import { getVacancyById } from "../services/vacancyService";
 import ProgressStepper from "../components/Global/ProgressStepper";
-import { createInterview, generateQuestions, getInterviewByApplicantId, downloadInterviewQuestions } from "../services/interviewService";
+import { createInterview, generateQuestions, getInterviewByApplicantId, downloadInterviewQuestions, saveInterviewQuestions } from "../services/interviewService";
 
 const { Content } = Layout;
 const { Title, Paragraph } = Typography;
@@ -24,6 +24,9 @@ const InterviewPreparation = () => {
   const [loading, setLoading] = useState(true);
   const [interviewQuestions, setInterviewQuestions] = useState([]);
   const [currentInterview, setCurrentInterview] = useState(null);
+  const [regenerating, setRegenerating] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [editedQuestions, setEditedQuestions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,23 +78,14 @@ const InterviewPreparation = () => {
     console.log('Current interviewQuestions state:', interviewQuestions);
   }, [interviewQuestions]);
 
-  const exampleQuestions = [
-    {
-      question: "What is a closure in JavaScript?",
-      answer:
-        "A closure is a function that retains access to its lexical scope, even when the function is executed outside that scope."
-    },
-    {
-      question: "Explain the concept of prototypal inheritance in JavaScript.",
-      answer:
-        "Prototypal inheritance is a feature in JavaScript used to add methods and properties to objects. It is a method by which an object can inherit the properties and methods of another object."
-    }
-  ];
+  useEffect(() => {
+    setEditedQuestions(interviewQuestions);
+  }, [interviewQuestions]);
 
   const steps = [
     { title: "Job Overview", status: "finish" },
     { title: "Applicant Details", status: "finish" },
-    { title: "Interview Preparation", status: "process" }
+    { title: "Interview Preparation", status: "finish" }
   ];
 
   const handleDownload = async () => {
@@ -125,6 +119,73 @@ const InterviewPreparation = () => {
     }
   };
 
+  const handleRegenerate = async () => {
+    if (!currentInterview) {
+      message.error("No interview available");
+      return;
+    }
+    setRegenerating(true);
+    try {
+      const response = await generateQuestions(currentInterview._id);
+      setInterviewQuestions(response.questions || response);
+      notification.success({
+        message: "Questions Regenerated",
+        description: "Interview questions have been successfully updated.",
+        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        duration: 4,
+        pauseOnHover: true,
+        style: { 
+          backgroundColor: "rgba(255,255,255,0.8)", 
+          borderLeft: '4px solid #547bae', 
+          backdropFilter: 'blur(8px)' 
+        }
+      });
+    } catch (error) {
+      message.error("Failed to regenerate questions");
+    } finally {
+      setRegenerating(false);
+    }
+  };
+
+  const handleEditClick = () => {
+    setEditMode(true);
+    setEditedQuestions([...interviewQuestions]);
+  };
+
+  const handleQuestionChange = (index, newValue) => {
+    const newQuestions = [...editedQuestions];
+    newQuestions[index] = newValue;
+    setEditedQuestions(newQuestions);
+  };
+
+  const handleDeleteQuestion = (indexToDelete) => {
+    const newQuestions = editedQuestions.filter((_, index) => index !== indexToDelete);
+    setEditedQuestions(newQuestions);
+  };
+
+  const handleSave = async () => {
+    if (!currentInterview) return;
+    
+    try {
+      await saveInterviewQuestions(currentInterview._id, editedQuestions);
+      setInterviewQuestions(editedQuestions);
+      setEditMode(false);
+      notification.success({
+        message: "Changes Saved",
+        description: "Interview questions have been successfully updated.",
+        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        duration: 4,
+        style: { 
+          backgroundColor: "rgba(255,255,255,0.8)", 
+          borderLeft: '4px solid #547bae', 
+          backdropFilter: 'blur(8px)' 
+        }
+      });
+    } catch (error) {
+      message.error("Failed to save changes");
+    }
+  };
+
   return (
     <Layout style={{ minHeight: "100vh", background: "#000000" }}>
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
@@ -144,14 +205,33 @@ const InterviewPreparation = () => {
           <Row justify="center" style={{ margin: "40px 0 16px" }}>
             {applicants.length > 0 && (
               <Col style={{ textAlign: "center" }}>
-                <Title level={3}>{applicants[0].prename} {applicants[0].surname}</Title>
-                <Image
-                  src={applicants[0].photo}
-                  alt="Applicant photo"
-                  width={160}
-                  height={160}
-                  style={{ borderRadius: "50%" }}
-                />
+                <Card
+                  style={{
+                    background: '#333333',
+                    borderRadius: '8px',
+                    padding: '0px',  // Reduced from 20px to 12px
+                    marginBottom: '20px',
+                    width: '500px',
+                    border: '1px solid #333333'  // Making border same color as background
+                  }}
+                >
+                  <Row align="middle" justify="space-around">
+                    <Col span={11}>  {/* Increased from 10 to 11 */}
+                      <Title level={1} style={{ margin: 0, color: '#fff' }}>
+                        {applicants[0].prename} {applicants[0].surname}
+                      </Title>
+                    </Col>
+                    <Col span={11}>  {/* Increased from 10 to 11 */}
+                      <Image
+                        src={applicants[0].photo}
+                        alt="Applicant photo"
+                        width={160}
+                        height={160}
+                        style={{ borderRadius: "50%" }}
+                      />
+                    </Col>
+                  </Row>
+                </Card>
               </Col>
             )}
           </Row>
@@ -163,51 +243,136 @@ const InterviewPreparation = () => {
                 </Title>
                 <Card bordered={true} style={{ minHeight: "200px", maxWidth: "100%", overflowY: "auto", color: '#000000' }}>
                   <div className="interview-questions">
-                    {interviewQuestions.map((question, index) => (
-                      <div key={index} className="question-item" style={{ 
-                        marginBottom: '16px',
-                        padding: '12px',
-                        borderLeft: '4px solid #547bae',
-                        backgroundColor: '#f5f5f5',
-                        borderRadius: '4px',
-                        color: '#000000'
-                      }}>
-                        <Typography.Text strong style={{ fontSize: '16px', color: '#000000' }}>
-                          {`${index + 1}. ${question}`}
-                        </Typography.Text>
-                      </div>
+                    {(editMode ? editedQuestions : interviewQuestions).map((question, index) => (
+                      editMode ? (
+                        <div key={index} className="question-item" style={{ 
+                          marginBottom: '16px',
+                          padding: '12px',
+                          borderLeft: '4px solid #547bae',
+                          backgroundColor: '#f5f5f5',
+                          borderRadius: '4px',
+                          color: '#000000',
+                          display: 'flex',
+                          gap: '8px'
+                        }}>
+                          <div style={{ flex: 1 }}>
+                            <Input.TextArea
+                              value={question}
+                              onChange={(e) => handleQuestionChange(index, e.target.value)}
+                              autoSize={{ minRows: 2 }}
+                              style={{ fontSize: '16px', color: '#000000' }}
+                            />
+                          </div>
+                          <Button
+                            type="text"
+                            danger
+                            icon={<CloseCircleOutlined />}
+                            onClick={() => handleDeleteQuestion(index)}
+                            style={{ alignSelf: 'flex-start' }}
+                          />
+                        </div>
+                      ) : (
+                        <div key={index} className="question-item" style={{ 
+                          marginBottom: '16px',
+                          padding: '12px',
+                          borderLeft: '4px solid #547bae',
+                          backgroundColor: '#f5f5f5',
+                          borderRadius: '4px',
+                          color: '#000000'
+                        }}>
+                          <Typography.Text strong style={{ fontSize: '16px', color: '#000000' }}>
+                            {`${index + 1}. ${question}`}
+                          </Typography.Text>
+                        </div>
+                      )
                     ))}
                   </div>
                 </Card>
-                <Row justify="end" style={{ marginTop: "16px" }}>
-                  <Button 
-                    onClick={() => {}} // Leerer Click-Handler für Cancel
-                    type="default" 
-                    size="large"
-                    style={{ 
-                      marginRight: 8, 
-                      height: "40px", 
-                      padding: "0 24px",
-                      backgroundColor: "#547bae",
-                      borderColor: "#547bae",
-                      color: "white"
-                    }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button 
-                    onClick={handleDownload} 
-                    type="primary"
-                    size="large"
-                    style={{ 
-                      height: "40px", 
-                      padding: "0 24px",
-                      backgroundColor: "#547bae",
-                      borderColor: "#547bae"
-                    }}
-                  >
-                    Download
-                  </Button>
+                <Row justify="space-between" style={{ marginTop: "16px" }}>
+                  <div>
+                    <Button 
+                      onClick={handleRegenerate}
+                      type="default"
+                      size="large"
+                      icon={<RedoOutlined />}
+                      loading={regenerating}
+                      style={{
+                        height: "40px", 
+                        padding: "0 24px",
+                        backgroundColor: "#547bae",
+                        borderColor: "#547bae",
+                        color: "white",
+                        marginRight: 8
+                      }}
+                    >
+                      Regenerate
+                    </Button>
+                    {!editMode ? (
+                      <Button 
+                        onClick={handleEditClick} 
+                        type="default" 
+                        size="large"
+                        icon={<EditOutlined />}
+                        style={{ 
+                          height: "40px", 
+                          padding: "0 24px",
+                          backgroundColor: "#547bae",
+                          borderColor: "#547bae",
+                          color: "white"
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    ) : (
+                      <Button 
+                        onClick={handleSave} 
+                        type="default" 
+                        size="large"
+                        icon={<SaveOutlined />}
+                        style={{ 
+                          height: "40px", 
+                          padding: "0 24px",
+                          backgroundColor: "#547bae",
+                          borderColor: "#547bae",
+                          color: "white"
+                        }}
+                      >
+                        Save
+                      </Button>
+                    )}
+                  </div>
+                  <div>
+                    <Button 
+                      onClick={() => {}} 
+                      type="default" 
+                      size="large"
+                      icon={<CloseCircleOutlined />}
+                      style={{ 
+                        marginRight: 8, 
+                        height: "40px", 
+                        padding: "0 24px",
+                        backgroundColor: "#547bae",
+                        borderColor: "#547bae",
+                        color: "white"
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    <Button 
+                      onClick={handleDownload} 
+                      type="primary"
+                      size="large"
+                      icon={<DownloadOutlined />}
+                      style={{ 
+                        height: "40px", 
+                        padding: "0 24px",
+                        backgroundColor: "#547bae",
+                        borderColor: "#547bae"
+                      }}
+                    >
+                      Download
+                    </Button>
+                  </div>
                 </Row>
               </BackgroundBox>
             </Col>
