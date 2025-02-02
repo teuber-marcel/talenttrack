@@ -24,3 +24,17 @@ export const deleteApplicant = async (id) => {
     return false;
   }
 };
+
+export const getApplicantsByVacancy = async (vacancyId) => {
+  try {
+    const response = await fetch(`${API_URL}/api/vacancies/${vacancyId}/details`);
+    if (!response.ok) {
+      throw new Error(`Error fetching applicants: ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data.applicants;
+  } catch (error) {
+    console.error("API error in getApplicantsByVacancy:", error);
+    return [];
+  }
+};

@@ -29,3 +29,16 @@ export const deleteVacancy = async (id) => {
     return false;
   }
 };
+
+export const getVacancyWithApplicantsById = async (id) => {
+  try {
+    console.log(`Calling API: ${process.env.NEXT_PUBLIC_API_URL}/api/vacancies/${id}/details`);
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/vacancies/${id}/details`);
+    const data = await response.json();
+    console.log("API Response Data:", data);
+    return data;
+  } catch (error) {
+    console.error("Error in getVacancyWithApplicantsById:", error);
+    return null;
+  }
+};

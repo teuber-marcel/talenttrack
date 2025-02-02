@@ -25,24 +25,34 @@ const getVacancyById = async (req,res) => {
 };
 
 const getVacancyWithApplicantsById = async (req, res) => {
-    const id = req.params;
+    const id = req.params.id;  // ✅ Extracts the ID as a string.
+
     try {
-        // 1. Vakanzdetails abrufen
+        console.log("Fetching vacancy and applicants for ID:", id);
+
+        if (!id || id.length !== 24) {  // ✅ Ensure ID is valid
+            return res.status(400).json({ message: "Invalid Vacancy ID" });
+        }
+
+        // Fetch the vacancy
         const vacancy = await Vacancy.findById(id);
         if (!vacancy) {
             return res.status(404).json({ message: "Vacancy not found" });
         }
 
-        // 2. Bewerber abrufen, die der Vakanz zugeordnet sind
+        // Fetch applicants linked to this vacancy
         const applicants = await Applicant.find({ vacancy: id });
 
-        // 3. Kombinierte Antwort zurückgeben
+        console.log("Fetched Vacancy:", vacancy);
+        console.log("Fetched Applicants:", applicants);
+
         res.status(200).json({
             vacancy,
             applicants
         });
     } catch (error) {
-        res.status(500).json({ message: "Error retrieving vacancy details.", error: error.message });
+        console.error("Error retrieving vacancy details:", error.message);
+        res.status(500).json({ message: "Error retrieving vacancy details", error: error.message });
     }
 };
 
