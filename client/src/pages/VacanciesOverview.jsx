@@ -11,6 +11,7 @@ import {
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
+import { getApplicantsForOverview } from "../services/applicantService"; // ✅ **Neue Funktion importiert**
 
 const { Header, Content } = Layout;
 
@@ -21,21 +22,39 @@ const VacanciesOverview = () => {
   const [collapsed, setCollapsed] = useState(false);
 
   const router = useRouter();
+  const { status } = router.query;
 
   useEffect(() => {
-    const fetchVacancies = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getVacancies();
-        setVacancies(data);
+        const vacancyData = await getVacancies();
+        const applicantData = await getApplicantsForOverview();
+
+        const applicantCount = applicantData.reduce((acc, applicant) => {
+          acc[applicant.vacancy] = (acc[applicant.vacancy] || 0) + 1;
+          return acc;
+        }, {});
+
+        const updatedVacancies = vacancyData.map((vacancy) => ({
+          ...vacancy,
+          applications: applicantCount[vacancy._id] || 0,
+        }));
+
+        //Falls ein Status in der URL ist, nur passende Vacancies anzeigen
+        if (status) {
+          setVacancies(updatedVacancies.filter((v) => v.status === status));
+        } else {
+          setVacancies(updatedVacancies);
+        }
       } catch (error) {
-        message.error("Error loading vacancies");
+        message.error("Error loading vacancies or applicants");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchVacancies();
-  }, []);
+    fetchData();
+  }, [status]); //Filtert automatisch, wenn sich der Status ändert
 
   const handleDelete = async (id) => {
     try {
@@ -58,11 +77,21 @@ const VacanciesOverview = () => {
     )
   );
 
+  const getColumnFilters = (dataIndex) => {
+    const uniqueValues = [...new Set(vacancies.map((item) => item[dataIndex]))];
+
+    return uniqueValues.map((value) => ({
+      text: value,
+      value: value,
+    }));
+  };
+
   const columns = [
     {
       title: "Vacancy Title",
       dataIndex: "title",
       key: "title",
+      sorter: (a, b) => a.title.localeCompare(b.title),
       render: (text, record) => (
         <Link href={`/ViewApplications?id=${record._id}`}>{text}</Link>
       ),
@@ -71,31 +100,53 @@ const VacanciesOverview = () => {
       title: "Department",
       dataIndex: "department",
       key: "department",
+      filters: getColumnFilters("department"),
+      onFilter: (value, record) => record.department === value,
     },
     {
       title: "Hierarchy Level",
       dataIndex: "hierarchy",
       key: "hierarchyLevel",
+      filters: getColumnFilters("hierarchy"),
+      onFilter: (value, record) => record.hierarchy === value,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      filters: getColumnFilters("status"),
+      onFilter: (value, record) => record.status === value,
+      align: "center",
     },
     {
       title: "Created",
       dataIndex: "createdAt",
       key: "createdAt",
+      sorter: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
       render: (text) => new Date(text).toLocaleDateString(),
+      align: "center",
+    },
+    {
+      title: "Updated",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      sorter: (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
+      defaultSortOrder: "ascend",
+      render: (text) => new Date(text).toLocaleDateString(),
+      align: "center",
     },
     {
       title: "Applications",
       dataIndex: "applications",
       key: "applications",
+      sorter: (a, b) => a.applications - b.applications,
+      render: (count) => count, //**Zeigt Anzahl der Bewerbungen an**
+      align: "center",
     },
     {
       title: "Actions",
       key: "actions",
+      align: "center",
       render: (_, record) => (
         <Space>
           <Link href={`/vacancies/edit/${record._id}`}>
@@ -125,10 +176,7 @@ const VacanciesOverview = () => {
         display: "flex",
       }}
     >
-      {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-
-      {/* Main Layout */}
       <Layout style={{ background: "var(--background)" }}>
         <Header
           style={{

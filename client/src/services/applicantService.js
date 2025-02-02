@@ -43,3 +43,18 @@ export const getApplicantById = async (id) => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/applicants/${id}`);
   return response.json();
 };
+
+export const getApplicantsForOverview = async () => {
+  try {
+    const response = await fetch("/api/applicants");
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch applicants");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching applicants:", error);
+    return [];
+  }
+};
