@@ -15,7 +15,7 @@ const ProgressStepper = ({ steps, currentStep }) => {
         <span className={`progress-dot ${status}`}>{dot}</span>
       )}
       style={{
-        width: "120%",
+        width: "100%",
         display: "flex",
         justifyContent: "flex-start",
         minWidth: "100%",

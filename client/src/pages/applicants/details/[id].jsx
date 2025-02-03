@@ -309,11 +309,11 @@ const ApplicantDetails = () => {
             </p>
           )}
 
-          <div style={{ marginTop: "24px", textAlign: "center" }}>
+          <div style={{ marginTop: "24px", textAlign: "right" }}>
             <Button
               type="default"
               icon={<ArrowLeftOutlined />}
-              onClick={() => router.push("/ViewApplications")}
+              onClick={() => router.back()} // <— Use router.back()
             >
               Cancel
             </Button>
