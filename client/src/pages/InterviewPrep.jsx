@@ -34,6 +34,7 @@ import {
   saveInterviewQuestions,
 } from "../services/interviewService";
 import { useRouter } from "next/router";
+import "@ant-design/v5-patch-for-react-19";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -298,13 +299,16 @@ const InterviewPreparation = () => {
                               {applicant.prename} {applicant.surname}
                             </Title>
                             <Text type="secondary">
-                              {vacancy?.title ? `Vacancy: ${vacancy.title}` : ""}
+                              {vacancy?.title
+                                ? `Vacancy: ${vacancy.title}`
+                                : ""}
                             </Text>
                           </Col>
                           <Col xs={24} md={12} style={{ textAlign: "center" }}>
                             <Image
                               src={
-                                applicant.photo || "https://via.placeholder.com/150"
+                                applicant.photo ||
+                                "https://via.placeholder.com/150"
                               }
                               alt="Applicant Photo"
                               width={150}
