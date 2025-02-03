@@ -7,7 +7,7 @@ const EditRadioButtonGroup = ({ onChange, value }) => {
   return (
     <div style={{ width: "100%" }}>
       {/* Überschrift */}
-      <Title level={4} style={{ marginBottom: 16, textAlign: "left", color: "white" }}>
+      <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left" }}>
         Select the department
       </Title>
 
@@ -23,16 +23,16 @@ const EditRadioButtonGroup = ({ onChange, value }) => {
           rowGap: "12px", 
           columnGap: "50px" 
         }}>
-          <Radio value="Accounting" style={{ color: "white" }}>Accounting</Radio>
-          <Radio value="Marketing" style={{ color: "white" }}>Marketing</Radio>
-          <Radio value="Finance" style={{ color: "white" }}>Finance</Radio>
-          <Radio value="Production" style={{ color: "white" }}>Production</Radio>
-          <Radio value="Risk & Compliance" style={{ color: "white" }}>Risk & Compliance</Radio>
-          <Radio value="Project Management" style={{ color: "white" }}>Project Management</Radio>
-          <Radio value="Human Resources" style={{ color: "white" }}>Human Resources</Radio>
-          <Radio value="Research & Development" style={{ color: "white" }}>Research & Development</Radio>
-          <Radio value="IT" style={{ color: "white" }}>IT</Radio>
-          <Radio value="Sales" style={{ color: "white" }}>Sales</Radio>
+          <Radio value="Accounting">Accounting</Radio>
+          <Radio value="Marketing">Marketing</Radio>
+          <Radio value="Finance">Finance</Radio>
+          <Radio value="Production">Production</Radio>
+          <Radio value="Risk & Compliance">Risk & Compliance</Radio>
+          <Radio value="Project Management">Project Management</Radio>
+          <Radio value="Human Resources">Human Resources</Radio>
+          <Radio value="Research & Development">Research & Development</Radio>
+          <Radio value="IT">IT</Radio>
+          <Radio value="Sales">Sales</Radio>
         </div>
       </Radio.Group>
     </div>

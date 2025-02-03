@@ -15,7 +15,7 @@ const VacancyTitleInput = ({ onChange, disabled  }) => {
   return (
     <div style={{
       width: "100%",
-      padding: "12px",
+      padding: "0px",
       borderRadius: "8px",
       display: "flex",
       flexDirection: "column",
@@ -24,8 +24,8 @@ const VacancyTitleInput = ({ onChange, disabled  }) => {
     }}>
       {/* Überschrift */}
       <Title level={4} style={{
+        marginTop: 0,
         marginBottom: 8,
-        color: "white",
         textAlign: "left",
       }}>
         Vacancy Title
@@ -39,7 +39,10 @@ const VacancyTitleInput = ({ onChange, disabled  }) => {
         style={{
           width: "100%",
           padding: "10px",
-          borderRadius: "6px"
+          borderRadius: "6px",
+          background: "#fff",
+          color: "#333",
+          marginBottom: 0
         }}
         disabled={disabled}
       />

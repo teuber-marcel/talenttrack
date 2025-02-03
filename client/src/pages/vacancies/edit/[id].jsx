@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../../app/globals.css";
-import { Layout, Row, Col, Button, Input, message } from "antd";
+import { Layout, Row, Col, Button, Input, message, Typography } from "antd";
 import {
   CloseCircleOutlined,
   PlayCircleOutlined,
@@ -15,6 +15,7 @@ import EditVacancyTitleInput from "../../../components/EditVacancy/EditVacancyTi
 import { getVacancyById } from "../../../services/vacancyService.js";
 
 const { Header, Content } = Layout;
+const { Title } = Typography;
 const { TextArea } = Input;
 
 const EditVacancy = () => {
@@ -129,21 +130,19 @@ const EditVacancy = () => {
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
       <Layout style={{ background: "#f0f2f5" }}>
-        {" "}
-        {/* replaced var(--background) */}
-        <Header
-          style={{
-            background: "#fff", // light header
-            color: "#333", // darker text for header
-            padding: 0,
-            textAlign: "center",
-            fontSize: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-          }}
-        >
-          Edit Vacancy
-        </Header>
-        <Content style={{ margin: "16px" }}>
+        <Content style={{ padding: "24px" }}>
+          {/* Title + Stepper */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: 24 }}
+          >
+            <Col>
+              <Title level={2} style={{ margin: 0 }}>
+                Edit Vacancy
+              </Title>
+            </Col>
+          </Row>
           <Row gutter={[16, 16]}>
             <Col span={12}>
               <div
@@ -188,7 +187,7 @@ const EditVacancy = () => {
               <div
                 style={{
                   padding: 16,
-                  minHeight: 140,
+                  minHeight: 120,
                   background: "#fff", // changed from #333
                   borderRadius: 8,
                   color: "#333", // changed from 'white'
@@ -212,9 +211,9 @@ const EditVacancy = () => {
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 }}
               >
-                <h3 style={{ color: "#333", marginBottom: "8px" }}>
+                <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left"}}>
                   Description
-                </h3>
+                </Title>
                 <TextArea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -227,9 +226,9 @@ const EditVacancy = () => {
                   }}
                 />
 
-                <h3 style={{ color: "#333", marginBottom: "8px" }}>
+                <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left" }}>
                   Requirements
-                </h3>
+                </Title>
                 <TextArea
                   value={requirements}
                   onChange={(e) => setRequirements(e.target.value)}
@@ -242,7 +241,9 @@ const EditVacancy = () => {
                   }}
                 />
 
-                <h3 style={{ color: "#333", marginBottom: "8px" }}>Other</h3>
+                <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left" }}>
+                  Further Information
+                </Title>
                 <TextArea
                   value={other}
                   onChange={(e) => setOther(e.target.value)}

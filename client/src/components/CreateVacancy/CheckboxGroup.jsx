@@ -14,7 +14,7 @@ const CheckboxGroup = ({ onChange, disabled }) => {
   return (
     <div style={{ width: "100%" }}>
       {/* Überschrift */}
-      <Title level={4} style={{ marginBottom: 16, textAlign: "left", color: "white" }}>
+      <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left" }}>
         Select the hierarchy level
       </Title>
 
@@ -31,16 +31,16 @@ const CheckboxGroup = ({ onChange, disabled }) => {
           rowGap: "12px", 
           columnGap: "50px" 
         }}>
-          <Radio value="Working Student" style={{ color: "white" }} disabled={disabled}>Working Student</Radio>
-          <Radio value="Intern" style={{ color: "white" }} disabled={disabled}>Intern</Radio>
-          <Radio value="Junior Professional" style={{ color: "white" }} disabled={disabled}>Junior Professional</Radio>
-          <Radio value="Professional" style={{ color: "white" }} disabled={disabled}>Professional</Radio>
-          <Radio value="Senior Professional" style={{ color: "white" }} disabled={disabled}>Senior Professional</Radio>
-          <Radio value="Executive Professional" style={{ color: "white" }} disabled={disabled}>Executive Professional</Radio>
-          <Radio value="Team Lead" style={{ color: "white" }} disabled={disabled}>Team Lead</Radio>
-          <Radio value="Manager" style={{ color: "white" }} disabled={disabled}>Manager</Radio>
-          <Radio value="Director" style={{ color: "white" }} disabled={disabled}>Director</Radio>
-          <Radio value="Executive Director" style={{ color: "white" }} disabled={disabled}>Executive Director</Radio>
+          <Radio value="Working Student" disabled={disabled}>Working Student</Radio>
+          <Radio value="Intern" disabled={disabled}>Intern</Radio>
+          <Radio value="Junior Professional" disabled={disabled}>Junior Professional</Radio>
+          <Radio value="Professional" disabled={disabled}>Professional</Radio>
+          <Radio value="Senior Professional" disabled={disabled}>Senior Professional</Radio>
+          <Radio value="Executive Professional" disabled={disabled}>Executive Professional</Radio>
+          <Radio value="Team Lead" disabled={disabled}>Team Lead</Radio>
+          <Radio value="Manager" disabled={disabled}>Manager</Radio>
+          <Radio value="Director" disabled={disabled}>Director</Radio>
+          <Radio value="Executive Director" disabled={disabled}>Executive Director</Radio>
         </div>
       </Radio.Group>
     </div>
