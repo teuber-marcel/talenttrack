@@ -21,7 +21,10 @@ import {
 } from "antd";
 import { ArrowLeftOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import Sidebar from "../../../components/Global/Sidebar";
-import { getApplicantById } from "../../../services/applicantService";
+import {
+  getApplicantById,
+  updateApplicantStatus,
+} from "../../../services/applicantService";
 import {
   createInterview,
   generateQuestions,
@@ -31,7 +34,6 @@ import {
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-// Reusable card style for consistency
 const cardStyle = {
   background: "#fff",
   border: "1px solid #d9d9d9",
@@ -57,7 +59,7 @@ const ApplicantDetails = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  // Notification config (like your ViewApplications approach)
+  // Global notification config
   useEffect(() => {
     notification.config({
       placement: "topRight",
@@ -74,7 +76,7 @@ const ApplicantDetails = () => {
         if (!data) throw new Error("Applicant not found");
         setApplicant(data);
 
-        // Check if interview questions already exist
+        // Check if interview questions exist
         const interview = await getInterviewByApplicantId(data._id);
         setHasInterviewQuestions(
           interview && interview.questions && interview.questions.length > 0
@@ -90,22 +92,53 @@ const ApplicantDetails = () => {
     fetchApplicantData();
   }, [id]);
 
+  /** Navigate to the "Schedule Interview" page with the applicant ID. */
+  const handleScheduleInterview = () => {
+    if (!applicant?._id) {
+      message.error("No applicant ID found.");
+      return;
+    }
+    // Replace route with your actual schedule interview path
+    router.push(`/vacancies/scheduleInterview?id=${applicant._id}`);
+  };
+
+  /** Send rejection: update applicant status to "Rejected" + success message. */
+  const handleSendRejection = async () => {
+    if (!applicant?._id) {
+      message.error("No applicant ID found.");
+      return;
+    }
+    try {
+      await updateApplicantStatus(applicant._id, "Rejected");
+      // Update local state
+      setApplicant((prev) => ({ ...prev, status: "Rejected" }));
+      // Show success notification
+      notification.success({
+        message: "Applicant Rejected",
+        description:
+          "The applicant has been successfully rejected, and an email has been sent.",
+        icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
+        duration: 4,
+      });
+    } catch (error) {
+      console.error("Error rejecting applicant:", error);
+      message.error("Failed to reject applicant.");
+    }
+  };
+
+  /** Generate Interview Questions */
   const handleGenerateQuestions = async () => {
     setGeneratingQuestions(true);
     try {
-      // First check if an interview exists
       let interview = await getInterviewByApplicantId(applicant._id);
-
       if (!interview) {
         // If no interview exists, create a new one
         interview = await createInterview(applicant._id);
       }
-
       if (!interview?._id) {
         throw new Error("No valid interview ID");
       }
-
-      // Generate questions with the existing interview ID
+      // Generate questions
       await generateQuestions(interview._id);
       setHasInterviewQuestions(true);
       notification.success({
@@ -129,6 +162,7 @@ const ApplicantDetails = () => {
     }
   };
 
+  /** Confirm overwrite of existing questions */
   const confirmGenerateQuestions = () => {
     Modal.confirm({
       title: "Generate New Interview Questions",
@@ -158,7 +192,7 @@ const ApplicantDetails = () => {
             </Col>
             <Col style={{ overflowX: "auto" }}>
               <div style={{ minWidth: 300, paddingBottom: 4 }}>
-                <ProgressStepper steps={steps} currentStep={0} />
+                <ProgressStepper steps={steps} currentStep={1} />
               </div>
             </Col>
           </Row>
@@ -170,7 +204,6 @@ const ApplicantDetails = () => {
               <Text>Applicant not found.</Text>
             </Row>
           ) : (
-            // Main Content for Applicant Details
             <Row gutter={[24, 24]}>
               {/* Left Panel - Profile Information */}
               <Col xs={24} md={8}>
@@ -231,10 +264,14 @@ const ApplicantDetails = () => {
 
                 <Card style={cardStyle} title="Further Steps">
                   <Space direction="vertical" style={{ width: "100%" }}>
-                    <Button type="primary" block>
+                    <Button
+                      type="primary"
+                      block
+                      onClick={handleScheduleInterview}
+                    >
                       Schedule Interview
                     </Button>
-                    <Button danger block>
+                    <Button danger block onClick={handleSendRejection}>
                       Send Rejection
                     </Button>
                   </Space>
