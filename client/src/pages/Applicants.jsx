@@ -37,22 +37,12 @@ const ApplicantsOverview = () => {
             padding: "0 24px",
             fontSize: "24px",
             boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-            display: "grid",
-            gridTemplateColumns: "1fr auto 1fr",
+            display: "flex",
+            justifyContent: "center",
             alignItems: "center"
           }}
         >
-          <div /> {/* leerer Platzhalter links */}
           <div style={{ fontWeight: "600" }}>Applicants Overview</div>
-          <div style={{ justifySelf: "end" }}>
-            <img 
-              src="/assets/Logo_Klein.png" 
-              alt="Logo" 
-              style={{ 
-                height: "40px"
-              }} 
-            />
-          </div>
         </Header>
         <Content style={{ margin: "16px" }}>
           <div
