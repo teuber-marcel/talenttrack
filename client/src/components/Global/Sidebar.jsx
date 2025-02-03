@@ -21,7 +21,7 @@ const getItem = (label, key, icon) => ({
 const items = [
   getItem("Dashboard", "/Dashboard", <PieChartOutlined />),
   getItem("Vacancies", "/VacanciesOverview", <DesktopOutlined />),
-  getItem("Applicants", "/Applicants", <UserOutlined />),
+  getItem("Applicants", "/ApplicantsOverview", <UserOutlined />),
 ];
 
 const Sidebar = ({ collapsed, setCollapsed }) => {
