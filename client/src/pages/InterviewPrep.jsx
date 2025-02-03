@@ -138,12 +138,12 @@ const InterviewPreparation = () => {
         notification.success({
           message: "Download Complete",
           description: "Interview questions have been successfully downloaded.",
-          icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+          icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
           duration: 4,
           pauseOnHover: true,
           style: {
             backgroundColor: "#fff",
-            borderLeft: "4px solid #547bae",
+            borderLeft: "4px solid #1890ff",
           },
         });
       } else {
@@ -169,12 +169,12 @@ const InterviewPreparation = () => {
       notification.success({
         message: "Questions Regenerated",
         description: "Interview questions have been successfully updated.",
-        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
         duration: 4,
         pauseOnHover: true,
         style: {
           backgroundColor: "#fff",
-          borderLeft: "4px solid #547bae",
+          borderLeft: "4px solid #1890ff",
         },
       });
     } catch (error) {
@@ -214,11 +214,11 @@ const InterviewPreparation = () => {
       notification.success({
         message: "Changes Saved",
         description: "Interview questions have been successfully updated.",
-        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
         duration: 4,
         style: {
           backgroundColor: "#fff",
-          borderLeft: "4px solid #547bae",
+          borderLeft: "4px solid #1890ff",
         },
       });
     } catch (error) {
@@ -304,8 +304,8 @@ const InterviewPreparation = () => {
                             applicant.photo || "https://via.placeholder.com/150"
                           }
                           alt="Applicant Photo"
-                          width={120}
-                          height={120}
+                          width={140}
+                          height={140}
                           style={{ borderRadius: "50%" }}
                         />
                       </Col>
@@ -344,7 +344,7 @@ const InterviewPreparation = () => {
                                 gap: 8,
                                 marginBottom: 12,
                                 padding: "8px",
-                                borderLeft: "4px solid #547bae",
+                                borderLeft: "4px solid #1890ff",
                                 borderRadius: 4,
                                 background: "#fff",
                               }}
@@ -370,7 +370,7 @@ const InterviewPreparation = () => {
                               style={{
                                 marginBottom: 12,
                                 padding: 8,
-                                borderLeft: "4px solid #547bae",
+                                borderLeft: "4px solid #1890ff",
                                 borderRadius: 4,
                                 background: "#fff",
                               }}
@@ -389,7 +389,7 @@ const InterviewPreparation = () => {
                           size="large"
                           icon={<RedoOutlined />}
                           loading={regenerating}
-                          style={{ backgroundColor: "#547bae", color: "#fff" }}
+                          type="primary"
                         >
                           Regenerate
                         </Button>
@@ -398,10 +398,7 @@ const InterviewPreparation = () => {
                             onClick={handleEditClick}
                             size="large"
                             icon={<EditOutlined />}
-                            style={{
-                              backgroundColor: "#547bae",
-                              color: "#fff",
-                            }}
+                            type="primary"
                           >
                             Edit
                           </Button>
@@ -410,10 +407,7 @@ const InterviewPreparation = () => {
                             onClick={handleSave}
                             size="large"
                             icon={<SaveOutlined />}
-                            style={{
-                              backgroundColor: "#547bae",
-                              color: "#fff",
-                            }}
+                            type="primary"
                           >
                             Save
                           </Button>
@@ -425,7 +419,6 @@ const InterviewPreparation = () => {
                           onClick={() => router.back()}
                           size="large"
                           icon={<CloseCircleOutlined />}
-                          style={{ backgroundColor: "#547bae", color: "#fff" }}
                         >
                           Cancel
                         </Button>
@@ -434,10 +427,6 @@ const InterviewPreparation = () => {
                           type="primary"
                           size="large"
                           icon={<DownloadOutlined />}
-                          style={{
-                            backgroundColor: "#547bae",
-                            borderColor: "#547bae",
-                          }}
                         >
                           Download
                         </Button>
