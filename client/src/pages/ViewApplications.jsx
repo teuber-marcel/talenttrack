@@ -26,6 +26,7 @@ import {
   SearchOutlined,
   EditOutlined,
   LinkedinOutlined,
+  TeamOutlined,
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancyWithApplicantsById } from "../services/vacancyService";
@@ -439,8 +440,14 @@ const JobApplicationsPage = () => {
                 <Col xs={24} md={16}>
                   {/* Existing Applicants Card */}
                   <Card style={cardStyle}>
-                    {/* Applicant Search Field */}
-                    <Row style={{ marginBottom: 16 }} justify="end">
+                    {/* Header Row with Icon and Search */}
+                    <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+                      <Col>
+                        <Space>
+                          <TeamOutlined style={{ fontSize: "24px" }} />
+                          <span style={{ fontSize: "16px" }}>Current Applicants</span>
+                        </Space>
+                      </Col>
                       <Col xs={24} md={12} lg={8}>
                         <Input
                           placeholder="Search applicants..."
