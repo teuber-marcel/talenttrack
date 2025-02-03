@@ -52,37 +52,45 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
         borderRight: "1px solid #dee2e6",
       }}
     >
-      <div className="sidebar-top">
-        <div
-          className="sidebar-logo"
+      {/* Logo Section */}
+      <div
+        className="sidebar-logo"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: collapsed ? "center" : "flex-start",
+          padding: "16px",
+        }}
+      >
+        <img
+          src="/assets/Logo_Klein.png"
+          alt="TalentTrack Logo"
           style={{
-            textAlign: "center",
-            padding: "16px",
-            color: "#212529",
+            width: "30px",
+            height: "30px",
+            marginRight: collapsed ? "0px" : "10px",
           }}
-        >
-          {collapsed ? (
-            <img
-              src="/assets/Logo_Klein.png"
-              alt="Collapsed Logo"
-              style={{ width: "30px", height: "30px" }}
-            />
-          ) : (
-            "TalentTrack"
-          )}
-        </div>
-
-        <Menu
-          theme="light"
-          mode="inline"
-          selectedKeys={[currentPath]}
-          items={items}
-          className="sidebar-menu"
-          style={{ backgroundColor: "#ffffff", color: "#212529" }}
         />
+        {!collapsed && (
+          <span
+            style={{ fontSize: "18px", fontWeight: "bold", color: "#212529" }}
+          >
+            TalentTrack
+          </span>
+        )}
       </div>
 
-      {/* Logout Button (Changes when Sidebar is Collapsed) */}
+      {/* Sidebar Menu */}
+      <Menu
+        theme="light"
+        mode="inline"
+        selectedKeys={[currentPath]}
+        items={items}
+        className="sidebar-menu"
+        style={{ backgroundColor: "#ffffff", color: "#212529" }}
+      />
+
+      {/* Logout Button */}
       <div
         style={{
           padding: "16px",
