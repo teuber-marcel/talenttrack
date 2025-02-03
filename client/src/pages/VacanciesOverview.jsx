@@ -186,22 +186,12 @@ const VacanciesOverview = () => {
             padding: "0 24px",
             fontSize: "24px",
             boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-            display: "grid",
-            gridTemplateColumns: "1fr auto 1fr",
+            display: "flex",
+            justifyContent: "center",
             alignItems: "center"
           }}
         >
-          <div /> {/* leerer Platzhalter links */}
-          <div style={{ fontWeight: "600" }}>Vacancy Overview</div>
-          <div style={{ justifySelf: "end" }}>
-            <img 
-              src="/assets/Logo_Klein.png" 
-              alt="Logo" 
-              style={{ 
-                height: "40px"
-              }} 
-            />
-          </div>
+          <div style={{ fontWeight: "600" }}>Vacancies Overview</div>
         </Header>
         <Content style={{ margin: "16px", padding: 24, background: "#fff" }}>
           <Space style={{ marginBottom: 16 }}>
