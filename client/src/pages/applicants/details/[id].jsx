@@ -99,7 +99,7 @@ const ApplicantDetails = () => {
       return;
     }
     // Replace route with your actual schedule interview path
-    router.push(`/vacancies/scheduleInterview?id=${applicant._id}`);
+    router.push(`/interviews/schedule/${applicant._id}`);
   };
 
   /** Send rejection: update applicant status to "Rejected" + success message. */
