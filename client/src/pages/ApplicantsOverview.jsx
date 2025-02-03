@@ -1,15 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "../app/globals.css";
-import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
+import { Layout, Table, Input, message } from "antd";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import {
-  SearchOutlined,
-  EditOutlined,
-  DeleteOutlined,
-} from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
-import { getApplicants, deleteApplicant } from "../services/applicantService";
+import { getApplicants } from "../services/applicantService";
 
 const { Header, Content } = Layout;
 
@@ -18,8 +13,6 @@ const ApplicantsOverview = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState("");
   const [collapsed, setCollapsed] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     const fetchApplicants = async () => {
@@ -35,22 +28,6 @@ const ApplicantsOverview = () => {
 
     fetchApplicants();
   }, []);
-
-  const handleDelete = async (id) => {
-    try {
-      const success = await deleteApplicant(id);
-      if (success) {
-        message.success("Applicant deleted");
-        setApplicants((prev) =>
-          prev.filter((applicant) => applicant._id !== id)
-        );
-      } else {
-        message.error("Error deleting applicant");
-      }
-    } catch (error) {
-      message.error("Error deleting applicant");
-    }
-  };
 
   const filteredApplicants = applicants.filter((applicant) =>
     Object.values(applicant).some((value) =>
@@ -75,7 +52,7 @@ const ApplicantsOverview = () => {
       key: "prename",
       sorter: (a, b) => a.prename.localeCompare(b.prename),
       render: (_, record) => (
-        <Link href={`/ApplicantDetails?id=${record._id}`}>
+        <Link href={`/applicants/details/${record._id}`}>
           {record.surname}, {record.prename}
         </Link>
       ),
@@ -84,11 +61,13 @@ const ApplicantsOverview = () => {
       title: "Email",
       dataIndex: "email",
       key: "email",
+      sorter: (a, b) => a.email.localeCompare(b.email),
     },
     {
       title: "Phone",
       dataIndex: "phone",
       key: "phone",
+      sorter: (a, b) => a.phone.localeCompare(b.phone),
     },
     {
       title: "Status",
@@ -113,26 +92,6 @@ const ApplicantsOverview = () => {
       defaultSortOrder: "ascend",
       render: (text) => new Date(text).toLocaleDateString(),
     },
-    {
-      title: "Actions",
-      key: "actions",
-      align: "center",
-      render: (_, record) => (
-        <Space>
-          <Link href={`/applicants/edit/${record._id}`}>
-            <Button type="primary" icon={<EditOutlined />} />
-          </Link>
-          <Popconfirm
-            title="Confirm Deletion"
-            onConfirm={() => setTimeout(() => handleDelete(record._id), 100)}
-            okText="Confirm"
-            cancelText="Cancel"
-          >
-            <Button danger icon={<DeleteOutlined />} />
-          </Popconfirm>
-        </Space>
-      ),
-    },
   ];
 
   return (
@@ -140,7 +99,7 @@ const ApplicantsOverview = () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "#f0f2f5", // replaced var(--background)
+        backgroundColor: "#f0f2f5",
         minHeight: "100vh",
         height: "100%",
         display: "flex",
