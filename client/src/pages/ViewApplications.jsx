@@ -19,6 +19,8 @@ import {
   Input,
   Space,
   Alert,
+  Divider,
+  notification, // Add this import
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -27,13 +29,22 @@ import {
   EditOutlined,
   LinkedinOutlined,
   TeamOutlined,
+  CheckCircleOutlined,  // Add this
+  CloseCircleOutlined,  // Add this
 } from "@ant-design/icons";
+import "@ant-design/v5-patch-for-react-19";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancyWithApplicantsById } from "../services/vacancyService";
 import ProgressStepper from "../components/Global/ProgressStepper";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
+
+// Configure notifications globally after imports
+notification.config({
+  placement: "topRight",
+  top: 100,
+});
 
 // A unified Card style for consistent appearance
 const cardStyle = {
@@ -91,33 +102,70 @@ const JobApplicationsPage = () => {
   // PATCH request to update the vacancy status
   const handleStatusChange = async (newStatus) => {
     if (!vacancy || !vacancy._id) {
-      message.error("No vacancy selected for update.");
+      notification.error({
+        message: "Error",
+        description: "No vacancy selected for update.",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
       return;
     }
+    
     if (newStatus === vacancy.status) {
-      message.info(`Status is already '${newStatus}'.`);
+      notification.info({
+        message: "Information",
+        description: `Status is already '${newStatus}'.`,
+        icon: <InfoCircleOutlined style={{ color: "#1890ff" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #1890ff",
+        },
+      });
       return;
     }
+
     try {
       const response = await fetch(`/api/vacancies/${vacancy._id}/details`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status: newStatus }),
       });
+
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(
-          errorData.message || "Failed to update vacancy status."
-        );
+        throw new Error(errorData.message || "Failed to update vacancy status.");
       }
-      // Success => update local vacancy state
+
       setVacancy((prev) => ({ ...prev, status: newStatus }));
-      message.success(`Vacancy status updated to '${newStatus}'.`);
+      
+      notification.success({
+        message: "Status Updated",
+        description: `Vacancy status updated to '${newStatus}'.`,
+        icon: <CheckCircleOutlined style={{ color: "#52c41a" }} />,
+        duration: 4,
+        pauseOnHover: true,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #52c41a",
+        },
+      });
     } catch (err) {
       console.error("Error updating vacancy status:", err);
-      message.error("Error updating vacancy status: " + err.message);
+      notification.error({
+        message: "Update Failed",
+        description: "Error updating vacancy status: " + err.message,
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
     }
   };
 
@@ -445,7 +493,7 @@ const JobApplicationsPage = () => {
                       <Col>
                         <Space>
                           <TeamOutlined style={{ fontSize: "24px" }} />
-                          <span style={{ fontSize: "16px" }}>Current Applicants</span>
+                          <span style={{ fontSize: "16px", fontWeight: "bold" }}>Current Applicants</span>
                         </Space>
                       </Col>
                       <Col xs={24} md={12} lg={8}>
@@ -457,6 +505,8 @@ const JobApplicationsPage = () => {
                         />
                       </Col>
                     </Row>
+                    
+                    <Divider style={{ margin: '0 0 16px 0' }} />
 
                     <Table
                       columns={columns}
@@ -474,7 +524,7 @@ const JobApplicationsPage = () => {
                         <LinkedinOutlined
                           style={{ color: "#0077B5", fontSize: "40px" }}
                         />
-                        <span>Suggested Candidates on LinkedIn</span>
+                        <span style={{ fontWeight: "bold" }}>Suggested Candidates on LinkedIn</span>
                       </Space>
                     }
                   >
