@@ -232,29 +232,29 @@ const JobApplicationsPage = () => {
       name: "Michael Chen",
       title: "Frontend Engineer at Google",
       suitabilityScore: 95,
-      profileUrl: "https://linkedin.com/in/michaelchen"
+      profileUrl: "https://linkedin.com/in/michaelchen",
     },
     {
       id: 2,
       name: "Sarah Mueller",
       title: "Senior Software Developer at Amazon",
       suitabilityScore: 92,
-      profileUrl: "https://linkedin.com/in/smueller"
+      profileUrl: "https://linkedin.com/in/smueller",
     },
     {
       id: 3,
       name: "David Kumar",
       title: "Full Stack Developer at Microsoft",
       suitabilityScore: 88,
-      profileUrl: "https://linkedin.com/in/davidkumar"
+      profileUrl: "https://linkedin.com/in/davidkumar",
     },
     {
       id: 4,
       name: "Emma Bergström",
       title: "Software Engineer at Spotify",
       suitabilityScore: 85,
-      profileUrl: "https://linkedin.com/in/emmabergstrom"
-    }
+      profileUrl: "https://linkedin.com/in/emmabergstrom",
+    },
   ]);
 
   // Filter LinkedIn suggestions
@@ -371,12 +371,19 @@ const JobApplicationsPage = () => {
                         <Dropdown
                           overlay={renderStatusMenu}
                           trigger={["click"]}
+                          getPopupContainer={(trigger) => trigger.parentNode}
                         >
-                          <Badge
-                            style={{ cursor: "pointer" }}
-                            color="#1890ff"
-                            text={vacancy.status}
-                          />
+                          <div
+                            style={{
+                              display: "inline-block",
+                              cursor: "pointer",
+                              padding: "4px",
+                              borderRadius: "4px",
+                              border: "1px solid #0077B5",
+                            }}
+                          >
+                            <Badge color="#1890ff" text={vacancy.status} />
+                          </div>
                         </Dropdown>
                       </Text>
                     </Space>
@@ -441,11 +448,13 @@ const JobApplicationsPage = () => {
                   </Card>
 
                   {/* New LinkedIn Suggestions Card */}
-                  <Card 
+                  <Card
                     style={cardStyle}
                     title={
                       <Space>
-                        <LinkedinOutlined style={{ color: '#0077B5', fontSize: '40px' }} />
+                        <LinkedinOutlined
+                          style={{ color: "#0077B5", fontSize: "40px" }}
+                        />
                         <span>Suggested Candidates on LinkedIn</span>
                       </Space>
                     }
@@ -458,7 +467,7 @@ const JobApplicationsPage = () => {
                       style={{ marginBottom: 16 }}
                       closable
                     />
-                    
+
                     {/* LinkedIn Search Field */}
                     <Row style={{ marginBottom: 16 }} justify="end">
                       <Col xs={24} md={12} lg={8}>
@@ -466,7 +475,9 @@ const JobApplicationsPage = () => {
                           placeholder="Search LinkedIn suggestions..."
                           prefix={<SearchOutlined />}
                           allowClear
-                          onChange={(e) => setLinkedinSearchText(e.target.value)}
+                          onChange={(e) =>
+                            setLinkedinSearchText(e.target.value)
+                          }
                         />
                       </Col>
                     </Row>
