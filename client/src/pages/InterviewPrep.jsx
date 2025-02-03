@@ -21,6 +21,7 @@ import {
   RedoOutlined,
   EditOutlined,
   SaveOutlined,
+  ArrowLeftOutlined,
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getApplicantById } from "../services/applicantService";
@@ -427,7 +428,7 @@ const InterviewPreparation = () => {
                         <Button
                           onClick={() => router.back()}
                           size="large"
-                          icon={<CloseCircleOutlined />}
+                          icon={<ArrowLeftOutlined />}
                         >
                           Cancel
                         </Button>

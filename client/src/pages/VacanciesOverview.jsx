@@ -181,15 +181,27 @@ const VacanciesOverview = () => {
         {/* replaced var(--background) */}
         <Header
           style={{
-            background: "#fff", // typical light header
-            color: "#333", // darker text
-            padding: 0,
-            textAlign: "center",
+            background: "#fff",
+            color: "#333",
+            padding: "0 24px",
             fontSize: "24px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.05)", // subtle header shadow
+            boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+            display: "grid",
+            gridTemplateColumns: "1fr auto 1fr",
+            alignItems: "center"
           }}
         >
-          Vacancy Overview
+          <div /> {/* leerer Platzhalter links */}
+          <div style={{ fontWeight: "600" }}>Vacancy Overview</div>
+          <div style={{ justifySelf: "end" }}>
+            <img 
+              src="/assets/Logo_Klein.png" 
+              alt="Logo" 
+              style={{ 
+                height: "40px"
+              }} 
+            />
+          </div>
         </Header>
         <Content style={{ margin: "16px", padding: 24, background: "#fff" }}>
           <Space style={{ marginBottom: 16 }}>
