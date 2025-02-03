@@ -445,7 +445,7 @@ const JobApplicationsPage = () => {
                     style={cardStyle}
                     title={
                       <Space>
-                        <LinkedinOutlined style={{ color: '#0077B5', fontSize: '24px' }} />
+                        <LinkedinOutlined style={{ color: '#0077B5', fontSize: '40px' }} />
                         <span>Suggested Candidates on LinkedIn</span>
                       </Space>
                     }
