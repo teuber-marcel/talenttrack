@@ -10,8 +10,14 @@ import {
   Typography,
   message,
   Card,
+  notification,
 } from "antd";
-import { CloseCircleOutlined, CalendarOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  CalendarOutlined,
+  CheckCircleOutlined,
+} from "@ant-design/icons";
+import "@ant-design/v5-patch-for-react-19";
 import { useRouter } from "next/router";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -46,6 +52,12 @@ const cardStyle = {
   padding: 24,
 };
 
+// Configure notifications globally
+notification.config({
+  placement: "topRight",
+  top: 100,
+});
+
 const ScheduleInterview = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedDate, setSelectedDate] = useState(dayjs().startOf("day"));
@@ -78,18 +90,45 @@ const ScheduleInterview = () => {
 
   const handleScheduleInterview = async () => {
     if (!applicantId) {
-      message.error("Missing Applicant ID in the URL!");
+      notification.error({
+        message: "Error",
+        description: "Missing Applicant ID in the URL!",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
       return;
     }
 
     if (!selectedDate || !timeRange || !timeRange[0] || !timeRange[1]) {
-      message.error("Please select a date and valid time range!");
+      notification.error({
+        message: "Error",
+        description: "Please select a date and valid time range!",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
       return;
     }
 
     const [startTime, endTime] = timeRange;
     if (startTime.isSameOrAfter(endTime)) {
-      message.error("Start time must be before end time!");
+      notification.error({
+        message: "Error",
+        description: "Start time must be before end time!",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
       return;
     }
 
@@ -117,20 +156,58 @@ const ScheduleInterview = () => {
 
       if (!response.ok) throw new Error("Error saving the interview.");
 
-      message.success("Interview successfully scheduled!");
+      notification.success({
+        message: "Success",
+        description: "Interview successfully scheduled!",
+        icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
+        duration: 4,
+        pauseOnHover: true,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #1890ff",
+        },
+      });
 
       try {
         await updateApplicantStatus(applicantId, "Interview Scheduled");
-        message.success("Applicant status updated to 'Interview Scheduled'");
+        notification.success({
+          message: "Status Updated",
+          description: "Applicant status updated to 'Interview Scheduled'",
+          icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
+          duration: 4,
+          pauseOnHover: true,
+          style: {
+            backgroundColor: "#fff",
+            borderLeft: "4px solid #1890ff",
+          },
+        });
       } catch (error) {
         console.error("❌ Error updating applicant status:", error);
-        message.error("Failed to update applicant status.");
+        notification.error({
+          message: "Error",
+          description: "Failed to update applicant status.",
+          icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+          duration: 4,
+          style: {
+            backgroundColor: "#fff",
+            borderLeft: "4px solid #ff4d4f",
+          },
+        });
       }
 
       router.back(); // Return to previous page
     } catch (error) {
       console.error("❌ Error saving:", error);
-      message.error("Error scheduling the interview.");
+      notification.error({
+        message: "Error",
+        description: "Error scheduling the interview.",
+        icon: <CloseCircleOutlined style={{ color: "#ff4d4f" }} />,
+        duration: 4,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #ff4d4f",
+        },
+      });
     }
   };
 
