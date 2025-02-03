@@ -47,6 +47,23 @@ const updateApplicant = async (req, res) => {
 	}
 };
 
+const partialUpdateApplicant = async (req, res) => {
+    const id = req.params.id;
+    const updateFields = req.body; // Enthält nur die Felder, die aktualisiert werden sollen
+
+    try {
+        const updatedApplicant = await Applicant.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
+
+        if (!updatedApplicant) {
+            return res.status(404).json({ message: "Applicant not found" });
+        }
+
+        res.status(200).json(updatedApplicant);
+    } catch (error) {
+        res.status(400).json({ message: "Error updating vacancy", error: error.message });
+    }
+};
+
 const calculateSuitabilityScore = async (req, res) => {
 	const id = req.params.id;
   
@@ -142,6 +159,7 @@ export {
 	getApplicantById,
 	createApplicant,
 	updateApplicant,
+	partialUpdateApplicant,
 	calculateSuitabilityScore,
 	deleteApplicant
 }

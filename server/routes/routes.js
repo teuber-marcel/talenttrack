@@ -13,6 +13,7 @@ import {
 	getApplicantById,
 	createApplicant,
 	updateApplicant,
+	partialUpdateApplicant,
 	calculateSuitabilityScore,
 	deleteApplicant
 } from '../controllers/applicant.controller.js';
@@ -46,7 +47,8 @@ router.route('/api/applicants')
 router.route('/api/applicants/:id')
 	.get(getApplicantById)
 	.put(updateApplicant)
-	.delete(deleteApplicant);
+	.delete(deleteApplicant)
+	.patch(partialUpdateApplicant);
 router.route('/api/applicants/:id/suitability')
 	.put(calculateSuitabilityScore);
 

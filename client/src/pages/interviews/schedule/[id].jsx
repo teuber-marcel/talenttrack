@@ -20,6 +20,7 @@ import weekday from "dayjs/plugin/weekday";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import Sidebar from "../../../components/Global/Sidebar.jsx";
 import ProgressStepper from "../../../components/Global/ProgressStepper";
+import { updateApplicantStatus } from "../../../services/applicantService";
 
 dayjs.extend(customParseFormat);
 dayjs.extend(localeData);
@@ -117,6 +118,15 @@ const ScheduleInterview = () => {
       if (!response.ok) throw new Error("Error saving the interview.");
 
       message.success("Interview successfully scheduled!");
+
+      try {
+        await updateApplicantStatus(applicantId, "Interview Scheduled");
+        message.success("Applicant status updated to 'Interview Scheduled'");
+      } catch (error) {
+        console.error("❌ Error updating applicant status:", error);
+        message.error("Failed to update applicant status.");
+      }
+
       router.back(); // Return to previous page
     } catch (error) {
       console.error("❌ Error saving:", error);
