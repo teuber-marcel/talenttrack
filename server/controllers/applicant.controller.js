@@ -101,13 +101,13 @@ const calculateSuitabilityScore = async (req, res) => {
 			},
 			{
 			  role: "user",
-			  content: `Based on the following details, calculate a suitability score from 0 to 100 for the applicant:
+			  content: `Based on the following details, calculate a suitability score from 0 to 100 for the applicant. 0 means the applicant does not fit the vacancy and 100 means the applicant fits the vacancy perfectly. Use the following data for the calculation::
 						\n\nApplicant's CV:\n${curriculumVitae}
 						\n\nApplicant's Motivation:\n${motivation}
 						\n\nJob Description:\n${description}
 						\n\nJob Requirements:\n${requirements}
 						\n\nOther Information:\n${other}
-						\n\nProvide only the score as a number.`
+						\n\nThe MongoDB database expects the suitabilityscore in the form of the type number. Accordingly, please return the suitabiltyscore only in the form of a number between 0 and 100.`
 			}
 		  ],
 		  max_tokens: 50,
