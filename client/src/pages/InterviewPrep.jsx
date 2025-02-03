@@ -56,7 +56,7 @@ const steps = [
   { title: "Interview", status: "finish" },
 ];
 
-// Configure notifications globally
+// Configure notifications globally after styles
 notification.config({
   placement: "topRight",
   top: 100,

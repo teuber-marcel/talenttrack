@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import '../app/globals.css';
-import { Layout, Row, Col, Button, Input, message, Typography } from 'antd';
-import { CloseCircleOutlined, PlayCircleOutlined, SaveOutlined, CloudUploadOutlined } from '@ant-design/icons';
+import { Layout, Row, Col, Button, Input, message, Typography, notification } from 'antd';
+import { CloseCircleOutlined, PlayCircleOutlined, SaveOutlined, CloudUploadOutlined, CheckCircleOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import Sidebar from '../components/Global/Sidebar.jsx';
 import RadioButtonGroup from '../components/CreateVacancy/RadioButtonGroup.jsx';
 import CheckboxGroup from '../components/CreateVacancy/CheckboxGroup.jsx';
 import VacancyTitleInput from '../components/CreateVacancy/VacancyTitleInput.jsx';
 import { deleteVacancy } from '../services/vacancyService.js';
+import "@ant-design/v5-patch-for-react-19";
 
 const { Header, Content } = Layout;
 const { Title } = Typography;
@@ -30,6 +31,12 @@ const CreateVacancy = () => {
     !selectedDepartment || 
     !selectedHierarchy || 
     vacancyTitle.length < 3;
+
+  // Add notification config
+  notification.config({
+    placement: 'topRight',
+    top: 100
+  });
 
   // Vacancy erstellen (POST /api/vacancies)
   const handleCreateVacancy = async () => {
@@ -56,7 +63,19 @@ const CreateVacancy = () => {
       setDescription(data.description);
       setRequirements(data.requirements);
       setOther(data.other);
-      message.success('Vacancy successfully created!');
+      
+      notification.success({
+        message: "Vacancy Created",
+        description: `The vacancy "${vacancyTitle}" has been successfully created.`,
+        icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+        duration: 4,
+        pauseOnHover: true,
+        style: {
+          backgroundColor: "rgba(255,255,255,0.8)",
+          borderLeft: '4px solid #547bae',
+          backdropFilter: 'blur(8px)'
+        }
+      });
     } catch (error) {
       console.error("Error creating vacancy:", error);
       message.error("Error creating vacancy");
@@ -91,7 +110,18 @@ const CreateVacancy = () => {
             throw new Error(data.message || 'Failed to update vacancy');
         }
 
-        message.success(`Vacancy ${status ? "Published" : "Draft"} successfully!`);
+        notification.success({
+            message: status === "Open" ? "Vacancy Published" : "Vacancy Saved as Draft",
+            description: `The vacancy "${vacancyTitle}" has been ${status === "Open" ? "published" : "saved as draft"} successfully.`,
+            icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+            duration: 4,
+            pauseOnHover: true,
+            style: {
+                backgroundColor: "rgba(255,255,255,0.8)",
+                borderLeft: '4px solid #547bae',
+                backdropFilter: 'blur(8px)'
+            }
+        });
         router.push('/VacanciesOverview');
     } catch (error) {
         console.error("❌ Error updating vacancy:", error);

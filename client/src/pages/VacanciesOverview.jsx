@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../app/globals.css";
-import { Layout, Table, Button, Space, Input, Popconfirm, message } from "antd";
+import { Layout, Table, Button, Space, Input, Popconfirm, message, notification } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import {
@@ -8,10 +8,13 @@ import {
   PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
-import { getApplicantsForOverview } from "../services/applicantService"; // ✅ Imported new function
+import { getApplicantsForOverview } from "../services/applicantService";
+// Add the React 19 patch for Ant Design:
+import "@ant-design/v5-patch-for-react-19";
 
 const { Header, Content } = Layout;
 
@@ -60,7 +63,18 @@ const VacanciesOverview = () => {
     try {
       const success = await deleteVacancy(id);
       if (success) {
-        message.success("Vacancy deleted");
+        notification.success({
+          message: "Vacancy Deleted",
+          description: "The vacancy has been successfully deleted.",
+          icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+          duration: 4,
+          pauseOnHover: true,
+          style: {
+            backgroundColor: "rgba(255,255,255,0.8)",
+            borderLeft: "4px solid #547bae",
+            backdropFilter: "blur(8px)"
+          }
+        });
         setVacancies((prev) => prev.filter((vacancy) => vacancy._id !== id));
       } else {
         message.error("Error deleting vacancy");
