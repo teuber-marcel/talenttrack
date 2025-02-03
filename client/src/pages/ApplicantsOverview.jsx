@@ -52,9 +52,38 @@ const ApplicantsOverview = () => {
       key: "prename",
       sorter: (a, b) => a.prename.localeCompare(b.prename),
       render: (_, record) => (
-        <Link href={`/applicants/details/${record._id}`}>
-          {record.surname}, {record.prename}
-        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {record.photo ? (
+            <img
+              src={record.photo}
+              alt={`${record.prename} ${record.surname}`}
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                objectFit: 'cover'
+              }}
+            />
+          ) : (
+            <div
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                backgroundColor: '#f0f0f0',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#666'
+              }}
+            >
+              {record.prename[0]}
+            </div>
+          )}
+          <Link href={`/applicants/details/${record._id}`}>
+            {record.surname}, {record.prename}
+          </Link>
+        </div>
       ),
     },
     {
