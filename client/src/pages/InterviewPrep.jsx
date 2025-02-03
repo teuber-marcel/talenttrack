@@ -286,28 +286,32 @@ const InterviewPreparation = () => {
           ) : (
             <>
               {/* Applicant Header Card */}
-              <Row justify="center" style={{ marginBottom: 24 }}>
-                <Col xs={24} md={16} lg={12}>
+              <Row justify="center" style={{ marginBottom: 10 }}>
+                <Col xs={24} md={20}>
                   <Card style={cardStyle}>
-                    <Row gutter={[16, 16]} align="middle">
-                      <Col xs={24} md={12}>
-                        <Title level={4} style={{ margin: 0 }}>
-                          {applicant.prename} {applicant.surname}
-                        </Title>
-                        <Text type="secondary">
-                          {vacancy?.title ? `Vacancy: ${vacancy.title}` : ""}
-                        </Text>
-                      </Col>
-                      <Col xs={24} md={12} style={{ textAlign: "center" }}>
-                        <Image
-                          src={
-                            applicant.photo || "https://via.placeholder.com/150"
-                          }
-                          alt="Applicant Photo"
-                          width={140}
-                          height={140}
-                          style={{ borderRadius: "50%" }}
-                        />
+                    <Row justify="center">
+                      <Col xs={24} md={14}>
+                        <Row gutter={[16, 16]} align="middle">
+                          <Col xs={24} md={12}>
+                            <Title level={1} style={{ margin: 0 }}>
+                              {applicant.prename} {applicant.surname}
+                            </Title>
+                            <Text type="secondary">
+                              {vacancy?.title ? `Vacancy: ${vacancy.title}` : ""}
+                            </Text>
+                          </Col>
+                          <Col xs={24} md={12} style={{ textAlign: "center" }}>
+                            <Image
+                              src={
+                                applicant.photo || "https://via.placeholder.com/150"
+                              }
+                              alt="Applicant Photo"
+                              width={150}
+                              height={150}
+                              style={{ borderRadius: "50%" }}
+                            />
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
                   </Card>
