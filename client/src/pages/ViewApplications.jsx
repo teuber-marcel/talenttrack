@@ -409,7 +409,7 @@ const JobApplicationsPage = () => {
                         <Title
                           level={4}
                           style={{
-                            margin: 0,
+                            margin: "0 0 16px 0",  // Added bottom margin
                             fontSize: "clamp(16px, 2vw, 22px)", // Flexible Größe
                             whiteSpace: "normal", // Zeilenumbruch erlauben
                             wordBreak: "break-word", // Lange Wörter umbrechen
@@ -450,7 +450,7 @@ const JobApplicationsPage = () => {
                     </Space>
 
                     <Title level={5} style={{ marginTop: 16 }}>
-                      # Applications
+                      Applications
                     </Title>
                     <Space direction="vertical" size={2}>
                       <Text>{total} Total</Text>
