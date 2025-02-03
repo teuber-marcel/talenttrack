@@ -5,7 +5,6 @@ import {
   Layout,
   Table,
   Badge,
-  Steps,
   Card,
   Progress,
   Button,
@@ -14,8 +13,18 @@ import {
   Tooltip,
   Row,
   Col,
+  Dropdown,
+  Menu,
+  message,
+  Input,
+  Space,
 } from "antd";
-import { ArrowLeftOutlined, ReloadOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ReloadOutlined,
+  SearchOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancyWithApplicantsById } from "../services/vacancyService";
 import ProgressStepper from "../components/Global/ProgressStepper";
@@ -23,16 +32,30 @@ import ProgressStepper from "../components/Global/ProgressStepper";
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
+// A unified Card style for consistent appearance
+const cardStyle = {
+  borderRadius: 8,
+  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+  border: "1px solid #d9d9d9",
+  background: "#fff",
+  padding: 24,
+  marginBottom: 24,
+};
+
 const steps = [
   { title: "Job Overview", status: "finish" },
-  { title: "Applicant Details", status: "finish" },
-  { title: "Interview Preparation", status: "finish" },
+  { title: "Applicant Details", status: "wait" },
+  { title: "Interview Preparation", status: "wait" },
 ];
+
+// Example of possible statuses for a vacancy
+const statusOptions = ["Draft", "Open", "Filled"];
 
 const JobApplicationsPage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [vacancy, setVacancy] = useState(null);
   const [applicants, setApplicants] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -61,6 +84,58 @@ const JobApplicationsPage = () => {
     fetchVacancyData();
   }, [id]);
 
+  // PATCH request to update the vacancy status
+  const handleStatusChange = async (newStatus) => {
+    if (!vacancy || !vacancy._id) {
+      message.error("No vacancy selected for update.");
+      return;
+    }
+    if (newStatus === vacancy.status) {
+      message.info(`Status is already '${newStatus}'.`);
+      return;
+    }
+    try {
+      const response = await fetch(`/api/vacancies/${vacancy._id}/details`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Failed to update vacancy status."
+        );
+      }
+      // Success => update local vacancy state
+      setVacancy((prev) => ({ ...prev, status: newStatus }));
+      message.success(`Vacancy status updated to '${newStatus}'.`);
+    } catch (err) {
+      console.error("Error updating vacancy status:", err);
+      message.error("Error updating vacancy status: " + err.message);
+    }
+  };
+
+  // Create a Menu that calls handleStatusChange on item click
+  const renderStatusMenu = (
+    <Menu
+      onClick={(info) => {
+        handleStatusChange(info.key);
+      }}
+      selectedKeys={[vacancy?.status || ""]}
+      items={statusOptions.map((option) => ({ key: option, label: option }))}
+    />
+  );
+
+  // Helper: Return unique statuses among applicants
+  const getApplicantStatusFilters = () => {
+    const uniqueStatuses = [
+      ...new Set(applicants.map((app) => app.status).filter(Boolean)),
+    ];
+    return uniqueStatuses.map((s) => ({ text: s, value: s }));
+  };
+
   const getStatusBadge = (status) => {
     const statusMap = {
       Applied: { color: "#1890ff", text: "Applied" },
@@ -76,23 +151,36 @@ const JobApplicationsPage = () => {
     );
   };
 
+  // Table columns with sorting & filtering
   const columns = [
     {
       title: "Name",
       dataIndex: "prename",
       key: "name",
+      sorter: (a, b) => {
+        const nameA = `${a.surname || ""}, ${a.prename || ""}`.toLowerCase();
+        const nameB = `${b.surname || ""}, ${b.prename || ""}`.toLowerCase();
+        return nameA.localeCompare(nameB);
+      },
       render: (_, record) => `${record.surname}, ${record.prename}`,
     },
     {
       title: "Status",
       dataIndex: "status",
       key: "status",
+      filters: getApplicantStatusFilters(),
+      onFilter: (value, record) => record.status === value,
+      sorter: (a, b) =>
+        (a.status || "")
+          .toLowerCase()
+          .localeCompare((b.status || "").toLowerCase()),
       render: getStatusBadge,
     },
     {
       title: "Suitability",
       dataIndex: "suitabilityScore",
       key: "suitabilityScore",
+      sorter: (a, b) => (a.suitabilityScore || 0) - (b.suitabilityScore || 0),
       render: (score) => (
         <Tooltip title={`${score}%`}>
           <Progress
@@ -101,7 +189,6 @@ const JobApplicationsPage = () => {
             strokeColor={
               score >= 70 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"
             }
-            trailColor="#f0f0f0"
           />
         </Tooltip>
       ),
@@ -113,7 +200,6 @@ const JobApplicationsPage = () => {
         <Button
           type="link"
           onClick={() => router.push(`/applicants/details/${record._id}`)}
-          style={{ padding: 0 }}
         >
           View Details
         </Button>
@@ -121,46 +207,61 @@ const JobApplicationsPage = () => {
     },
   ];
 
+  // Suitability cluster counts
+  const total = applicants.length;
+  const goodFit = applicants.filter((a) => a.suitabilityScore >= 70).length;
+  const mediumFit = applicants.filter(
+    (a) => a.suitabilityScore >= 50 && a.suitabilityScore < 70
+  ).length;
+  const badFit = applicants.filter((a) => a.suitabilityScore < 50).length;
+
+  // Filter applicants by `searchText`
+  const filteredApplicants = applicants.filter((app) =>
+    Object.values(app).some((value) =>
+      value?.toString().toLowerCase().includes(searchText.toLowerCase())
+    )
+  );
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
+      {/* Sidebar */}
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-      {/* Main Section */}
-      <Layout style={{ marginLeft: collapsed ? 80 : 200, padding: "24px" }}>
-        <Content style={{ background: "#f0f2f5", padding: "24px" }}>
-          {/* Row for Title + Stepper */}
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+        <Content style={{ padding: "24px" }}>
+          {/* Title + Stepper */}
           <Row
             justify="space-between"
             align="middle"
             style={{ marginBottom: 24 }}
           >
             <Col>
-              <Title level={2} style={{ marginBottom: 0 }}>
+              <Title level={2} style={{ margin: 0 }}>
                 {vacancy ? `Applications for ${vacancy.title}` : "Loading..."}
               </Title>
             </Col>
-            <Col>
-              {/* The Progress Stepper, aligned to the right with black text for readability */}
-              <ProgressStepper
-                steps={steps}
-                currentStep={0}
-                style={{ color: "#333" }}
-              />
+            <Col style={{ overflowX: "auto" }}>
+              <div style={{ minWidth: 300, paddingBottom: 4 }}>
+                <ProgressStepper steps={steps} currentStep={0} />
+              </div>
             </Col>
           </Row>
 
+          {/* Main Content */}
           {loading ? (
             <Skeleton active />
           ) : error ? (
-            <div style={{ textAlign: "center" }}>
-              <p>Failed to load data.</p>
-              <Button
-                type="primary"
-                icon={<ReloadOutlined />}
-                onClick={() => router.reload()}
-              >
-                Retry
-              </Button>
+            <div style={{ textAlign: "center", marginTop: 50 }}>
+              <Space direction="vertical">
+                <Text>Failed to load data.</Text>
+                <Button
+                  type="primary"
+                  icon={<ReloadOutlined />}
+                  onClick={() => router.reload()}
+                >
+                  Retry
+                </Button>
+              </Space>
             </div>
           ) : (
             vacancy && (
@@ -168,60 +269,86 @@ const JobApplicationsPage = () => {
                 {/* Left Column */}
                 <Col xs={24} md={8}>
                   <Card
-                    bordered={false}
-                    style={{
-                      background: "#fff",
-                      border: "1px solid #d9d9d9",
-                      borderRadius: 8,
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                      padding: 24,
-                    }}
+                    style={cardStyle}
                     title={
                       <Title level={4} style={{ margin: 0 }}>
                         {vacancy.title}
                       </Title>
                     }
                   >
-                    <Text>
-                      <strong>Department: </strong>
-                      {vacancy.department}
-                    </Text>
-                    <br />
-                    <Text>
-                      <strong>Status: </strong>
-                      <Badge color="#1890ff" text={vacancy.status} />
-                    </Text>
-                    <br />
+                    <Space direction="vertical" size="small">
+                      <Text>
+                        <strong>Department: </strong>
+                        {vacancy.department}
+                      </Text>
+                      <Text>
+                        <strong>Status: </strong>
+                        <Dropdown
+                          overlay={renderStatusMenu}
+                          trigger={["click"]}
+                        >
+                          <Badge
+                            style={{ cursor: "pointer" }}
+                            color="#1890ff"
+                            text={vacancy.status}
+                          />
+                        </Dropdown>
+                      </Text>
+                    </Space>
+
                     <Title level={5} style={{ marginTop: 16 }}>
                       # Applications
                     </Title>
-                    <Text>{applicants.length} Total</Text>
-                    <br />
-                    <Button
-                      icon={<ArrowLeftOutlined />}
-                      onClick={() => router.push("/VacanciesOverview")}
-                      style={{ marginTop: 16 }}
-                    >
-                      Back to Vacancies
-                    </Button>
+                    <Space direction="vertical" size={2}>
+                      <Text>{total} Total</Text>
+                      <Text>
+                        <strong>Good Fit:</strong> {goodFit}
+                      </Text>
+                      <Text>
+                        <strong>Medium Fit:</strong> {mediumFit}
+                      </Text>
+                      <Text>
+                        <strong>Bad Fit:</strong> {badFit}
+                      </Text>
+                    </Space>
+
+                    <Space style={{ marginTop: 16 }}>
+                      <Button
+                        icon={<EditOutlined />}
+                        onClick={() =>
+                          router.push(`/vacancies/edit/${vacancy._id}`)
+                        }
+                      >
+                        Edit Vacancy
+                      </Button>
+                      <Button
+                        icon={<ArrowLeftOutlined />}
+                        onClick={() => router.push("/VacanciesOverview")}
+                      >
+                        Back
+                      </Button>
+                    </Space>
                   </Card>
                 </Col>
 
                 {/* Right Column */}
                 <Col xs={24} md={16}>
-                  <Card
-                    bordered={false}
-                    style={{
-                      background: "#fff",
-                      border: "1px solid #d9d9d9",
-                      borderRadius: 8,
-                      boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                      padding: 24,
-                    }}
-                  >
+                  <Card style={cardStyle}>
+                    {/* Applicant Search Field */}
+                    <Row style={{ marginBottom: 16 }} justify="end">
+                      <Col xs={24} md={12} lg={8}>
+                        <Input
+                          placeholder="Search applicants..."
+                          prefix={<SearchOutlined />}
+                          allowClear
+                          onChange={(e) => setSearchText(e.target.value)}
+                        />
+                      </Col>
+                    </Row>
+
                     <Table
                       columns={columns}
-                      dataSource={applicants}
+                      dataSource={filteredApplicants}
                       rowKey="_id"
                       pagination={{ pageSize: 5 }}
                     />
