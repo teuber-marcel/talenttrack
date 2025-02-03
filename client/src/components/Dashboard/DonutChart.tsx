@@ -6,7 +6,7 @@ import { Chart as ChartJS, Title, Tooltip, Legend, ArcElement, CategoryScale } f
 ChartJS.register(Title, Tooltip, Legend, ArcElement, CategoryScale);
 
 interface Vacancy {
-  status: 'Open' | 'Filled' | 'Draft' | 'Interview';
+  status: 'Open' | 'Filled' | 'Draft';
 }
 
 const DonutChart: React.FC = () => {
@@ -16,7 +16,6 @@ const DonutChart: React.FC = () => {
     Open: 0,
     Filled: 0,
     Draft: 0,
-    Interview: 0,
   });
 
   useEffect(() => {
@@ -31,7 +30,7 @@ const DonutChart: React.FC = () => {
   };
 
   const countStatus = (data: Vacancy[]) => {
-    const counts = { Open: 0, Filled: 0, Draft: 0, Interview: 0 };
+    const counts = { Open: 0, Filled: 0, Draft: 0 };
     data.forEach(vacancy => {
       if (counts[vacancy.status] !== undefined) {
         counts[vacancy.status]++;
@@ -43,10 +42,9 @@ const DonutChart: React.FC = () => {
   const totalVacancies =
     statusCounts.Open +
     statusCounts.Filled +
-    statusCounts.Draft +
-    statusCounts.Interview;
+    statusCounts.Draft;
 
-  const chartLabels = ['Open', 'Filled', 'Draft', 'Interview'];
+  const chartLabels = ['Open', 'Filled', 'Draft'];
 
   const data = {
     labels: chartLabels,
@@ -56,19 +54,16 @@ const DonutChart: React.FC = () => {
           statusCounts.Open,
           statusCounts.Filled,
           statusCounts.Draft,
-          statusCounts.Interview,
         ],
         backgroundColor: [
           '#dc3545', // Red
           '#198754', // Green
           '#fd7e14', // Orange
-          '#0d6efd', // Blue
         ],
         borderColor: [
           '#dc3545',
           '#198754',
           '#fd7e14',
-          '#0d6efd',
         ],
         borderWidth: 1,
         hoverOffset: 10,
