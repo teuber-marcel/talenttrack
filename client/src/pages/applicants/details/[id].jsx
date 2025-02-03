@@ -59,6 +59,16 @@ const ApplicantDetails = () => {
   const router = useRouter();
   const { id } = router.query;
 
+  const handleDownload = (filename) => {
+    const filePath = `/assets/${filename}`;
+    const link = document.createElement("a");
+    link.href = filePath;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   // Global notification config
   useEffect(() => {
     notification.config({
@@ -255,10 +265,30 @@ const ApplicantDetails = () => {
               <Col xs={24} md={16}>
                 <Card style={cardStyle} title="Downloads">
                   <Space direction="vertical" style={{ width: "100%" }}>
-                    <Button block>CV</Button>
-                    <Button block>Motivation Letter</Button>
-                    <Button block>Degree Certification</Button>
-                    <Button block>Work Resume</Button>
+                    <Button
+                      block
+                      onClick={() => handleDownload("cv-template.pdf")}
+                    >
+                      CV
+                    </Button>
+                    <Button
+                      block
+                      onClick={() => handleDownload("motivation-letter.pdf")}
+                    >
+                      Motivation Letter
+                    </Button>
+                    <Button
+                      block
+                      onClick={() => handleDownload("degree-certification.pdf")}
+                    >
+                      Degree Certification
+                    </Button>
+                    <Button
+                      block
+                      onClick={() => handleDownload("work-resume.pdf")}
+                    >
+                      Work Resume
+                    </Button>
                   </Space>
                 </Card>
 
