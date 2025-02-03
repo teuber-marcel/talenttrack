@@ -322,7 +322,7 @@ const JobApplicationsPage = () => {
           >
             <Col>
               <Title level={2} style={{ margin: 0 }}>
-                {vacancy ? `Applications for ${vacancy.title}` : "Loading..."}
+                Vacancy Details
               </Title>
             </Col>
             <Col style={{ overflowX: "auto" }}>
@@ -356,9 +356,21 @@ const JobApplicationsPage = () => {
                   <Card
                     style={cardStyle}
                     title={
-                      <Title level={4} style={{ margin: 0 }}>
-                        {vacancy.title}
-                      </Title>
+                      <Tooltip title={vacancy.title}>
+                        <Title
+                          level={4}
+                          style={{
+                            margin: 0,
+                            fontSize: "clamp(16px, 2vw, 22px)", // Flexible Größe
+                            whiteSpace: "normal", // Zeilenumbruch erlauben
+                            wordBreak: "break-word", // Lange Wörter umbrechen
+                            overflowWrap: "break-word", // Alternative für ältere Browser
+                            textAlign: "center", // Optionale Zentrierung
+                          }}
+                        >
+                          {vacancy.title}
+                        </Title>
+                      </Tooltip>
                     }
                   >
                     <Space direction="vertical" size="small">
