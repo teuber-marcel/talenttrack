@@ -14,6 +14,16 @@ const applicantSchema = mongoose.Schema(
             minlength: 2,
             maxlength: 50
         },
+        birthdate: {
+            type: Date,
+            required: true,
+            validate: {
+                validator: function (value) {
+                    return value.getTime() < Date.now();
+                },
+                message: "Birthdate must be in the past."
+            }
+        },
         email: {
             type: String,
             required: true,
@@ -24,6 +34,12 @@ const applicantSchema = mongoose.Schema(
             type: String,
             required: true,
             match: /^\+?[1-9]\d{1,14}$/
+        },
+        education: {
+            type: String,
+            required: true,
+            minlength: 2,
+            maxlength: 30
         },
         address: {
             street: { type: String, required: true },
