@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import {
   SearchOutlined,
-  PlusCircleOutlined,
   EditOutlined,
   DeleteOutlined,
 } from "@ant-design/icons";
@@ -33,6 +32,7 @@ const ApplicantsOverview = () => {
         setLoading(false);
       }
     };
+
     fetchApplicants();
   }, []);
 
@@ -58,14 +58,24 @@ const ApplicantsOverview = () => {
     )
   );
 
+  const getColumnFilters = (dataIndex) => {
+    const uniqueValues = [
+      ...new Set(applicants.map((item) => item[dataIndex])),
+    ];
+    return uniqueValues.map((value) => ({
+      text: value,
+      value: value,
+    }));
+  };
+
   const columns = [
     {
       title: "Name",
       dataIndex: "prename",
-      key: "name",
+      key: "prename",
       sorter: (a, b) => a.prename.localeCompare(b.prename),
       render: (_, record) => (
-        <Link href={`/applicants/${record._id}`}>
+        <Link href={`/ApplicantDetails?id=${record._id}`}>
           {record.surname}, {record.prename}
         </Link>
       ),
@@ -84,7 +94,24 @@ const ApplicantsOverview = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      align: "center",
+      sorter: (a, b) => a.status.localeCompare(b.status),
+      filters: getColumnFilters("status"),
+      onFilter: (value, record) => record.status === value,
+    },
+    {
+      title: "Created",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
+      render: (text) => new Date(text).toLocaleDateString(),
+    },
+    {
+      title: "Updated",
+      dataIndex: "updatedAt",
+      key: "updatedAt",
+      sorter: (a, b) => new Date(b.updatedAt) - new Date(a.updatedAt),
+      defaultSortOrder: "ascend",
+      render: (text) => new Date(text).toLocaleDateString(),
     },
     {
       title: "Actions",
@@ -113,7 +140,7 @@ const ApplicantsOverview = () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "#f0f2f5",
+        backgroundColor: "#f0f2f5", // replaced var(--background)
         minHeight: "100vh",
         height: "100%",
         display: "flex",
@@ -137,23 +164,14 @@ const ApplicantsOverview = () => {
           <div style={{ fontWeight: "600" }}>Applicants Overview</div>
         </Header>
         <Content style={{ margin: "16px", padding: 24, background: "#fff" }}>
-          <Space style={{ marginBottom: 16 }}>
-            <Button
-              type="primary"
-              icon={<PlusCircleOutlined />}
-              size="large"
-              onClick={() => router.push("/CreateApplicant")}
-            >
-              New Applicant
-            </Button>
-            <Input
-              placeholder="Search..."
-              prefix={<SearchOutlined />}
-              size="large"
-              onChange={(e) => setSearchText(e.target.value)}
-              allowClear
-            />
-          </Space>
+          <Input
+            placeholder="Search..."
+            prefix={<SearchOutlined />}
+            size="large"
+            onChange={(e) => setSearchText(e.target.value)}
+            allowClear
+            style={{ marginBottom: 16 }}
+          />
           <Table
             className="custom-table"
             columns={columns}
