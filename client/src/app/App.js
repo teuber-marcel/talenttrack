@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Form, Input, Button, Typography, Divider, Space, Layout } from "antd";
 import { GoogleOutlined, WindowsOutlined } from "@ant-design/icons";
+import '@ant-design/v5-patch-for-react-19';
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
