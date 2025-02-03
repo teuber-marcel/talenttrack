@@ -25,6 +25,7 @@ import {
   getApplicantById,
   updateApplicantStatus,
 } from "../../../services/applicantService";
+import { getVacancyById } from "../../../services/vacancyService"; // ✅ Import vacancy service
 import {
   createInterview,
   generateQuestions,
@@ -60,6 +61,7 @@ const steps = [
 const ApplicantDetails = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [applicant, setApplicant] = useState(null);
+  const [vacancyTitle, setVacancyTitle] = useState("Loading..."); // ✅ Initialize as 'Loading...'
   const [loading, setLoading] = useState(true);
   const [hasInterviewQuestions, setHasInterviewQuestions] = useState(false);
   const [generatingQuestions, setGeneratingQuestions] = useState(false);
@@ -93,6 +95,14 @@ const ApplicantDetails = () => {
         const data = await getApplicantById(id);
         if (!data) throw new Error("Applicant not found");
         setApplicant(data);
+
+        // ✅ Fetch vacancy title if vacancy ID is available
+        if (data.vacancy) {
+          const vacancyData = await getVacancyById(data.vacancy);
+          setVacancyTitle(vacancyData?.title || "Unknown Vacancy");
+        } else {
+          setVacancyTitle("No Vacancy Assigned");
+        }
 
         // Check if interview questions exist
         const interview = await getInterviewByApplicantId(data._id);
@@ -251,6 +261,10 @@ const ApplicantDetails = () => {
                     </Text>
                     <Text>
                       <strong>Location:</strong> {applicant.address?.city}
+                    </Text>
+                    <Text>
+                      <strong>Vacancy:</strong> {vacancyTitle}{" "}
+                      {/* ✅ Updated */}
                     </Text>
                     <Text>
                       <strong>Status:</strong>{" "}
