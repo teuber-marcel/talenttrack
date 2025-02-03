@@ -107,7 +107,7 @@ const calculateSuitabilityScore = async (req, res) => {
 						\n\nJob Description:\n${description}
 						\n\nJob Requirements:\n${requirements}
 						\n\nOther Information:\n${other}
-						\n\nThe MongoDB database expects the suitabilityscore in the form of the type number. Accordingly, please return the suitabiltyscore only in the form of a number between 0 and 100.`
+						\n\nThe MongoDB database expects the suitabilityscore in the form of the type number. Accordingly, please return the suitabilty score only in the form of a number between 0 and 100. Ensure that you only return the number and no additional text.`
 			}
 		  ],
 		  max_tokens: 50,
@@ -122,7 +122,12 @@ const calculateSuitabilityScore = async (req, res) => {
 	  );
   
 	  // 4️⃣ Verarbeite die Antwort der OpenAI API
-	  const suitabilityScore = parseFloat(openAIResponse.data.choices[0].message.content.trim());
+	  const responseText = openAIResponse.data.choices[0].message.content;
+    const match = responseText.match(/(\d+(\.\d+)?)/); // Extrahiert die erste Zahl (ggf. mit Dezimalpunkt)
+    if (!match) {
+      throw new Error("Invalid suitability score received from OpenAI.");
+    }
+    const suitabilityScore = parseFloat(match[0]);
   
 	  // Validierung des Scores
 	  if (isNaN(suitabilityScore) || suitabilityScore < 0 || suitabilityScore > 100) {
