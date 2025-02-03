@@ -31,6 +31,13 @@ import {
   getInterviewByApplicantId,
 } from "../../../services/interviewService";
 import "@ant-design/v5-patch-for-react-19";
+import dayjs from "dayjs";
+import { Divider } from "antd";
+
+const calculateAge = (birthdate) => {
+  if (!birthdate) return "N/A"; // Return 'N/A' if birthdate is missing
+  return dayjs().diff(dayjs(birthdate), "year"); // Calculate age
+};
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -234,13 +241,13 @@ const ApplicantDetails = () => {
                     height={120}
                     style={{ borderRadius: "50%", marginBottom: 16 }}
                   />
-
+                  <Divider style={{ margin: "12px 0" }} />
                   <Space direction="vertical" size={4}>
                     <Text>
-                      <strong>Age:</strong> 27
+                      <strong>Age:</strong> {calculateAge(applicant.birthdate)}
                     </Text>
                     <Text>
-                      <strong>Education:</strong> B.Sc. Computer Science
+                      <strong>Education:</strong> {applicant.education}
                     </Text>
                     <Text>
                       <strong>Location:</strong> {applicant.address?.city}
@@ -250,7 +257,7 @@ const ApplicantDetails = () => {
                       <Badge color="#1890ff" text={applicant.status} />
                     </Text>
                   </Space>
-
+                  <Divider style={{ margin: "12px 0" }} />
                   <Title level={5} style={{ marginTop: 16 }}>
                     Suitability
                   </Title>
