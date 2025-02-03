@@ -1,11 +1,13 @@
+import "@ant-design/v5-patch-for-react-19";
 import React, { useEffect, useState } from "react";
 import "../../../app/globals.css";
-import { Layout, Row, Col, Button, Input, message, Typography } from "antd";
+import { Layout, Row, Col, Button, Input, message, Typography, notification } from "antd";
 import {
   CloseCircleOutlined,
   PlayCircleOutlined,
   SaveOutlined,
   CloudUploadOutlined,
+  CheckCircleOutlined,  // Add this import
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import Sidebar from "../../../components/Global/Sidebar.jsx";
@@ -17,6 +19,12 @@ import { getVacancyById } from "../../../services/vacancyService.js";
 const { Header, Content } = Layout;
 const { Title } = Typography;
 const { TextArea } = Input;
+
+// Configure notifications globally
+notification.config({
+  placement: 'topRight',
+  top: 100
+});
 
 const EditVacancy = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -83,12 +91,28 @@ const EditVacancy = () => {
         throw new Error(errorData.message || "Failed to update vacancy");
       }
 
-      message.success("Vacancy updated successfully!");
+      showSuccessNotification();
       router.push("/VacanciesOverview");
     } catch (error) {
       console.error("❌ Error updating vacancy:", error);
       message.error(`Error updating vacancy: ${error.message}`);
     }
+  };
+
+  // Update success notification
+  const showSuccessNotification = () => {
+    notification.success({
+      message: "Vacancy Updated",
+      description: "The vacancy has been successfully updated.",
+      icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+      duration: 4,
+      pauseOnHover: true,
+      style: {
+        backgroundColor: "rgba(255,255,255,0.8)",
+        borderLeft: '4px solid #547bae',
+        backdropFilter: 'blur(8px)'
+      }
+    });
   };
 
   useEffect(() => {
