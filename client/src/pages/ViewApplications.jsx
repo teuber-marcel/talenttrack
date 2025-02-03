@@ -18,12 +18,14 @@ import {
   message,
   Input,
   Space,
+  Alert,
 } from "antd";
 import {
   ArrowLeftOutlined,
   ReloadOutlined,
   SearchOutlined,
   EditOutlined,
+  LinkedinOutlined,
 } from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancyWithApplicantsById } from "../services/vacancyService";
@@ -58,6 +60,7 @@ const JobApplicationsPage = () => {
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [linkedinSearchText, setLinkedinSearchText] = useState("");
 
   const router = useRouter();
   const { id } = router.query;
@@ -222,6 +225,88 @@ const JobApplicationsPage = () => {
     )
   );
 
+  // Add new state for LinkedIn suggestions
+  const [linkedinSuggestions] = useState([
+    {
+      id: 1,
+      name: "Michael Chen",
+      title: "Frontend Engineer at Google",
+      suitabilityScore: 95,
+      profileUrl: "https://linkedin.com/in/michaelchen"
+    },
+    {
+      id: 2,
+      name: "Sarah Mueller",
+      title: "Senior Software Developer at Amazon",
+      suitabilityScore: 92,
+      profileUrl: "https://linkedin.com/in/smueller"
+    },
+    {
+      id: 3,
+      name: "David Kumar",
+      title: "Full Stack Developer at Microsoft",
+      suitabilityScore: 88,
+      profileUrl: "https://linkedin.com/in/davidkumar"
+    },
+    {
+      id: 4,
+      name: "Emma Bergström",
+      title: "Software Engineer at Spotify",
+      suitabilityScore: 85,
+      profileUrl: "https://linkedin.com/in/emmabergstrom"
+    }
+  ]);
+
+  // Filter LinkedIn suggestions
+  const filteredLinkedinSuggestions = linkedinSuggestions.filter((suggestion) =>
+    Object.values(suggestion).some((value) =>
+      value?.toString().toLowerCase().includes(linkedinSearchText.toLowerCase())
+    )
+  );
+
+  const linkedinColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Current Title",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Suitability",
+      dataIndex: "suitabilityScore",
+      key: "suitabilityScore",
+      render: (score) => (
+        <Tooltip title={`${score}%`}>
+          <Progress
+            percent={score}
+            showInfo={false}
+            strokeColor={
+              score >= 70 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"
+            }
+          />
+        </Tooltip>
+      ),
+    },
+    {
+      title: "Profile",
+      key: "profile",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          icon={<LinkedinOutlined />}
+          href={record.profileUrl}
+          target="_blank"
+        >
+          View Profile
+        </Button>
+      ),
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {/* Sidebar */}
@@ -333,6 +418,7 @@ const JobApplicationsPage = () => {
 
                 {/* Right Column */}
                 <Col xs={24} md={16}>
+                  {/* Existing Applicants Card */}
                   <Card style={cardStyle}>
                     {/* Applicant Search Field */}
                     <Row style={{ marginBottom: 16 }} justify="end">
@@ -350,6 +436,45 @@ const JobApplicationsPage = () => {
                       columns={columns}
                       dataSource={filteredApplicants}
                       rowKey="_id"
+                      pagination={{ pageSize: 5 }}
+                    />
+                  </Card>
+
+                  {/* New LinkedIn Suggestions Card */}
+                  <Card 
+                    style={cardStyle}
+                    title={
+                      <Space>
+                        <LinkedinOutlined style={{ color: '#0077B5', fontSize: '24px' }} />
+                        <span>Suggested Candidates on LinkedIn</span>
+                      </Space>
+                    }
+                  >
+                    <Alert
+                      message="Demo Data Only"
+                      description="Currently showing mock data. LinkedIn API integration required for real candidate suggestions."
+                      type="warning"
+                      showIcon
+                      style={{ marginBottom: 16 }}
+                      closable
+                    />
+                    
+                    {/* LinkedIn Search Field */}
+                    <Row style={{ marginBottom: 16 }} justify="end">
+                      <Col xs={24} md={12} lg={8}>
+                        <Input
+                          placeholder="Search LinkedIn suggestions..."
+                          prefix={<SearchOutlined />}
+                          allowClear
+                          onChange={(e) => setLinkedinSearchText(e.target.value)}
+                        />
+                      </Col>
+                    </Row>
+
+                    <Table
+                      columns={linkedinColumns}
+                      dataSource={filteredLinkedinSuggestions}
+                      rowKey="id"
                       pagination={{ pageSize: 5 }}
                     />
                   </Card>
