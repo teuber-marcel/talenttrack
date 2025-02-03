@@ -92,7 +92,7 @@ const LoginPage = () => {
       {/* Footer Section */}
       <footer style={{ marginTop: 24, color: "#6c757d", fontSize: "14px", textAlign: "center" }}>
         <p> 
-          Need help? <Link href="#" style={{ color: "#007bff" }}>Contact Support</Link>
+          Need help? <Link href="mailto:info@talenttrack.de" style={{ color: "#007bff" }}>Contact Support</Link>
         </p>
       </footer>
     </Layout>
