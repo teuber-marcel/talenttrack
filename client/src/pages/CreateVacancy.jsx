@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import '../app/globals.css';
-import { Layout, Row, Col, Button, Input, message } from 'antd';
+import { Layout, Row, Col, Button, Input, message, Typography } from 'antd';
 import { CloseCircleOutlined, PlayCircleOutlined, SaveOutlined, CloudUploadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import Sidebar from '../components/Global/Sidebar.jsx';
@@ -10,6 +10,7 @@ import VacancyTitleInput from '../components/CreateVacancy/VacancyTitleInput.jsx
 import { deleteVacancy } from '../services/vacancyService.js';
 
 const { Header, Content } = Layout;
+const { Title } = Typography;
 const { TextArea } = Input;
 
 const CreateVacancy = () => {
@@ -120,64 +121,159 @@ const handleDeleteVacancy = async () => {
 
 
   return (
-    <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: "margin-left 0.3s ease", backgroundColor: 'var(--background)', minHeight: '100vh', display: 'flex' }}>
+    <Layout
+      style={{
+        marginLeft: collapsed ? 80 : 200,
+        transition: "margin-left 0.3s ease",
+        backgroundColor: "#f0f2f5", // replaced var(--background)
+        minHeight: '100vh',
+        display: 'flex'
+      }}
+    >
+
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-      <Layout style={{ background: 'var(--background)' }}>  
-        <Header style={{ color: 'white', background: 'var(--background)', padding: 0, textAlign: 'center', fontSize: '24px' }}>
-          Create Vacancy
-        </Header>
-        <Content style={{ margin: '16px' }}>
+      <Layout style={{ background: "#f0f2f5" }}>  
+        <Content style={{ padding: "24px" }}>
+          {/* Title + Stepper */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: 24 }}
+          >
+            <Col>
+              <Title level={2} style={{ margin: 0 }}>
+                Create Vacancy
+              </Title>
+            </Col>
+          </Row>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <div style={{ padding: 16, minHeight: 240, background: '#333', borderRadius: 8, color: 'white', display: 'flex', justifyContent: 'center' }}>
-                <RadioButtonGroup onChange={setSelectedDepartment} disabled={!!createdVacancy} />
+              <div
+                style={{
+                  padding: 16,
+                  minHeight: 240,
+                  background: "#fff", // changed from #333
+                  borderRadius: 8,
+                  color: "#333", // changed from 'white'
+                  display: 'flex',
+                  justifyContent: 'center',
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <RadioButtonGroup
+                  onChange={setSelectedDepartment}
+                  disabled={!!createdVacancy}
+                />
               </div>
             </Col>
             <Col span={12}>
-              <div style={{ padding: 16, minHeight: 240, background: '#333', borderRadius: 8, color: 'white', display: 'flex', justifyContent: 'center' }}>
-                <CheckboxGroup onChange={setSelectedHierarchy} disabled={!!createdVacancy} />
+              <div
+                style={{
+                  padding: 16,
+                  minHeight: 240,
+                  background: "#fff", // changed from #333
+                  borderRadius: 8,
+                  color: "#333", // changed from 'white'
+                  display: 'flex',
+                  justifyContent: 'center',
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <CheckboxGroup
+                  onChange={setSelectedHierarchy}
+                  disabled={!!createdVacancy}
+                />
               </div>
             </Col>
+
             <Col span={24}>
-              <div style={{ padding: 16, minHeight: 140, background: '#333', borderRadius: 8, color: 'white' }}>
-                <VacancyTitleInput onChange={setVacancyTitle} disabled={!!createdVacancy} />
+              <div
+                style={{
+                  padding: 16,
+                  minHeight: 120,
+                  background: "#fff", // changed from #333
+                  borderRadius: 8,
+                  color: "#333", // changed from 'white'
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                }}
+              >
+                <VacancyTitleInput
+                  onChange={setVacancyTitle}
+                  disabled={!!createdVacancy}
+                />
               </div>
             </Col>
 
             {/* Beschreibung, Anforderungen, Sonstiges - Felder */}
             {createdVacancy && (
               <Col span={24}>
-                <div style={{ background: '#333', padding: '16px', borderRadius: '8px', marginTop: '16px' }}>
-                  <h3 style={{ color: 'white', marginBottom: '8px' }}>Description</h3>
+                <div
+                  style={{
+                    background: "#fff", // changed from #333
+                    padding: '16px',
+                    borderRadius: '8px',
+                    marginTop: '16px',
+                    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left"}}>
+                    Description
+                  </Title>
                   <TextArea 
                     value={description} 
                     onChange={(e) => setDescription(e.target.value)}
                     autoSize={{ minRows: 3 }} 
-                    style={{ background: '#222', color: 'white', border: 'none', marginBottom: '12px' }} 
+                    style={{
+                      background: "#fff", // changed from #222
+                      color: "#333", // changed from 'white'
+                      border: "1px solid #d9d9d9",
+                      marginBottom: '12px',
+                    }} 
                   />
 
-                  <h3 style={{ color: 'white', marginBottom: '8px' }}>Requirements</h3>
+                  <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left"}}>
+                    Requirements
+                  </Title>
                   <TextArea 
                     value={requirements} 
                     onChange={(e) => setRequirements(e.target.value)}
                     autoSize={{ minRows: 3 }} 
-                    style={{ background: '#222', color: 'white', border: 'none', marginBottom: '12px' }} 
+                    style={{
+                      background: "#fff", // changed from #222
+                      color: "#333", // changed from 'white'
+                      border: "1px solid #d9d9d9",
+                      marginBottom: '12px',
+                    }} 
                   />
 
-                  <h3 style={{ color: 'white', marginBottom: '8px' }}>Other</h3>
+                  <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left"}}>
+                    Further Information
+                  </Title>
                   <TextArea 
                     value={other} 
                     onChange={(e) => setOther(e.target.value)}
                     autoSize={{ minRows: 3 }} 
-                    style={{ background: '#222', color: 'white', border: 'none' }} 
+                    style={{
+                      background: "#fff", // changed from #222
+                      color: "#333", // changed from 'white'
+                      border: "1px solid #d9d9d9",
+                    }} 
                   />
                 </div>
               </Col>
             )}
 
             {/* Buttons */}
-            <Col span={24} style={{ display: 'flex', justifyContent: 'flex-end', gap: '16px', marginTop: '16px' }}>
+            <Col
+              span={24}
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '16px',
+                marginTop: '16px'
+              }}
+            >
               <Button 
                 type="default" 
                 icon={<CloseCircleOutlined />} 

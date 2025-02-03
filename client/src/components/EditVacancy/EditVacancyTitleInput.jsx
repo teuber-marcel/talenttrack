@@ -7,7 +7,7 @@ const EditVacancyTitleInput = ({ onChange, value }) => {
   return (
     <div style={{
       width: "100%",
-      padding: "12px",
+      padding: "0px",
       borderRadius: "8px",
       display: "flex",
       flexDirection: "column",
@@ -16,8 +16,8 @@ const EditVacancyTitleInput = ({ onChange, value }) => {
     }}>
       {/* Überschrift */}
       <Title level={4} style={{
+        marginTop: 0,
         marginBottom: 8,
-        color: "white",
         textAlign: "left",
       }}>
         Vacancy Title
@@ -32,9 +32,9 @@ const EditVacancyTitleInput = ({ onChange, value }) => {
           width: "100%",
           padding: "10px",
           borderRadius: "6px",
-          background: "#222",
-          color: "white",
-          border: 'none'
+          background: "#fff",
+          color: "#333",
+          marginBottom: 0
         }}
       />
     </div>

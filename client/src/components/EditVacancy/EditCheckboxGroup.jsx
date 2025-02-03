@@ -7,7 +7,7 @@ const EditCheckboxGroup = ({ onChange, value }) => {
   return (
     <div style={{ width: "100%" }}>
       {/* Überschrift */}
-      <Title level={4} style={{ marginBottom: 16, textAlign: "left", color: "white" }}>
+      <Title level={4} style={{ marginTop: 0, marginBottom: 16, textAlign: "left" }}>
         Select the hierarchy level
       </Title>
 
@@ -23,16 +23,16 @@ const EditCheckboxGroup = ({ onChange, value }) => {
           rowGap: "12px", 
           columnGap: "50px" 
         }}>
-          <Radio value="Working Student" style={{ color: "white" }}>Working Student</Radio>
-          <Radio value="Intern" style={{ color: "white" }}>Intern</Radio>
-          <Radio value="Junior Professional" style={{ color: "white" }}>Junior Professional</Radio>
-          <Radio value="Professional" style={{ color: "white" }}>Professional</Radio>
-          <Radio value="Senior Professional" style={{ color: "white" }}>Senior Professional</Radio>
-          <Radio value="Executive Professional" style={{ color: "white" }}>Executive Professional</Radio>
-          <Radio value="Team Lead" style={{ color: "white" }}>Team Lead</Radio>
-          <Radio value="Manager" style={{ color: "white" }}>Manager</Radio>
-          <Radio value="Director" style={{ color: "white" }}>Director</Radio>
-          <Radio value="Executive Director" style={{ color: "white" }}>Executive Director</Radio>
+          <Radio value="Working Student">Working Student</Radio>
+          <Radio value="Intern">Intern</Radio>
+          <Radio value="Junior Professional">Junior Professional</Radio>
+          <Radio value="Professional">Professional</Radio>
+          <Radio value="Senior Professional">Senior Professional</Radio>
+          <Radio value="Executive Professional">Executive Professional</Radio>
+          <Radio value="Team Lead">Team Lead</Radio>
+          <Radio value="Manager">Manager</Radio>
+          <Radio value="Director">Director</Radio>
+          <Radio value="Executive Director">Executive Director</Radio>
         </div>
       </Radio.Group>
     </div>
