@@ -68,8 +68,7 @@ const EditVacancy = () => {
     console.log("📦 Data sent:", JSON.stringify(updatedFields, null, 2));
 
     try {
-      const response = await fetch(
-        `/api/vacancies/${createdVacancy._id}/details`,
+      const response = await fetch(`/api/vacancies/${createdVacancy._id}/details`,
         {
           method: "PATCH",
           headers: {
