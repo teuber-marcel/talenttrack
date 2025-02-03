@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import "../../../app/globals.css";
+import ProgressStepper from "../../../components/Global/ProgressStepper";
 import {
   Layout,
   Card,
@@ -13,6 +14,10 @@ import {
   Badge,
   Modal,
   notification,
+  Row,
+  Col,
+  Space,
+  Skeleton,
 } from "antd";
 import { ArrowLeftOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import Sidebar from "../../../components/Global/Sidebar";
@@ -26,14 +31,39 @@ import {
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
+// Reusable card style for consistency
+const cardStyle = {
+  background: "#fff",
+  border: "1px solid #d9d9d9",
+  borderRadius: 8,
+  padding: 24,
+  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+  marginBottom: 24,
+};
+
+const steps = [
+  { title: "Vacancy", status: "finish" },
+  { title: "Applicant", status: "finish" },
+  { title: "Interview", status: "wait" },
+];
+
 const ApplicantDetails = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [applicant, setApplicant] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasInterviewQuestions, setHasInterviewQuestions] = useState(false);
   const [generatingQuestions, setGeneratingQuestions] = useState(false);
+
   const router = useRouter();
   const { id } = router.query;
+
+  // Notification config (like your ViewApplications approach)
+  useEffect(() => {
+    notification.config({
+      placement: "topRight",
+      top: 100,
+    });
+  }, []);
 
   useEffect(() => {
     if (!id) return;
@@ -59,14 +89,6 @@ const ApplicantDetails = () => {
 
     fetchApplicantData();
   }, [id]);
-
-  // Setup global notification config
-  useEffect(() => {
-    notification.config({
-      placement: "topRight",
-      top: 100,
-    });
-  }, []);
 
   const handleGenerateQuestions = async () => {
     setGeneratingQuestions(true);
@@ -94,7 +116,7 @@ const ApplicantDetails = () => {
         duration: 4,
         pauseOnHover: true,
         style: {
-          backgroundColor: "#ffffff",
+          backgroundColor: "#fff",
           borderLeft: "4px solid #1890ff",
         },
       });
@@ -120,204 +142,137 @@ const ApplicantDetails = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout
-        style={{
-          marginLeft: collapsed ? 80 : 200,
-          padding: "24px",
-          background: "#f0f2f5", // replaced var(--background)
-        }}
-      >
-        <Content>
-          <Title level={1} style={{ textAlign: "center", color: "#333" }}>
-            {/* replaced var(--text-color) */}
-            Applicant Details
-          </Title>
 
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              margin: "20px 0",
-            }}
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+        <Content style={{ padding: "24px" }}>
+          {/* Title + Stepper */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: 24 }}
           >
-            <Steps
-              current={1}
-              items={[
-                { title: "Job Overview" },
-                { title: "Applicant Details" },
-                { title: "Interview Preparation" },
-              ]}
-            />
-          </div>
+            <Col>
+              <Title level={2} style={{ margin: 0 }}>
+                Applicant Details
+              </Title>
+            </Col>
+            <Col style={{ overflowX: "auto" }}>
+              <div style={{ minWidth: 300, paddingBottom: 4 }}>
+                <ProgressStepper steps={steps} currentStep={0} />
+              </div>
+            </Col>
+          </Row>
 
           {loading ? (
-            <p style={{ textAlign: "center", color: "#333" }}>Loading...</p>
-          ) : applicant ? (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 2fr",
-                gap: "24px",
-                alignItems: "flex-start",
-              }}
-            >
-              {/* Left Panel - Profile Information */}
-              <Card
-                bordered={false}
-                style={{
-                  background: "#fff", // replaced #1C1C1C
-                  border: "1px solid #d9d9d9",
-                  borderRadius: "12px",
-                  color: "#333", // replaced var(--text-color)
-                  padding: "20px",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                }}
-              >
-                <Title level={3} style={{ color: "#333" }}>
-                  {/* replaced var(--text-color) */}
-                  {applicant.prename} {applicant.surname}
-                </Title>
-                <Image
-                  src={applicant.photo || "https://via.placeholder.com/150"}
-                  alt="Applicant Photo"
-                  width={120}
-                  height={120}
-                  style={{ borderRadius: "50%", marginBottom: 16 }}
-                />
-
-                <Text style={{ color: "#333" }}>
-                  <strong>Age:</strong> 27
-                </Text>
-                <br />
-                <Text style={{ color: "#333" }}>
-                  <strong>Education:</strong> B.Sc. Computer Science
-                </Text>
-                <br />
-                <Text style={{ color: "#333" }}>
-                  <strong>Location:</strong> {applicant.address.city}
-                </Text>
-                <br />
-                <Text style={{ color: "#333" }}>
-                  <strong>Status:</strong>{" "}
-                  <Badge color="#1890ff" text={applicant.status} />
-                </Text>
-                <br />
-
-                <Title level={5} style={{ marginTop: 16, color: "#333" }}>
-                  Suitability
-                </Title>
-                <Progress
-                  percent={applicant.suitabilityScore || 50}
-                  status="active"
-                  strokeColor={
-                    applicant.suitabilityScore >= 70
-                      ? "#52c41a"
-                      : applicant.suitabilityScore >= 50
-                        ? "#faad14"
-                        : "#ff4d4f"
-                  }
-                />
-              </Card>
-
-              {/* Right Panel - Actions */}
-              <div>
-                <Card
-                  title="Downloads"
-                  bordered={false}
-                  style={{
-                    background: "#fff",
-                    border: "1px solid #d9d9d9",
-                    borderRadius: "12px",
-                    color: "#333",
-                    padding: "20px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <Button type="default" block style={{ marginBottom: 8 }}>
-                    CV
-                  </Button>
-                  <Button type="default" block style={{ marginBottom: 8 }}>
-                    Motivation Letter
-                  </Button>
-                  <Button type="default" block style={{ marginBottom: 8 }}>
-                    Degree Certification
-                  </Button>
-                  <Button type="default" block>
-                    Work Resume
-                  </Button>
-                </Card>
-
-                <Card
-                  title="Further Steps"
-                  bordered={false}
-                  style={{
-                    background: "#fff",
-                    border: "1px solid #d9d9d9",
-                    borderRadius: "12px",
-                    color: "#333",
-                    padding: "20px",
-                    marginTop: "16px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <Button type="primary" block style={{ marginBottom: 8 }}>
-                    Schedule Interview
-                  </Button>
-                  <Button type="default" block danger>
-                    Send Rejection
-                  </Button>
-                </Card>
-
-                <Card
-                  title="Interview Preparation"
-                  bordered={false}
-                  style={{
-                    background: "#fff",
-                    border: "1px solid #d9d9d9",
-                    borderRadius: "12px",
-                    color: "#333",
-                    padding: "20px",
-                    marginTop: "16px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                  }}
-                >
-                  <Button
-                    type="primary"
-                    block
-                    onClick={confirmGenerateQuestions}
-                    loading={generatingQuestions}
-                    style={{ marginBottom: 8 }}
-                  >
-                    Generate New Interview Questions
-                  </Button>
-                  <Button
-                    type="default"
-                    block
-                    onClick={() =>
-                      router.push(`/InterviewPrep?applicantId=${applicant._id}`)
-                    }
-                    disabled={!hasInterviewQuestions}
-                  >
-                    Show Interview Questions
-                  </Button>
-                </Card>
-              </div>
-            </div>
+            <Skeleton active />
+          ) : !applicant ? (
+            <Row justify="center" style={{ marginTop: 40 }}>
+              <Text>Applicant not found.</Text>
+            </Row>
           ) : (
-            <p style={{ textAlign: "center", color: "#333" }}>
-              Applicant not found.
-            </p>
+            // Main Content for Applicant Details
+            <Row gutter={[24, 24]}>
+              {/* Left Panel - Profile Information */}
+              <Col xs={24} md={8}>
+                <Card style={cardStyle}>
+                  <Title level={4} style={{ marginBottom: 16 }}>
+                    {applicant.prename} {applicant.surname}
+                  </Title>
+                  <Image
+                    src={applicant.photo || "https://via.placeholder.com/150"}
+                    alt="Applicant Photo"
+                    width={120}
+                    height={120}
+                    style={{ borderRadius: "50%", marginBottom: 16 }}
+                  />
+
+                  <Space direction="vertical" size={4}>
+                    <Text>
+                      <strong>Age:</strong> 27
+                    </Text>
+                    <Text>
+                      <strong>Education:</strong> B.Sc. Computer Science
+                    </Text>
+                    <Text>
+                      <strong>Location:</strong> {applicant.address?.city}
+                    </Text>
+                    <Text>
+                      <strong>Status:</strong>{" "}
+                      <Badge color="#1890ff" text={applicant.status} />
+                    </Text>
+                  </Space>
+
+                  <Title level={5} style={{ marginTop: 16 }}>
+                    Suitability
+                  </Title>
+                  <Progress
+                    percent={applicant.suitabilityScore || 50}
+                    strokeColor={
+                      applicant.suitabilityScore >= 70
+                        ? "#52c41a"
+                        : applicant.suitabilityScore >= 50
+                          ? "#faad14"
+                          : "#ff4d4f"
+                    }
+                  />
+                </Card>
+              </Col>
+
+              {/* Right Panel - Action Cards */}
+              <Col xs={24} md={16}>
+                <Card style={cardStyle} title="Downloads">
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Button block>CV</Button>
+                    <Button block>Motivation Letter</Button>
+                    <Button block>Degree Certification</Button>
+                    <Button block>Work Resume</Button>
+                  </Space>
+                </Card>
+
+                <Card style={cardStyle} title="Further Steps">
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Button type="primary" block>
+                      Schedule Interview
+                    </Button>
+                    <Button danger block>
+                      Send Rejection
+                    </Button>
+                  </Space>
+                </Card>
+
+                <Card style={cardStyle} title="Interview Preparation">
+                  <Space direction="vertical" style={{ width: "100%" }}>
+                    <Button
+                      type="primary"
+                      block
+                      onClick={confirmGenerateQuestions}
+                      loading={generatingQuestions}
+                    >
+                      Generate New Interview Questions
+                    </Button>
+                    <Button
+                      block
+                      onClick={() =>
+                        router.push(
+                          `/InterviewPrep?applicantId=${applicant._id}`
+                        )
+                      }
+                      disabled={!hasInterviewQuestions}
+                    >
+                      Show Interview Questions
+                    </Button>
+                  </Space>
+                </Card>
+              </Col>
+            </Row>
           )}
 
-          <div style={{ marginTop: "24px", textAlign: "right" }}>
-            <Button
-              type="default"
-              icon={<ArrowLeftOutlined />}
-              onClick={() => router.back()} // <— Use router.back()
-            >
+          {/* Footer Button */}
+          <Row justify="end" style={{ marginTop: 24 }}>
+            <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()}>
               Cancel
             </Button>
-          </div>
+          </Row>
         </Content>
       </Layout>
     </Layout>

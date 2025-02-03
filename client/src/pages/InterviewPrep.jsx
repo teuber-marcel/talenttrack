@@ -1,53 +1,101 @@
 import React, { useEffect, useState } from "react";
-import { Layout, Typography, Row, Col, Card, Button, Image, message, notification, Input } from "antd";
-import { CheckCircleOutlined, ExclamationCircleOutlined, InfoCircleOutlined, DownloadOutlined, CloseCircleOutlined, RedoOutlined, EditOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  Layout,
+  Typography,
+  Row,
+  Col,
+  Card,
+  Button,
+  Image,
+  message,
+  notification,
+  Input,
+  Space,
+  Skeleton,
+} from "antd";
+import {
+  CheckCircleOutlined,
+  CloseCircleOutlined,
+  DownloadOutlined,
+  RedoOutlined,
+  EditOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
 import Sidebar from "../components/Global/Sidebar";
-import BackgroundBox from "../components/Global/BackgroundBox";
-import { getApplicants, getApplicantById } from "../services/applicantService";
+import { getApplicantById } from "../services/applicantService";
 import { getVacancyById } from "../services/vacancyService";
 import ProgressStepper from "../components/Global/ProgressStepper";
-import { createInterview, generateQuestions, getInterviewByApplicantId, downloadInterviewQuestions, saveInterviewQuestions } from "../services/interviewService";
-import { useRouter } from 'next/router';
+import {
+  createInterview,
+  generateQuestions,
+  getInterviewByApplicantId,
+  downloadInterviewQuestions,
+  saveInterviewQuestions,
+} from "../services/interviewService";
+import { useRouter } from "next/router";
 
 const { Content } = Layout;
-const { Title, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
-// 1. Globale Notification-Konfiguration: Legt die Grundeinstellungen für alle Notifications fest
+// Unify card style for consistent appearance
+const cardStyle = {
+  background: "#fff",
+  border: "1px solid #d9d9d9",
+  borderRadius: 8,
+  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+  padding: 24,
+  marginBottom: 24,
+};
+
+const steps = [
+  { title: "Vacancy", status: "finish" },
+  { title: "Applicant", status: "finish" },
+  { title: "Interview", status: "finish" },
+];
+
+// Configure notifications globally
 notification.config({
-  placement: 'topRight', // Position oben rechts
-  top: 100 // Abstand von oben in Pixeln
+  placement: "topRight",
+  top: 100,
 });
 
 const InterviewPreparation = () => {
   const router = useRouter();
   const { applicantId } = router.query;
-  
+
   const [collapsed, setCollapsed] = useState(false);
-  const [applicants, setApplicants] = useState([]);
+  const [applicant, setApplicant] = useState(null);
   const [vacancy, setVacancy] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [interviewQuestions, setInterviewQuestions] = useState([]);
   const [currentInterview, setCurrentInterview] = useState(null);
   const [regenerating, setRegenerating] = useState(false);
+
   const [editMode, setEditMode] = useState(false);
   const [editedQuestions, setEditedQuestions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!applicantId) return;
-      
-      try {
-        const applicantData = await getApplicantById(applicantId);
-        setApplicants([applicantData]); // Setze den spezifischen Bewerber
 
+      try {
+        // 1) Fetch the applicant
+        const applicantData = await getApplicantById(applicantId);
+        if (!applicantData) throw new Error("Applicant not found");
+        setApplicant(applicantData);
+
+        // 2) Fetch the vacancy
         if (applicantData.vacancy) {
           const vacancyData = await getVacancyById(applicantData.vacancy);
           setVacancy(vacancyData);
         }
 
+        // 3) Check for an existing interview
         let interview = await getInterviewByApplicantId(applicantId);
         setCurrentInterview(interview);
 
+        // 4) If no interview, create and generate new Qs; else load existing Qs
         if (!interview) {
           interview = await createInterview(applicantId);
           const questionsData = await generateQuestions(interview._id);
@@ -58,7 +106,7 @@ const InterviewPreparation = () => {
         }
       } catch (error) {
         console.error("Error:", error);
-        message.error("Fehler beim Laden der Daten");
+        message.error("Error loading data");
       } finally {
         setLoading(false);
       }
@@ -67,52 +115,47 @@ const InterviewPreparation = () => {
     fetchData();
   }, [applicantId]);
 
-  // Debugging-Log für den State
-  useEffect(() => {
-    console.log('Current interviewQuestions state:', interviewQuestions);
-  }, [interviewQuestions]);
-
+  // Keep a separate "draft" array for editing
   useEffect(() => {
     setEditedQuestions(interviewQuestions);
   }, [interviewQuestions]);
 
-  const steps = [
-    { title: "Job Overview", status: "finish" },
-    { title: "Applicant Details", status: "finish" },
-    { title: "Interview Preparation", status: "finish" }
-  ];
+  // Debugging
+  useEffect(() => {
+    console.log("Current interviewQuestions state:", interviewQuestions);
+  }, [interviewQuestions]);
 
+  /** Download the interview questions */
   const handleDownload = async () => {
     if (!currentInterview) {
       message.error("No interview available for download");
       return;
     }
-    
+
     try {
       const success = await downloadInterviewQuestions(currentInterview._id);
       if (success) {
-        // 2. Notification-Aufruf: Zeigt eine Success-Notification mit benutzerdefinierten Styles
         notification.success({
-          message: "Download Complete", // Titel der Notification
-          description: "Interview questions have been successfully downloaded.", // Beschreibungstext
-          icon: <CheckCircleOutlined style={{ color: "#547bae" }} />, // Custom Icon mit Farbe
-          duration: 4, // Anzeigedauer in Sekunden
-          pauseOnHover: true, // Pausiert Timer beim Hover
-          style: { 
-            backgroundColor: "rgba(255,255,255,0.8)", // Halbtransparenter Hintergrund
-            borderLeft: '4px solid #547bae', // Farbiger Rand links
-            backdropFilter: 'blur(8px)' // Glaseffekt
-          }
+          message: "Download Complete",
+          description: "Interview questions have been successfully downloaded.",
+          icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
+          duration: 4,
+          pauseOnHover: true,
+          style: {
+            backgroundColor: "#fff",
+            borderLeft: "4px solid #547bae",
+          },
         });
       } else {
         message.error("Failed to download interview questions");
       }
     } catch (error) {
-      console.error('Download error:', error);
+      console.error("Download error:", error);
       message.error("Error during download");
     }
   };
 
+  /** Regenerate Qs */
   const handleRegenerate = async () => {
     if (!currentInterview) {
       message.error("No interview available");
@@ -121,18 +164,18 @@ const InterviewPreparation = () => {
     setRegenerating(true);
     try {
       const response = await generateQuestions(currentInterview._id);
-      setInterviewQuestions(response.questions || response);
+      const newQs = response.questions || response;
+      setInterviewQuestions(newQs);
       notification.success({
         message: "Questions Regenerated",
         description: "Interview questions have been successfully updated.",
         icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
         duration: 4,
         pauseOnHover: true,
-        style: { 
-          backgroundColor: "rgba(255,255,255,0.8)", 
-          borderLeft: '4px solid #547bae', 
-          backdropFilter: 'blur(8px)' 
-        }
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #547bae",
+        },
       });
     } catch (error) {
       message.error("Failed to regenerate questions");
@@ -141,25 +184,29 @@ const InterviewPreparation = () => {
     }
   };
 
+  /** Enter or exit Edit Mode */
   const handleEditClick = () => {
     setEditMode(true);
     setEditedQuestions([...interviewQuestions]);
   };
 
+  /** Handle typed changes in a question text area */
   const handleQuestionChange = (index, newValue) => {
     const newQuestions = [...editedQuestions];
     newQuestions[index] = newValue;
     setEditedQuestions(newQuestions);
   };
 
+  /** Remove a question from the list while editing */
   const handleDeleteQuestion = (indexToDelete) => {
-    const newQuestions = editedQuestions.filter((_, index) => index !== indexToDelete);
+    const newQuestions = editedQuestions.filter((_, i) => i !== indexToDelete);
     setEditedQuestions(newQuestions);
   };
 
+  /** Save changes to the interview questions */
   const handleSave = async () => {
     if (!currentInterview) return;
-    
+
     try {
       await saveInterviewQuestions(currentInterview._id, editedQuestions);
       setInterviewQuestions(editedQuestions);
@@ -169,215 +216,238 @@ const InterviewPreparation = () => {
         description: "Interview questions have been successfully updated.",
         icon: <CheckCircleOutlined style={{ color: "#547bae" }} />,
         duration: 4,
-        style: { 
-          backgroundColor: "rgba(255,255,255,0.8)", 
-          borderLeft: '4px solid #547bae', 
-          backdropFilter: 'blur(8px)' 
-        }
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #547bae",
+        },
       });
     } catch (error) {
       message.error("Failed to save changes");
     }
   };
 
-  return (
-    <Layout style={{ minHeight: "100vh", background: "#000000" }}>
-      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-      <Layout style={{ marginLeft: collapsed ? 80 : 200, padding: "24px", background: "#000000" }}>
-        <Content>
-          <div style={{ 
-            position: "absolute", 
-            top: "24px", 
-            left: "70%", 
-            transform: "translateX(-50%)",
-            zIndex: 1000
-          }}>
-            <ProgressStepper steps={steps} currentStep={0} />
-          </div>
+  /** Confirm regeneration, overwriting existing Qs */
+  const confirmGenerateQuestions = () => {
+    if (!currentInterview) {
+      message.error("No interview available");
+      return;
+    }
+    Modal.confirm({
+      title: "Generate New Interview Questions",
+      content: "Are you sure you want to overwrite any existing questions?",
+      okText: "Yes",
+      cancelText: "No",
+      onOk: handleRegenerate,
+    });
+  };
 
-          <Title level={1}>Interview Preparation</Title>
-          <Row justify="center" style={{ margin: "40px 0 16px" }}>
-            {applicants.length > 0 && (
-              <Col style={{ textAlign: "center" }}>
-                <Card
-                  style={{
-                    background: '#333333',
-                    borderRadius: '8px',
-                    padding: '0px',  // Reduced from 20px to 12px
-                    marginBottom: '20px',
-                    width: '500px',
-                    border: '1px solid #333333'  // Making border same color as background
-                  }}
-                >
-                  <Row align="middle" justify="space-around">
-                    <Col span={11}>  {/* Increased from 10 to 11 */}
-                      <Title
-                        level={1}
-                        style={{
-                          margin: 0,
-                          color: '#fff',
-                          fontSize: 'clamp(16px, 5vw, 32px)'
-                        }}
-                      >
-                        {applicants[0].prename} {applicants[0].surname}
-                      </Title>
-                    </Col>
-                    <Col span={11}>  {/* Increased from 10 to 11 */}
-                      <Image
-                        src={applicants[0].photo}
-                        alt="Applicant photo"
-                        width={160}
-                        height={160}
-                        style={{ borderRadius: "50%" }}
-                      />
-                    </Col>
-                  </Row>
-                </Card>
-              </Col>
-            )}
-          </Row>
-          <Row justify="center">
-            <Col span={20}>
-              <BackgroundBox>
-                <Title level={2} style={{ textAlign: "center", marginBottom: 8 }}>
-                  {vacancy ? vacancy.title : "Loading..."}
-                </Title>
-                <Card bordered={true} style={{ minHeight: "200px", maxWidth: "100%", overflowY: "auto", color: '#000000' }}>
-                  <div className="interview-questions">
-                    {(editMode ? editedQuestions : interviewQuestions).map((question, index) => (
-                      editMode ? (
-                        <div key={index} className="question-item" style={{ 
-                          marginBottom: '16px',
-                          padding: '12px',
-                          borderLeft: '4px solid #547bae',
-                          backgroundColor: '#f5f5f5',
-                          borderRadius: '4px',
-                          color: '#000000',
-                          display: 'flex',
-                          gap: '8px'
-                        }}>
-                          <div style={{ flex: 1 }}>
-                            <Input.TextArea
-                              value={question}
-                              onChange={(e) => handleQuestionChange(index, e.target.value)}
-                              autoSize={{ minRows: 2 }}
-                              style={{ fontSize: '16px', color: '#000000' }}
-                            />
-                          </div>
-                          <Button
-                            type="text"
-                            danger
-                            icon={<CloseCircleOutlined />}
-                            onClick={() => handleDeleteQuestion(index)}
-                            style={{ alignSelf: 'flex-start' }}
-                          />
-                        </div>
-                      ) : (
-                        <div key={index} className="question-item" style={{ 
-                          marginBottom: '16px',
-                          padding: '12px',
-                          borderLeft: '4px solid #547bae',
-                          backgroundColor: '#f5f5f5',
-                          borderRadius: '4px',
-                          color: '#000000'
-                        }}>
-                          <Typography.Text strong style={{ fontSize: '16px', color: '#000000' }}>
-                            {`${index + 1}. ${question}`}
-                          </Typography.Text>
-                        </div>
-                      )
-                    ))}
-                  </div>
-                </Card>
-                <Row justify="space-between" style={{ marginTop: "16px" }}>
-                  <div>
-                    <Button 
-                      onClick={handleRegenerate}
-                      type="default"
-                      size="large"
-                      icon={<RedoOutlined />}
-                      loading={regenerating}
-                      style={{
-                        height: "40px", 
-                        padding: "0 24px",
-                        backgroundColor: "#547bae",
-                        borderColor: "#547bae",
-                        color: "white",
-                        marginRight: 8
-                      }}
-                    >
-                      Regenerate
-                    </Button>
-                    {!editMode ? (
-                      <Button 
-                        onClick={handleEditClick} 
-                        type="default" 
-                        size="large"
-                        icon={<EditOutlined />}
-                        style={{ 
-                          height: "40px", 
-                          padding: "0 24px",
-                          backgroundColor: "#547bae",
-                          borderColor: "#547bae",
-                          color: "white"
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    ) : (
-                      <Button 
-                        onClick={handleSave} 
-                        type="default" 
-                        size="large"
-                        icon={<SaveOutlined />}
-                        style={{ 
-                          height: "40px", 
-                          padding: "0 24px",
-                          backgroundColor: "#547bae",
-                          borderColor: "#547bae",
-                          color: "white"
-                        }}
-                      >
-                        Save
-                      </Button>
-                    )}
-                  </div>
-                  <div>
-                    <Button 
-                      onClick={() => {}} 
-                      type="default" 
-                      size="large"
-                      icon={<CloseCircleOutlined />}
-                      style={{ 
-                        marginRight: 8, 
-                        height: "40px", 
-                        padding: "0 24px",
-                        backgroundColor: "#547bae",
-                        borderColor: "#547bae",
-                        color: "white"
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button 
-                      onClick={handleDownload} 
-                      type="primary"
-                      size="large"
-                      icon={<DownloadOutlined />}
-                      style={{ 
-                        height: "40px", 
-                        padding: "0 24px",
-                        backgroundColor: "#547bae",
-                        borderColor: "#547bae"
-                      }}
-                    >
-                      Download
-                    </Button>
-                  </div>
-                </Row>
-              </BackgroundBox>
+  if (loading) {
+    return (
+      <Layout style={{ minHeight: "100vh" }}>
+        <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+        <Layout style={{ marginLeft: collapsed ? 80 : 200, padding: 24 }}>
+          <Content style={{ background: "#f0f2f5", padding: 24 }}>
+            <Skeleton active />
+          </Content>
+        </Layout>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout style={{ minHeight: "100vh" }}>
+      <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+
+      <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
+        <Content style={{ padding: "24px" }}>
+          {/* Title + Stepper */}
+          <Row
+            justify="space-between"
+            align="middle"
+            style={{ marginBottom: 24 }}
+          >
+            <Col>
+              <Title level={2} style={{ margin: 0 }}>
+                Interview Preparation
+              </Title>
+            </Col>
+            <Col style={{ overflowX: "auto" }}>
+              <div style={{ minWidth: 300, paddingBottom: 4 }}>
+                <ProgressStepper steps={steps} currentStep={0} />
+              </div>
             </Col>
           </Row>
+
+          {/* If applicant not found */}
+          {!applicant ? (
+            <Row justify="center" style={{ marginTop: 40 }}>
+              <Text>Applicant not found.</Text>
+            </Row>
+          ) : (
+            <>
+              {/* Applicant Header Card */}
+              <Row justify="center" style={{ marginBottom: 24 }}>
+                <Col xs={24} md={16} lg={12}>
+                  <Card style={cardStyle}>
+                    <Row gutter={[16, 16]} align="middle">
+                      <Col xs={24} md={12}>
+                        <Title level={4} style={{ margin: 0 }}>
+                          {applicant.prename} {applicant.surname}
+                        </Title>
+                        <Text type="secondary">
+                          {vacancy?.title ? `Vacancy: ${vacancy.title}` : ""}
+                        </Text>
+                      </Col>
+                      <Col xs={24} md={12} style={{ textAlign: "center" }}>
+                        <Image
+                          src={
+                            applicant.photo || "https://via.placeholder.com/150"
+                          }
+                          alt="Applicant Photo"
+                          width={120}
+                          height={120}
+                          style={{ borderRadius: "50%" }}
+                        />
+                      </Col>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
+
+              {/* Interview Questions Container */}
+              <Row justify="center">
+                <Col xs={24} md={20}>
+                  <Card style={cardStyle}>
+                    <Title
+                      level={4}
+                      style={{ marginBottom: 16, textAlign: "center" }}
+                    >
+                      {vacancy ? vacancy.title : "Loading..."}
+                    </Title>
+
+                    {/* Interview Questions List */}
+                    <Card
+                      style={{
+                        marginBottom: 16,
+                        maxHeight: 400,
+                        overflowY: "auto",
+                        background: "#fafafa",
+                      }}
+                    >
+                      {(editMode ? editedQuestions : interviewQuestions).map(
+                        (question, index) =>
+                          editMode ? (
+                            <div
+                              key={index}
+                              style={{
+                                display: "flex",
+                                gap: 8,
+                                marginBottom: 12,
+                                padding: "8px",
+                                borderLeft: "4px solid #547bae",
+                                borderRadius: 4,
+                                background: "#fff",
+                              }}
+                            >
+                              <Input.TextArea
+                                value={question}
+                                onChange={(e) =>
+                                  handleQuestionChange(index, e.target.value)
+                                }
+                                autoSize={{ minRows: 2 }}
+                                style={{ flex: 1 }}
+                              />
+                              <Button
+                                type="text"
+                                danger
+                                icon={<CloseCircleOutlined />}
+                                onClick={() => handleDeleteQuestion(index)}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              key={index}
+                              style={{
+                                marginBottom: 12,
+                                padding: 8,
+                                borderLeft: "4px solid #547bae",
+                                borderRadius: 4,
+                                background: "#fff",
+                              }}
+                            >
+                              <Text strong>{`${index + 1}. ${question}`}</Text>
+                            </div>
+                          )
+                      )}
+                    </Card>
+
+                    {/* Bottom Buttons */}
+                    <Row justify="space-between">
+                      <Space>
+                        <Button
+                          onClick={confirmGenerateQuestions}
+                          size="large"
+                          icon={<RedoOutlined />}
+                          loading={regenerating}
+                          style={{ backgroundColor: "#547bae", color: "#fff" }}
+                        >
+                          Regenerate
+                        </Button>
+                        {!editMode ? (
+                          <Button
+                            onClick={handleEditClick}
+                            size="large"
+                            icon={<EditOutlined />}
+                            style={{
+                              backgroundColor: "#547bae",
+                              color: "#fff",
+                            }}
+                          >
+                            Edit
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={handleSave}
+                            size="large"
+                            icon={<SaveOutlined />}
+                            style={{
+                              backgroundColor: "#547bae",
+                              color: "#fff",
+                            }}
+                          >
+                            Save
+                          </Button>
+                        )}
+                      </Space>
+
+                      <Space>
+                        <Button
+                          onClick={() => router.back()}
+                          size="large"
+                          icon={<CloseCircleOutlined />}
+                          style={{ backgroundColor: "#547bae", color: "#fff" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={handleDownload}
+                          type="primary"
+                          size="large"
+                          icon={<DownloadOutlined />}
+                          style={{
+                            backgroundColor: "#547bae",
+                            borderColor: "#547bae",
+                          }}
+                        >
+                          Download
+                        </Button>
+                      </Space>
+                    </Row>
+                  </Card>
+                </Col>
+              </Row>
+            </>
+          )}
         </Content>
       </Layout>
     </Layout>

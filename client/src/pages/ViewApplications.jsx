@@ -43,9 +43,9 @@ const cardStyle = {
 };
 
 const steps = [
-  { title: "Job Overview", status: "finish" },
-  { title: "Applicant Details", status: "wait" },
-  { title: "Interview Preparation", status: "wait" },
+  { title: "Vacancy", status: "finish" },
+  { title: "Applicant", status: "wait" },
+  { title: "Interview", status: "wait" },
 ];
 
 // Example of possible statuses for a vacancy
