@@ -130,6 +130,11 @@ const ApplicantDetails = () => {
           "The applicant has been successfully rejected, and an email has been sent.",
         icon: <CheckCircleOutlined style={{ color: "#1890ff" }} />,
         duration: 4,
+        pauseOnHover: true,
+        style: {
+          backgroundColor: "#fff",
+          borderLeft: "4px solid #1890ff",
+        },
       });
     } catch (error) {
       console.error("Error rejecting applicant:", error);
