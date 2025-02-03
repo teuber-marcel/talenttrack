@@ -87,7 +87,7 @@ const CalendarComponent: React.FC = () => {
           <Calendar
             onChange={(value) => setDate(value as Date)}
             value={date}
-            className="dark-theme-calendar"
+            className="light-theme-calendar"
             locale="en-GB" // Set the locale to English
             tileClassName={({ date }) =>
               interviewStartDates.includes(date.toDateString())
@@ -102,8 +102,8 @@ const CalendarComponent: React.FC = () => {
             style={{
               marginTop: '10px',
               padding: '10px 20px',
-              backgroundColor: '#333',
-              color: '#fff',
+              backgroundColor: '#03213F', // Updated dark blue color
+              color: 'white',
               border: '1px solid #555',
               borderRadius: '5px',
               cursor: 'pointer',
@@ -121,12 +121,12 @@ const CalendarComponent: React.FC = () => {
             width: '50%',
           }}
         >
-          <h3 style={{ color: 'white', textAlign: 'center', paddingBottom: '10px' }}>
+          <h3 style={{ color: 'black ', textAlign: 'center', paddingBottom: '10px' }}>
             {date
               ? `Interviews on ${date.toLocaleDateString('en-GB')}`
               : 'Coming Up'}
           </h3>
-          <ul style={{ listStyleType: 'none', padding: 0, color: '#ddd', textAlign: 'left' }}>
+          <ul style={{ listStyleType: 'none', padding: 0, color: 'black', textAlign: 'left' }}>
             {events
               .filter((event) => {
                 if (!date) return false;

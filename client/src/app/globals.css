@@ -58,38 +58,9 @@ p {
   font-size: 18px;
 }
 
-/* Sidebar Menu Styles */
-.sidebar-menu {
-  background-color: var(--card-background) !important;
-  border-right: none;
-}
 
-.sidebar-menu .ant-menu-item {
-  background-color: transparent;
-  color: var(--foreground);
-}
 
-.sidebar-menu .ant-menu-item:hover {
-  background-color: var(--border-color);
-  color: var(--foreground);
-}
 
-.sidebar-menu .ant-menu-item-selected {
-  background-color: var(--highlight-color) !important;
-  color: white !important;
-}
-
-/* Sidebar Trigger (Collapse Icon) */
-.ant-layout-sider-trigger {
-  background-color: var(--card-background) !important;
-  color: var(--foreground) !important;
-  border-top: 1px solid var(--border-color);
-}
-
-.ant-layout-sider-trigger:hover {
-  background-color: var(--border-color) !important;
-  color: var(--foreground) !important;
-}
 
 /* Main Content Styles */
 .main-content {
