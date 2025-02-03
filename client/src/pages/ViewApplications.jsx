@@ -19,6 +19,7 @@ import {
   Input,
   Space,
   Alert,
+  Divider,  // Add this import
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -445,7 +446,7 @@ const JobApplicationsPage = () => {
                       <Col>
                         <Space>
                           <TeamOutlined style={{ fontSize: "24px" }} />
-                          <span style={{ fontSize: "16px" }}>Current Applicants</span>
+                          <span style={{ fontSize: "16px", fontWeight: "bold" }}>Current Applicants</span>
                         </Space>
                       </Col>
                       <Col xs={24} md={12} lg={8}>
@@ -457,6 +458,8 @@ const JobApplicationsPage = () => {
                         />
                       </Col>
                     </Row>
+                    
+                    <Divider style={{ margin: '0 0 16px 0' }} />
 
                     <Table
                       columns={columns}
@@ -474,7 +477,7 @@ const JobApplicationsPage = () => {
                         <LinkedinOutlined
                           style={{ color: "#0077B5", fontSize: "40px" }}
                         />
-                        <span>Suggested Candidates on LinkedIn</span>
+                        <span style={{ fontWeight: "bold" }}>Suggested Candidates on LinkedIn</span>
                       </Space>
                     }
                   >
