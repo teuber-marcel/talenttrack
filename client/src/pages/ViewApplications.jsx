@@ -278,31 +278,31 @@ const JobApplicationsPage = () => {
   const [linkedinSuggestions] = useState([
     {
       id: 1,
-      name: "Michael Chen",
-      title: "Frontend Engineer at Google",
+      name: "Henry Yong Wibbe",
+      title: "Consultant at Horváth",
       suitabilityScore: 95,
-      profileUrl: "https://linkedin.com/in/michaelchen",
+      profileUrl: "https://www.linkedin.com/in/henry-yong-wibbe-8a5017198/",
     },
     {
       id: 2,
-      name: "Sarah Mueller",
-      title: "Senior Software Developer at Amazon",
+      name: "Felix Makowski",
+      title: "Consultant at Schwarz IT KG",
       suitabilityScore: 92,
-      profileUrl: "https://linkedin.com/in/smueller",
+      profileUrl: "https://www.linkedin.com/in/felix-makowski-88762a239/",
     },
     {
       id: 3,
-      name: "David Kumar",
-      title: "Full Stack Developer at Microsoft",
+      name: "Marcel Teuber",
+      title: "IT-Consultant at Geberit",
       suitabilityScore: 88,
-      profileUrl: "https://linkedin.com/in/davidkumar",
+      profileUrl: "https://www.linkedin.com/in/marcel-teuber/",
     },
     {
       id: 4,
-      name: "Emma Bergström",
-      title: "Software Engineer at Spotify",
+      name: "Lukas Walter",
+      title: "Business Analyst at Xibix",
       suitabilityScore: 85,
-      profileUrl: "https://linkedin.com/in/emmabergstrom",
+      profileUrl: "https://www.linkedin.com/in/lukas-walter-924b77236/",
     },
   ]);
 
