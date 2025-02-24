@@ -5,6 +5,7 @@ import axios from "axios";
 import PDFDocument from "pdfkit";
 import fs from "fs";
 
+// Get all interviews
 const getInterviews = async (req,res) => {
     try {
         const filter = {};
@@ -16,12 +17,13 @@ const getInterviews = async (req,res) => {
     } catch (e) {
         res.status(500).json({ message: "Error retrieving interviews", error: e.message });
     }
-}
+};
 
+// Get an interview by ID
 const getInterviewById = async (req,res) => {
-	const id = req.params.id;
-	try {
-		const interview = await Interview.findById(id);
+    const id = req.params.id;
+    try {
+	    const interview = await Interview.findById(id);
 		if (!interview) {
 			return res.status(404).json({ message: "Interview not found" });
 		}
@@ -31,23 +33,25 @@ const getInterviewById = async (req,res) => {
 	}
 };
 
+// Create a new interview
 const createInterview = async (req, res) => {
-	const reqBody = req.body;
+    const reqBody = req.body;
 	try {
-		const interview = await Interview.create(reqBody);
+	    const interview = await Interview.create(reqBody);
 		res.status(201).json(interview);
 	} catch (e) {
 		res.status(400).json({ message: e.message });
 	}
 };
 
+// Update an interview
 const updateInterview = async (req, res) => {
-	const id = req.params.id;
-	const reqBody = req.body;
+    const id = req.params.id;
+    const reqBody = req.body;
 	try {
-		const interview = await Interview.findOneAndUpdate({ _id: id }, reqBody, { new: true });
-		if (!interview) {
-			return res.status(404).json({ message: "Interview not found" });
+	    const interview = await Interview.findOneAndUpdate({ _id: id }, reqBody, { new: true });
+	    if (!interview) {
+		    return res.status(404).json({ message: "Interview not found" });
 		}
 		res.status(200).json(interview);
 	} catch (e) {
@@ -55,12 +59,13 @@ const updateInterview = async (req, res) => {
 	}
 };
 
+// Delete an interview
 const deleteInterview = async (req, res) => {
 	const id = req.params.id;
 	try {
-		const result = await Interview.deleteOne({ _id: id});
-		if (result.deletedCount === 0) {
-			return res.status(404).json({ message: "Interview not found" });
+	    const result = await Interview.deleteOne({ _id: id});
+	    if (result.deletedCount === 0) {
+		    return res.status(404).json({ message: "Interview not found" });
 		}
 		res.status(200).json("Inteview deleted");
 	} catch (e) {
@@ -68,29 +73,30 @@ const deleteInterview = async (req, res) => {
 	}
 };
 
+// Generate interview questions
 const generateInterviewQuestions = async (req, res) => {
     try {
         const interviewId = req.params.id;
 
-        //Get interview by id
+        // Get the interview by ID
         const interview = await Interview.findById(interviewId);
         if (!interview) {
             return res.status(404).json({ message: "Interview not found" });
         }
 
-        //Get linked applicant by id
+        // Get the linked applicant by ID
         const applicant = await Applicant.findById(interview.applicant);
         if (!applicant) {
             return res.status(404).json({ message: "Applicant not found" });
         }
 
-        //Get linked vacancy by id
+        // Get the linked vacancy by ID
         const vacancy = await Vacancy.findById(applicant.vacancy);
         if (!vacancy) {
             return res.status(404).json({ message: "Vacancy not found" });
         }
 
-        //Relevant information for API call
+        // Relevant information for API call
         const requestData = {
             curriculumVitae: applicant.curriculumVitae,
             motivation: applicant.motivation,
@@ -104,7 +110,7 @@ const generateInterviewQuestions = async (req, res) => {
             }
         };
 
-        //Send request to OpenAI API
+        // Send a request to the OpenAI API to generate the interview questions
         const openAIResponse = await axios.post(
             "https://api.openai.com/v1/chat/completions",
             {
@@ -148,12 +154,10 @@ const generateInterviewQuestions = async (req, res) => {
             }
         );
 
-        //Save generated questions to interview
+        // Save the generated questions to the interview
         const generatedQuestions = JSON.parse(openAIResponse.data.choices[0].message.content).questions;
-
         interview.questions = generatedQuestions;
         await interview.save();
-
         res.status(200).json({ message: "Interview questions generated successfully", questions: generatedQuestions });
 
     } catch (error) {
@@ -162,54 +166,56 @@ const generateInterviewQuestions = async (req, res) => {
     }
 };
 
+// Download interview questions as PDF
 const downloadInterviewQuestions = async (req, res) => {
     try {
         const interviewId = req.params.id;
 
-        //Get interview by id
+        // Get the interview by ID
         const interview = await Interview.findById(interviewId).populate("applicant");
+
+        // Check whether the interview details are present
         if (!interview) {
             return res.status(404).json({ message: "Interview not found" });
         }
-
         if (!interview.questions || interview.questions.length === 0) {
             return res.status(400).json({ message: "No questions available for this interview" });
         }
 
-        //Get applicant information the PDF file
+        // Get applicant information for the PDF file
         const applicantName = interview.applicant
             ? `${interview.applicant.prename} ${interview.applicant.surname}`
             : "Unknown Applicant";
 
-        //Define path for PDF file
+        // Define the path for the PDF file
         const pdfPath = `./interview_questions_${interviewId}.pdf`;
 
-        //Create PDF file
+        // Create PDF file
         const doc = new PDFDocument();
         const stream = fs.createWriteStream(pdfPath);
         doc.pipe(stream);
 
-        // 🔹 5. Titel und Bewerberinformationen hinzufügen
+        // Add title and applicant name to PDF
         doc.fontSize(18).text("Interview Questions", { align: "center" }).moveDown();
         doc.fontSize(14).text(`Applicant: ${applicantName}`).moveDown(2);
 
-        //Write questions to PDF
+        // Add questions to PDF
         doc.fontSize(12);
         interview.questions.forEach((question, index) => {
             doc.text(`${index + 1}. ${question}`).moveDown();
         });
 
-        //End PDF file creation
+        // End PDF file creation
         doc.end();
 
-        //End stream and send PDF file
+        // End stream and send PDF file
         stream.on("finish", () => {
             res.download(pdfPath, `interview_questions_${interviewId}.pdf`, (err) => {
                 if (err) {
                     console.error("Error sending file:", err);
                     res.status(500).json({ message: "Error sending file" });
                 }
-                //Delete PDF file after sending
+                // Delete PDF file after sending
                 fs.unlinkSync(pdfPath);
             });
         });

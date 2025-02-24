@@ -2,6 +2,7 @@ import Vacancy from '../models/vacancy.model.js';
 import Applicant from '../models/applicant.model.js';
 import axios from "axios";
 
+// Get all vacancies
 const getVacancies = async (req,res) => {
 	try {
 		const vacancies = await Vacancy.find({});
@@ -9,8 +10,9 @@ const getVacancies = async (req,res) => {
 	} catch (e) {
 		res.status(500).json({ message: "Error retrieving vacancies", error: e.message });
 	}
-}
+};
 
+// Get a vacancy by ID
 const getVacancyById = async (req,res) => {
 	const id = req.params.id;
 	try {
@@ -24,13 +26,13 @@ const getVacancyById = async (req,res) => {
 	}
 };
 
+// Get a vacancy with applicants by ID
 const getVacancyWithApplicantsById = async (req, res) => {
-    const id = req.params.id;  // ✅ Extracts the ID as a string.
-
+    const id = req.params.id;
     try {
         console.log("Fetching vacancy and applicants for ID:", id);
 
-        if (!id || id.length !== 24) {  // ✅ Ensure ID is valid
+        if (!id || id.length !== 24) {
             return res.status(400).json({ message: "Invalid Vacancy ID" });
         }
 
@@ -56,8 +58,8 @@ const getVacancyWithApplicantsById = async (req, res) => {
     }
 };
 
+// Create a new vacancy
 const createVacancy = async (req, res) => {
-
 	const { title, hierarchy, department } = req.body;
 
 	if (!process.env.OPENAI_API_KEY) {
@@ -130,6 +132,7 @@ const createVacancy = async (req, res) => {
   	}
 };
 
+// Update a vacancy
 const updateVacancy = async (req, res) => {
 	const id = req.params.id;
 	const reqBody = req.body;
@@ -144,10 +147,10 @@ const updateVacancy = async (req, res) => {
 	}
 };
 
+// Partially update a vacancy
 const partialUpdateVacancy = async (req, res) => {
     const id = req.params.id;
-    const updateFields = req.body; // Enthält nur die Felder, die aktualisiert werden sollen
-
+    const updateFields = req.body;
     try {
         const updatedVacancy = await Vacancy.findByIdAndUpdate(id, updateFields, { new: true, runValidators: true });
 
@@ -161,6 +164,7 @@ const partialUpdateVacancy = async (req, res) => {
     }
 };
 
+// Delete a vacancy
 const deleteVacancy = async (req, res) => {
 	const id = req.params.id;
 	try {
