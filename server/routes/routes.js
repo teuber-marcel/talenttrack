@@ -26,6 +26,7 @@ import {
 	generateInterviewQuestions,
 	downloadInterviewQuestions
 } from '../controllers/interview.controller.js';
+import { postJobToLinkedIn, receiveLinkedInApplicants, receiveLinkedInWebhook } from '../controllers/linkedin.controller.js';
 
 const router = express.Router();
 
@@ -63,6 +64,15 @@ router.route('/api/interviews/:id/generate-questions')
 	.post(generateInterviewQuestions);
 router.route('/api/interviews/:id/download-questions')
 	.get(downloadInterviewQuestions);
+
+router.route('/api/linkedin/post-job')
+  .post(postJobToLinkedIn);
+
+router.route('/api/linkedin/applicants')
+  .get(receiveLinkedInApplicants);
+
+router.route('/api/linkedin/webhook')
+  .post(receiveLinkedInWebhook);
 
 router.use('/', (req, res) => {
 	res.status(200).send("Program is running");
