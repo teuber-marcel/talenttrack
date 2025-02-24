@@ -29,14 +29,10 @@ export const postJobToLinkedIn = async (req, res) => {
       externalJobPostingId: vacancyId,
       title: vacancy.title,
       description: `<p>${vacancy.description}</p>`,
-      listedAt: Date.now() + 86400000, // e.g. one day in the future
+      listedAt: Date.now() + 86400000, 
       location: 'Your City, Country',
       companyApplyUrl: 'https://yourcompany.com/careers',
       companyName: 'Your Company Inc.',
-      employmentStatus: 'FULL_TIME',
-      experienceLevel: 'MID_SENIOR_LEVEL',
-      industries: ['urn:li:industry:96'],
-      workplaceTypes: ['On-site'],
     };
 
     // 3) Send job posting to LinkedIn
