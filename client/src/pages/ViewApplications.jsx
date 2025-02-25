@@ -20,7 +20,7 @@ import {
   Space,
   Alert,
   Divider,
-  notification, // Add this import
+  notification,
 } from "antd";
 import {
   ArrowLeftOutlined,
@@ -29,8 +29,8 @@ import {
   EditOutlined,
   LinkedinOutlined,
   TeamOutlined,
-  CheckCircleOutlined,  // Add this
-  CloseCircleOutlined,  // Add this
+  CheckCircleOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 import "@ant-design/v5-patch-for-react-19";
 import Sidebar from "../components/Global/Sidebar";
@@ -40,13 +40,11 @@ import ProgressStepper from "../components/Global/ProgressStepper";
 const { Content } = Layout;
 const { Title, Text } = Typography;
 
-// Configure notifications globally after imports
 notification.config({
   placement: "topRight",
   top: 100,
 });
 
-// A unified Card style for consistent appearance
 const cardStyle = {
   borderRadius: 8,
   boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
@@ -62,7 +60,6 @@ const steps = [
   { title: "Interview", status: "wait" },
 ];
 
-// Example of possible statuses for a vacancy
 const statusOptions = ["Draft", "Open", "Filled"];
 
 const JobApplicationsPage = () => {
@@ -114,7 +111,7 @@ const JobApplicationsPage = () => {
       });
       return;
     }
-    
+
     if (newStatus === vacancy.status) {
       notification.info({
         message: "Information",
@@ -138,11 +135,13 @@ const JobApplicationsPage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to update vacancy status.");
+        throw new Error(
+          errorData.message || "Failed to update vacancy status."
+        );
       }
 
       setVacancy((prev) => ({ ...prev, status: newStatus }));
-      
+
       notification.success({
         message: "Status Updated",
         description: `Vacancy status updated to '${newStatus}'.`,
@@ -409,7 +408,7 @@ const JobApplicationsPage = () => {
                         <Title
                           level={4}
                           style={{
-                            margin: "0 0 16px 0",  // Added bottom margin
+                            margin: "0 0 16px 0", // Added bottom margin
                             fontSize: "clamp(16px, 2vw, 22px)", // Flexible Größe
                             whiteSpace: "normal", // Zeilenumbruch erlauben
                             wordBreak: "break-word", // Lange Wörter umbrechen
@@ -489,11 +488,19 @@ const JobApplicationsPage = () => {
                   {/* Existing Applicants Card */}
                   <Card style={cardStyle}>
                     {/* Header Row with Icon and Search */}
-                    <Row justify="space-between" align="middle" style={{ marginBottom: 16 }}>
+                    <Row
+                      justify="space-between"
+                      align="middle"
+                      style={{ marginBottom: 16 }}
+                    >
                       <Col>
                         <Space>
                           <TeamOutlined style={{ fontSize: "24px" }} />
-                          <span style={{ fontSize: "16px", fontWeight: "bold" }}>Current Applicants</span>
+                          <span
+                            style={{ fontSize: "16px", fontWeight: "bold" }}
+                          >
+                            Current Applicants
+                          </span>
                         </Space>
                       </Col>
                       <Col xs={24} md={12} lg={8}>
@@ -505,8 +512,8 @@ const JobApplicationsPage = () => {
                         />
                       </Col>
                     </Row>
-                    
-                    <Divider style={{ margin: '0 0 16px 0' }} />
+
+                    <Divider style={{ margin: "0 0 16px 0" }} />
 
                     <Table
                       columns={columns}
@@ -524,7 +531,9 @@ const JobApplicationsPage = () => {
                         <LinkedinOutlined
                           style={{ color: "#0077B5", fontSize: "40px" }}
                         />
-                        <span style={{ fontWeight: "bold" }}>Suggested Candidates on LinkedIn</span>
+                        <span style={{ fontWeight: "bold" }}>
+                          Suggested Candidates on LinkedIn
+                        </span>
                       </Space>
                     }
                   >

@@ -1,4 +1,4 @@
-"use client"; // Ensure this is a Client Component
+"use client";
 
 import React from "react";
 import Image from "next/image";
@@ -16,11 +16,11 @@ const LoginPage = () => {
 
   const onFinish = (values) => {
     console.log("Success:", values);
-    router.push("/Dashboard"); // Redirect after login
+    router.push("/Dashboard"); 
   };
 
   const handleSSOClick = () => {
-    router.push("/Dashboard"); // Redirect to dashboard
+    router.push("/Dashboard"); 
   };
 
   return (

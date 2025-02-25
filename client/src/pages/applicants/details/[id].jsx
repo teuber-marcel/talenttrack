@@ -25,7 +25,7 @@ import {
   getApplicantById,
   updateApplicantStatus,
 } from "../../../services/applicantService";
-import { getVacancyById } from "../../../services/vacancyService"; // ✅ Import vacancy service
+import { getVacancyById } from "../../../services/vacancyService";
 import {
   createInterview,
   generateQuestions,
@@ -36,8 +36,8 @@ import dayjs from "dayjs";
 import { Divider } from "antd";
 
 const calculateAge = (birthdate) => {
-  if (!birthdate) return "N/A"; // Return 'N/A' if birthdate is missing
-  return dayjs().diff(dayjs(birthdate), "year"); // Calculate age
+  if (!birthdate) return "N/A";
+  return dayjs().diff(dayjs(birthdate), "year");
 };
 
 const { Content } = Layout;
@@ -61,7 +61,7 @@ const steps = [
 const ApplicantDetails = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [applicant, setApplicant] = useState(null);
-  const [vacancyTitle, setVacancyTitle] = useState("Loading..."); // ✅ Initialize as 'Loading...'
+  const [vacancyTitle, setVacancyTitle] = useState("Loading...");
   const [loading, setLoading] = useState(true);
   const [hasInterviewQuestions, setHasInterviewQuestions] = useState(false);
   const [generatingQuestions, setGeneratingQuestions] = useState(false);
@@ -79,7 +79,6 @@ const ApplicantDetails = () => {
     document.body.removeChild(link);
   };
 
-  // Global notification config
   useEffect(() => {
     notification.config({
       placement: "topRight",
@@ -96,7 +95,6 @@ const ApplicantDetails = () => {
         if (!data) throw new Error("Applicant not found");
         setApplicant(data);
 
-        // ✅ Fetch vacancy title if vacancy ID is available
         if (data.vacancy) {
           const vacancyData = await getVacancyById(data.vacancy);
           setVacancyTitle(vacancyData?.title || "Unknown Vacancy");
@@ -104,7 +102,6 @@ const ApplicantDetails = () => {
           setVacancyTitle("No Vacancy Assigned");
         }
 
-        // Check if interview questions exist
         const interview = await getInterviewByApplicantId(data._id);
         setHasInterviewQuestions(
           interview && interview.questions && interview.questions.length > 0
@@ -120,17 +117,14 @@ const ApplicantDetails = () => {
     fetchApplicantData();
   }, [id]);
 
-  /** Navigate to the "Schedule Interview" page with the applicant ID. */
   const handleScheduleInterview = () => {
     if (!applicant?._id) {
       message.error("No applicant ID found.");
       return;
     }
-    // Replace route with your actual schedule interview path
     router.push(`/interviews/schedule/${applicant._id}`);
   };
 
-  /** Send rejection: update applicant status to "Rejected" + success message. */
   const handleSendRejection = async () => {
     if (!applicant?._id) {
       message.error("No applicant ID found.");
@@ -138,9 +132,7 @@ const ApplicantDetails = () => {
     }
     try {
       await updateApplicantStatus(applicant._id, "Rejected");
-      // Update local state
       setApplicant((prev) => ({ ...prev, status: "Rejected" }));
-      // Show success notification
       notification.success({
         message: "Applicant Rejected",
         description:
@@ -159,19 +151,16 @@ const ApplicantDetails = () => {
     }
   };
 
-  /** Generate Interview Questions */
   const handleGenerateQuestions = async () => {
     setGeneratingQuestions(true);
     try {
       let interview = await getInterviewByApplicantId(applicant._id);
       if (!interview) {
-        // If no interview exists, create a new one
         interview = await createInterview(applicant._id);
       }
       if (!interview?._id) {
         throw new Error("No valid interview ID");
       }
-      // Generate questions
       await generateQuestions(interview._id);
       setHasInterviewQuestions(true);
       notification.success({
@@ -195,7 +184,6 @@ const ApplicantDetails = () => {
     }
   };
 
-  /** Confirm overwrite of existing questions */
   const confirmGenerateQuestions = () => {
     Modal.confirm({
       title: "Generate New Interview Questions",
@@ -238,7 +226,7 @@ const ApplicantDetails = () => {
             </Row>
           ) : (
             <Row gutter={[24, 24]}>
-              {/* Left Panel - Profile Information */}
+              {}
               <Col xs={24} md={8}>
                 <Card style={cardStyle}>
                   <Title level={4} style={{ marginBottom: 16 }}>
@@ -263,8 +251,7 @@ const ApplicantDetails = () => {
                       <strong>Location:</strong> {applicant.address?.city}
                     </Text>
                     <Text>
-                      <strong>Vacancy:</strong> {vacancyTitle}{" "}
-                      {/* ✅ Updated */}
+                      <strong>Vacancy:</strong> {vacancyTitle} {}
                     </Text>
                     <Text>
                       <strong>Status:</strong>{" "}
@@ -288,7 +275,7 @@ const ApplicantDetails = () => {
                 </Card>
               </Col>
 
-              {/* Right Panel - Action Cards */}
+              {}
               <Col xs={24} md={16}>
                 <Card style={cardStyle} title="Downloads">
                   <Space direction="vertical" style={{ width: "100%" }}>
@@ -361,7 +348,7 @@ const ApplicantDetails = () => {
             </Row>
           )}
 
-          {/* Footer Button */}
+          {}
           <Row justify="end" style={{ marginTop: 24 }}>
             <Button icon={<ArrowLeftOutlined />} onClick={() => router.back()}>
               Cancel

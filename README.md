@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+TalentTrack - AI-Powered Recruitment Platform
 
-## Getting Started
+This is an app designed to streamline recruitment processes through AI-driven job profile creation, suitability scoring, and interview preparation.
 
-First, run the development server:
+Project Overview
+
+TalentTrack is built to assist recruiters by automating candidate evaluation and improving hiring decisions. This project includes:
+
+- AI-generated suitability scores based on candidate profiles.
+- Automated interview question generation to streamline interview preparation.
+- A user-friendly dashboard for recruiters to manage applications.
+- Integration with LinkedIn for candidate sourcing.
+
+---
+
+Getting Started
+
+Installation
+
+Ensure you have Node.js (v18 or later) and npm (or yarn/pnpm/bun) installed.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/teuber-marcel/talenttrack.git
+   cd talenttrack
+   ```
+2. Install dependencies on both the server and client side (e.g. cd server & cd client):
+   ```bash
+   npm install
+   or
+   yarn install
+   or
+   pnpm install
+   ```
+
+Running the Development Server
+
+To start the project locally, run on both the server and client side (e.g. cd server & cd client):
 
 ```bash
 npm run dev
-# or
+or
 yarn dev
-# or
+or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then, open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Building for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To create an optimized production build on both the server and client side (e.g. cd server & cd client):
 
-## Learn More
+```bash
+npm run build
+npm start
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+📂 talenttrack
+ ┣ 📂 client                      front-end
+     ┣ 📂 public                  Static assets
+     ┣ 📂 src
+         ┣ 📂 app                 Next.js app directory and Global styles
+         ┣ 📂 components          UI components
+         ┣ 📂 pages               Main UI pages
+         ┣ 📂 services            API services (fetching applicants, vacancies, etc.)
+         ┣ 📂/📜 ...
+ ┣ 📂 server                      back-end logic
+     ┣ 📂 controllers             Feature controller
+     ┣ 📂 models                  Used models
+     ┣ 📂 routes                  Routing logic
+     ┣ 📂/📜 ...
+     ┣ 📜 .env.example            Environment variable template
+ ┣ 📜 package.json        Project dependencies & scripts
+ ┣ 📜 README.md           Project documentation
+ ┣ 📜 ...
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Environment Variables
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Before running the project, configure your environment variables.
+
+1. Create a `.env` file:
+   ```bash
+   cp .env.example .env
+   ```
+2. Open `.env` and update the values:
+   ```
+   DB_CONNECTION_URL=...
+   OPENAI_API_KEY=...
+   ```
+
+---
+
+Deployment
+
+The recommended deployment platform is Vercel.
+
+1. Install the Vercel CLI:
+   ```bash
+   npm install -g vercel
+   ```
+2. Deploy:
+   ```bash
+   vercel
+   ```
+
+For more details, refer to the Next.js Deployment Guide: https://nextjs.org/docs/app/building-your-application/deploying.
+
+---
+
+Contributors
+
+- Felix Makowski
+- Marcel Teuber
+- Lukas Walter
+- Henry Wibbe
+
+---
+
+Troubleshooting & Support
+
+For any issues, open an issue in the repository.
