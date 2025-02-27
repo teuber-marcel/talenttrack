@@ -1,4 +1,3 @@
-/* Root Variables */
 :root {
   --background: #ffffff; /* Light layout background */
   --foreground: #212529; /* Dark foreground color */
@@ -14,7 +13,6 @@
   }
 }
 
-/* Body Styles */
 html,
 body,
 #root {
@@ -37,12 +35,10 @@ p {
   text-align: left;
 }
 
-/* Dashboard Layout */
 .dashboard-layout {
   min-height: 100vh;
 }
 
-/* Sidebar Styles */
 .sidebar {
   height: 100vh;
   left: 0;
@@ -62,7 +58,6 @@ p {
 
 
 
-/* Main Content Styles */
 .main-content {
   margin: 20px;
   padding: 20px;
@@ -74,7 +69,6 @@ p {
   justify-content: flex-start;
 }
 
-/* Table Styles */
 .custom-table .ant-table {
   background-color: var(--card-background) !important;
   color: var(--foreground) !important;
@@ -99,7 +93,6 @@ p {
   transition: background-color 0.3s ease;
 }
 
-/* Action Buttons */
 .custom-table .ant-btn-primary {
   background-color: var(--highlight-color) !important;
   border-color: var(--highlight-color) !important;
@@ -110,7 +103,6 @@ p {
   border-color: #dc3545 !important;
 }
 
-/* Input and Search Field */
 .custom-table .ant-input {
   background-color: var(--background) !important;
   color: var(--foreground) !important;
@@ -121,12 +113,10 @@ p {
   color: #6c757d !important;
 }
 
-/* Fix for visibility issues */
 h1, h2, h3, h4, h5, h6, p {
   color: var(--foreground) !important;
 }
 
-/* Custom Notification Styles */
 .ant-notification-notice {
   background-color: var(--card-background) !important;
   border-left: 3px solid var(--highlight-color) !important;

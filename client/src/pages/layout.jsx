@@ -11,7 +11,7 @@ const {Header, Content } = Layout;
 const test = () => {
   const [collapsed, setCollapsed] = useState(false);
 
-  // Extract color and border-radius tokens from Ant Design theme
+  
   const {
     token: { borderRadiusLG },
   } = theme.useToken();

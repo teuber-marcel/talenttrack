@@ -56,7 +56,7 @@ const steps = [
   { title: "Interview", status: "finish" },
 ];
 
-// Configure notifications globally after styles
+
 notification.config({
   placement: "topRight",
   top: 100,
@@ -83,22 +83,22 @@ const InterviewPreparation = () => {
       if (!applicantId) return;
 
       try {
-        // 1) Fetch the applicant
+        
         const applicantData = await getApplicantById(applicantId);
         if (!applicantData) throw new Error("Applicant not found");
         setApplicant(applicantData);
 
-        // 2) Fetch the vacancy
+        
         if (applicantData.vacancy) {
           const vacancyData = await getVacancyById(applicantData.vacancy);
           setVacancy(vacancyData);
         }
 
-        // 3) Check for an existing interview
+        
         let interview = await getInterviewByApplicantId(applicantId);
         setCurrentInterview(interview);
 
-        // 4) If no interview, create and generate new Qs; else load existing Qs
+        
         if (!interview) {
           interview = await createInterview(applicantId);
           const questionsData = await generateQuestions(interview._id);
@@ -118,17 +118,17 @@ const InterviewPreparation = () => {
     fetchData();
   }, [applicantId]);
 
-  // Keep a separate "draft" array for editing
+  
   useEffect(() => {
     setEditedQuestions(interviewQuestions);
   }, [interviewQuestions]);
 
-  // Debugging
+  
   useEffect(() => {
     console.log("Current interviewQuestions state:", interviewQuestions);
   }, [interviewQuestions]);
 
-  /** Download the interview questions */
+  
   const handleDownload = async () => {
     if (!currentInterview) {
       message.error("No interview available for download");
@@ -158,7 +158,7 @@ const InterviewPreparation = () => {
     }
   };
 
-  /** Regenerate Qs */
+  
   const handleRegenerate = async () => {
     if (!currentInterview) {
       message.error("No interview available");
@@ -187,26 +187,26 @@ const InterviewPreparation = () => {
     }
   };
 
-  /** Enter or exit Edit Mode */
+  
   const handleEditClick = () => {
     setEditMode(true);
     setEditedQuestions([...interviewQuestions]);
   };
 
-  /** Handle typed changes in a question text area */
+  
   const handleQuestionChange = (index, newValue) => {
     const newQuestions = [...editedQuestions];
     newQuestions[index] = newValue;
     setEditedQuestions(newQuestions);
   };
 
-  /** Remove a question from the list while editing */
+  
   const handleDeleteQuestion = (indexToDelete) => {
     const newQuestions = editedQuestions.filter((_, i) => i !== indexToDelete);
     setEditedQuestions(newQuestions);
   };
 
-  /** Save changes to the interview questions */
+  
   const handleSave = async () => {
     if (!currentInterview) return;
 
@@ -229,7 +229,7 @@ const InterviewPreparation = () => {
     }
   };
 
-  /** Confirm regeneration, overwriting existing Qs */
+  
   const confirmGenerateQuestions = () => {
     if (!currentInterview) {
       message.error("No interview available");

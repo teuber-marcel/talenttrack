@@ -96,7 +96,7 @@ const JobApplicationsPage = () => {
     fetchVacancyData();
   }, [id]);
 
-  // PATCH request to update the vacancy status
+  
   const handleStatusChange = async (newStatus) => {
     if (!vacancy || !vacancy._id) {
       notification.error({
@@ -168,7 +168,7 @@ const JobApplicationsPage = () => {
     }
   };
 
-  // Create a Menu that calls handleStatusChange on item click
+  
   const renderStatusMenu = (
     <Menu
       onClick={(info) => {
@@ -179,7 +179,7 @@ const JobApplicationsPage = () => {
     />
   );
 
-  // Helper: Return unique statuses among applicants
+  
   const getApplicantStatusFilters = () => {
     const uniqueStatuses = [
       ...new Set(applicants.map((app) => app.status).filter(Boolean)),
@@ -202,7 +202,7 @@ const JobApplicationsPage = () => {
     );
   };
 
-  // Table columns with sorting & filtering
+  
   const columns = [
     {
       title: "Name",
@@ -258,7 +258,7 @@ const JobApplicationsPage = () => {
     },
   ];
 
-  // Suitability cluster counts
+  
   const total = applicants.length;
   const goodFit = applicants.filter((a) => a.suitabilityScore >= 70).length;
   const mediumFit = applicants.filter(
@@ -266,14 +266,14 @@ const JobApplicationsPage = () => {
   ).length;
   const badFit = applicants.filter((a) => a.suitabilityScore < 50).length;
 
-  // Filter applicants by `searchText`
+  
   const filteredApplicants = applicants.filter((app) =>
     Object.values(app).some((value) =>
       value?.toString().toLowerCase().includes(searchText.toLowerCase())
     )
   );
 
-  // Add new state for LinkedIn suggestions
+  
   const [linkedinSuggestions] = useState([
     {
       id: 1,
@@ -305,7 +305,7 @@ const JobApplicationsPage = () => {
     },
   ]);
 
-  // Filter LinkedIn suggestions
+  
   const filteredLinkedinSuggestions = linkedinSuggestions.filter((suggestion) =>
     Object.values(suggestion).some((value) =>
       value?.toString().toLowerCase().includes(linkedinSearchText.toLowerCase())
@@ -408,12 +408,12 @@ const JobApplicationsPage = () => {
                         <Title
                           level={4}
                           style={{
-                            margin: "0 0 16px 0", // Added bottom margin
-                            fontSize: "clamp(16px, 2vw, 22px)", // Flexible Größe
-                            whiteSpace: "normal", // Zeilenumbruch erlauben
-                            wordBreak: "break-word", // Lange Wörter umbrechen
-                            overflowWrap: "break-word", // Alternative für ältere Browser
-                            textAlign: "center", // Optionale Zentrierung
+                            margin: "0 0 16px 0", 
+                            fontSize: "clamp(16px, 2vw, 22px)", 
+                            whiteSpace: "normal", 
+                            wordBreak: "break-word", 
+                            overflowWrap: "break-word", 
+                            textAlign: "center", 
                           }}
                         >
                           {vacancy.title}

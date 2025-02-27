@@ -7,7 +7,7 @@ import {
   PlayCircleOutlined,
   SaveOutlined,
   CloudUploadOutlined,
-  CheckCircleOutlined,  // Add this import
+  CheckCircleOutlined,  
 } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import Sidebar from "../../../components/Global/Sidebar.jsx";
@@ -20,7 +20,6 @@ const { Header, Content } = Layout;
 const { Title } = Typography;
 const { TextArea } = Input;
 
-// Configure notifications globally
 notification.config({
   placement: 'topRight',
   top: 100
@@ -40,14 +39,13 @@ const EditVacancy = () => {
   const router = useRouter();
   const { id } = router.query;
 
-  // Vacancy aktualisieren (PATCH /api/vacancies/:id/details)
   const handleUpdateVacancy = async () => {
     if (!createdVacancy || !createdVacancy._id) {
       message.error("No vacancy selected for update.");
       return;
     }
 
-    // Falls sich nichts geändert hat -> API-Call vermeiden
+    
     if (
       vacancyTitle === createdVacancy.title &&
       selectedDepartment === createdVacancy.department &&
@@ -99,7 +97,7 @@ const EditVacancy = () => {
     }
   };
 
-  // Update success notification
+  
   const showSuccessNotification = () => {
     notification.success({
       message: "Vacancy Updated",
@@ -145,7 +143,7 @@ const EditVacancy = () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "#f0f2f5", // replaced var(--background)
+        backgroundColor: "#f0f2f5", 
         minHeight: "100vh",
         display: "flex",
       }}
@@ -172,9 +170,9 @@ const EditVacancy = () => {
                 style={{
                   padding: 16,
                   minHeight: 240,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   display: "flex",
                   justifyContent: "center",
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -191,9 +189,9 @@ const EditVacancy = () => {
                 style={{
                   padding: 16,
                   minHeight: 240,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   display: "flex",
                   justifyContent: "center",
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -211,9 +209,9 @@ const EditVacancy = () => {
                 style={{
                   padding: 16,
                   minHeight: 120,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 }}
               >
@@ -227,7 +225,7 @@ const EditVacancy = () => {
             <Col span={24}>
               <div
                 style={{
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   padding: "16px",
                   borderRadius: "8px",
                   marginTop: "16px",
@@ -242,8 +240,8 @@ const EditVacancy = () => {
                   onChange={(e) => setDescription(e.target.value)}
                   autoSize={{ minRows: 3 }}
                   style={{
-                    background: "#fff", // changed from #222
-                    color: "#333", // changed from 'white'
+                    background: "#fff", 
+                    color: "#333", 
                     border: "1px solid #d9d9d9",
                     marginBottom: "12px",
                   }}
@@ -257,8 +255,8 @@ const EditVacancy = () => {
                   onChange={(e) => setRequirements(e.target.value)}
                   autoSize={{ minRows: 3 }}
                   style={{
-                    background: "#fff", // changed from #222
-                    color: "#333", // changed from 'white'
+                    background: "#fff", 
+                    color: "#333", 
                     border: "1px solid #d9d9d9",
                     marginBottom: "12px",
                   }}
@@ -272,8 +270,8 @@ const EditVacancy = () => {
                   onChange={(e) => setOther(e.target.value)}
                   autoSize={{ minRows: 3 }}
                   style={{
-                    background: "#fff", // changed from #222
-                    color: "#333", // changed from 'white'
+                    background: "#fff", 
+                    color: "#333", 
                     border: "1px solid #d9d9d9",
                   }}
                 />
