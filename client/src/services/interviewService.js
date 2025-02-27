@@ -8,8 +8,8 @@ export const createInterview = async (applicantId) => {
       body: JSON.stringify({
         applicant: applicantId,
         interviewDate: new Date(Date.now() + 86400000),
-        interviewStartDate: new Date(Date.now() + 86400000), // tomorrow
-        interviewEndDate: new Date(Date.now() + 90000000)    // tomorrow + 1 hour
+        interviewStartDate: new Date(Date.now() + 86400000), 
+        interviewEndDate: new Date(Date.now() + 90000000)    
       })
     });
     if (!response.ok) {
@@ -28,7 +28,7 @@ export const generateQuestions = async (interviewId) => {
       method: 'POST'
     });
     const data = await response.json();
-    console.log('API Response for generate-questions:', data); // Debug-Log
+    console.log('API Response for generate-questions:', data); 
     return data;
   } catch (error) {
     console.error('Error in generateQuestions:', error);
@@ -40,7 +40,7 @@ export const getInterviewByApplicantId = async (applicantId) => {
   try {
     const response = await fetch(`${API_URL}/api/interviews?applicant=${applicantId}`);
     const interviews = await response.json();
-    console.log('API Response for interviews:', interviews); // Debug-Log
+    console.log('API Response for interviews:', interviews); 
     return interviews.length > 0 ? interviews[0] : null;
   } catch (error) {
     console.error('Error in getInterviewByApplicantId:', error);

@@ -32,13 +32,13 @@ const CreateVacancy = () => {
     !selectedHierarchy || 
     vacancyTitle.length < 3;
 
-  // Add notification config
+  
   notification.config({
     placement: 'topRight',
     top: 100
   });
 
-  // Vacancy erstellen (POST /api/vacancies)
+  
   const handleCreateVacancy = async () => {
     setLoading(true);
     try {
@@ -83,7 +83,7 @@ const CreateVacancy = () => {
     setLoading(false);
   };
 
-  // Vacancy aktualisieren (PATCH /api/vacancies/:id/details)
+  
   const handleUpdateVacancy = async (status) => {
     if (!createdVacancy) return;
 
@@ -139,7 +139,7 @@ const handleDeleteVacancy = async () => {
     const success = await deleteVacancy(createdVacancy._id);
     if (success) {
       message.success("Vacancy successfully deleted!");
-      router.push('/VacanciesOverview'); // Erst nach erfolgreicher Löschung weiterleiten
+      router.push('/VacanciesOverview'); 
     } else {
       message.error("Error deleting vacancy");
     }
@@ -155,7 +155,7 @@ const handleDeleteVacancy = async () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "#f0f2f5", // replaced var(--background)
+        backgroundColor: "#f0f2f5", 
         minHeight: '100vh',
         display: 'flex'
       }}
@@ -183,9 +183,9 @@ const handleDeleteVacancy = async () => {
                 style={{
                   padding: 16,
                   minHeight: 240,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   display: 'flex',
                   justifyContent: 'center',
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -202,9 +202,9 @@ const handleDeleteVacancy = async () => {
                 style={{
                   padding: 16,
                   minHeight: 240,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   display: 'flex',
                   justifyContent: 'center',
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
@@ -222,9 +222,9 @@ const handleDeleteVacancy = async () => {
                 style={{
                   padding: 16,
                   minHeight: 120,
-                  background: "#fff", // changed from #333
+                  background: "#fff", 
                   borderRadius: 8,
-                  color: "#333", // changed from 'white'
+                  color: "#333", 
                   boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 }}
               >
@@ -240,7 +240,7 @@ const handleDeleteVacancy = async () => {
               <Col span={24}>
                 <div
                   style={{
-                    background: "#fff", // changed from #333
+                    background: "#fff", 
                     padding: '16px',
                     borderRadius: '8px',
                     marginTop: '16px',
@@ -255,8 +255,8 @@ const handleDeleteVacancy = async () => {
                     onChange={(e) => setDescription(e.target.value)}
                     autoSize={{ minRows: 3 }} 
                     style={{
-                      background: "#fff", // changed from #222
-                      color: "#333", // changed from 'white'
+                      background: "#fff", 
+                      color: "#333", 
                       border: "1px solid #d9d9d9",
                       marginBottom: '12px',
                     }} 
@@ -270,8 +270,8 @@ const handleDeleteVacancy = async () => {
                     onChange={(e) => setRequirements(e.target.value)}
                     autoSize={{ minRows: 3 }} 
                     style={{
-                      background: "#fff", // changed from #222
-                      color: "#333", // changed from 'white'
+                      background: "#fff", 
+                      color: "#333", 
                       border: "1px solid #d9d9d9",
                       marginBottom: '12px',
                     }} 
@@ -285,8 +285,8 @@ const handleDeleteVacancy = async () => {
                     onChange={(e) => setOther(e.target.value)}
                     autoSize={{ minRows: 3 }} 
                     style={{
-                      background: "#fff", // changed from #222
-                      color: "#333", // changed from 'white'
+                      background: "#fff", 
+                      color: "#333", 
                       border: "1px solid #d9d9d9",
                     }} 
                   />

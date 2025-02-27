@@ -4,7 +4,7 @@ import { Layout, Menu, Row, Col } from "antd";
 import theme from "antd/es/theme";
 import DonutChart from "../components/Dashboard/DonutChart";
 import ApplicantDashboard from "../components/Dashboard/ApplicantDashboard";
-import CalendarComponent from "../components/Dashboard/Calendar"; // Import CalendarComponent
+import CalendarComponent from "../components/Dashboard/Calendar"; 
 import Sidebar from "../components/Global/Sidebar";
 
 const { Header, Content } = Layout;
@@ -12,7 +12,7 @@ const { Header, Content } = Layout;
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
 
-  // Extract color and border-radius tokens from Ant Design theme
+  
   const {
     token: { borderRadiusLG },
   } = theme.useToken();

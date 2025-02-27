@@ -13,7 +13,7 @@ import {
 import Sidebar from "../components/Global/Sidebar";
 import { getVacancies, deleteVacancy } from "../services/vacancyService";
 import { getApplicantsForOverview } from "../services/applicantService";
-// Add the React 19 patch for Ant Design:
+
 import "@ant-design/v5-patch-for-react-19";
 
 const { Header, Content } = Layout;
@@ -43,7 +43,7 @@ const VacanciesOverview = () => {
           applications: applicantCount[vacancy._id] || 0,
         }));
 
-        // If there's a status in the URL, filter vacancies by that status
+        
         if (status) {
           setVacancies(updatedVacancies.filter((v) => v.status === status));
         } else {
@@ -182,7 +182,7 @@ const VacanciesOverview = () => {
       style={{
         marginLeft: collapsed ? 80 : 200,
         transition: "margin-left 0.3s ease",
-        backgroundColor: "#f0f2f5", // replaced var(--background)
+        backgroundColor: "#f0f2f5", 
         minHeight: "100vh",
         height: "100%",
         display: "flex",

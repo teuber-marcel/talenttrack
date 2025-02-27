@@ -36,14 +36,12 @@ dayjs.extend(isSameOrAfter);
 const { Content } = Layout;
 const { Title } = Typography;
 
-// Example steps array
 const steps = [
   { title: "Vacancy", status: "finish" },
   { title: "Applicant", status: "finish" },
   { title: "Interview", status: "finish" },
 ];
 
-// A unified card style (like your other pages)
 const cardStyle = {
   background: "#fff",
   border: "1px solid #d9d9d9",
@@ -52,7 +50,6 @@ const cardStyle = {
   padding: 24,
 };
 
-// Configure notifications globally
 notification.config({
   placement: "topRight",
   top: 100,
@@ -66,21 +63,18 @@ const ScheduleInterview = () => {
 
   const router = useRouter();
 
-  // Once router is ready, set the applicantId from the URL (e.g., ?id=xxx)
   useEffect(() => {
     if (router.isReady) {
       setApplicantId(router.query.id || null);
     }
   }, [router.isReady, router.query.id]);
 
-  // Disable past days in the calendar
   const disabledDate = (current) => current && current.isBefore(dayjs(), "day");
 
-  // Allow only 08:00 - 18:00 in 15-min increments
   const disabledTime = () => ({
     disabledHours: () => [
-      ...Array(8).keys(), // 0-7
-      ...Array.from({ length: 6 }, (_, i) => 18 + i), // 18-23
+      ...Array(8).keys(), 
+      ...Array.from({ length: 6 }, (_, i) => 18 + i), 
     ],
     disabledMinutes: () =>
       Array.from({ length: 60 }, (_, i) => (i % 15 !== 0 ? i : null)).filter(
@@ -195,7 +189,7 @@ const ScheduleInterview = () => {
         });
       }
 
-      router.back(); // Return to previous page
+      router.back(); 
     } catch (error) {
       console.error("❌ Error saving:", error);
       notification.error({

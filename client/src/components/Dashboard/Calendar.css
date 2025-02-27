@@ -25,7 +25,6 @@
   width: 100%;
 }
 
-/* Ensure the current date with an interview has blue text */
 .light-theme-calendar .react-calendar__tile--now.highlighted-date {
   
   color: #03213F !important;
@@ -66,11 +65,10 @@
   border: 1px solid #03213F;
 }
 
-/* Highlight dates with interviews using a different text color */
 .highlighted-date {
-  text-decoration: underline; /* Underline the date */
-  color: #03213F !important; /* Highlighted text for interviews */
-  border-radius: 50%; /* Make it circular */
+  text-decoration: underline; 
+  color: #03213F !important; 
+  border-radius: 50%; 
   font-weight: bold;
  
 }

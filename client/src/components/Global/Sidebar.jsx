@@ -1,4 +1,3 @@
-// components/Sidebar.jsx
 import React from "react";
 import { Layout, Menu, Button, Tooltip } from "antd";
 import {
@@ -28,9 +27,9 @@ const Sidebar = ({ collapsed, setCollapsed }) => {
   const router = useRouter();
   const currentPath = router.pathname;
 
-  /** Handle Logout */
+  
   const handleLogout = () => {
-    router.push("/"); // Redirect to the login page (home page)
+    router.push("/"); 
   };
 
   return (
